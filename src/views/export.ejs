@@ -5,9 +5,9 @@
   <div class="field"><label>Formato</label>
     <select name="formato"><option value="csv">CSV</option><option value="xlsx">XLSX</option></select>
   </div>
-  <div class="field"><label>Creado desde</label><input type="date" name="fechaDesde"></div>
-  <div class="field"><label>Creado hasta</label><input type="date" name="fechaHasta"></div>
-  <div class="field"><label>recordNumber</label><input type="text" name="recordNumber"></div>
+  <div class="field"><label>Creado desde <span class="helpball" title="Opcional. Filtra por la fecha en que se creó el registro en el sistema (no la fecha de colecta). Déjelo vacío para no limitar por fecha inicial.">ⓘ</span></label><input type="date" name="fechaDesde"></div>
+  <div class="field"><label>Creado hasta <span class="helpball" title="Opcional. Déjelo vacío para no limitar por fecha final.">ⓘ</span></label><input type="date" name="fechaHasta"></div>
+  <div class="field"><label>recordNumber <span class="helpball" title="Opcional, sin formato fijo: busca coincidencia parcial dentro del campo recordNumber de cada registro. Si lo deja vacío, se exportan todos los registros (filtrados solo por fecha, si puso alguna).">ⓘ</span></label><input type="text" name="recordNumber" placeholder="Opcional"></div>
   <% if (role !== 'estudiante') { %>
   <div class="field"><label>Clase</label>
     <select name="claseId">
