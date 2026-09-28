@@ -3,7 +3,7 @@
 <div class="card">
 <form class="stack" method="post" action="/admin/settings">
   <div class="field">
-    <label>Encabezado del sobre</label>
+    <label>Encabezado del sobre <span class="helpball" title="Texto en negrita y centrado que aparece arriba de cada sobre generado, ej. HERBARIO UNIVERSIDAD DE LOS LLANOS (LLANOS).">ⓘ</span></label>
     <input type="text" name="sobre_encabezado" value="<%= settings.sobre_encabezado || '' %>">
   </div>
   <button type="submit">Guardar</button>

@@ -3,7 +3,7 @@
 <div class="card">
   <p>Rango actual: <%= clase.rango_inicial %> &ndash; <%= clase.rango_final %> (prefijo <%= clase.prefijo_occurrence_id %>)</p>
   <form class="stack" method="post" action="/classes/<%= clase.id %>/expand">
-    <div class="field"><label>Nuevo número final</label><input type="number" name="nuevoRangoFinal" required min="<%= clase.rango_final + 1 %>"></div>
+    <div class="field"><label>Nuevo número final <span class="helpball" title="Extiende el rango de catálogo de esta clase para que los estudiantes puedan seguir creando registros. Debe ser mayor al número final actual.">ⓘ</span></label><input type="number" name="nuevoRangoFinal" required min="<%= clase.rango_final + 1 %>"></div>
     <button type="submit">Ampliar</button>
   </form>
 </div>

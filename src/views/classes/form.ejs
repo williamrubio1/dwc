@@ -3,10 +3,10 @@
 <div class="card">
 <form class="stack" method="post" action="/classes">
   <div class="field"><label>Nombre de la clase o asignatura</label><input type="text" name="nombreClase" required></div>
-  <div class="field"><label>Periodo académico</label><input type="text" name="periodoAcademico" placeholder="2026-1"></div>
-  <div class="field"><label>Prefijo de occurrenceID</label><input type="text" name="prefijo" required placeholder="UniLlanos:LLANOS:"></div>
-  <div class="field"><label>Número inicial del rango</label><input type="number" name="rangoInicial" required></div>
-  <div class="field"><label>Número final del rango</label><input type="number" name="rangoFinal" required></div>
+  <div class="field"><label>Periodo académico <span class="helpball" title="Identifica el semestre o periodo en que se dicta la clase, por ejemplo 2026-1. Es solo informativo.">ⓘ</span></label><input type="text" name="periodoAcademico" placeholder="2026-1"></div>
+  <div class="field"><label>Prefijo de occurrenceID <span class="helpball" title="Texto fijo que antecede al número de catálogo de cada registro de esta clase, por ejemplo UniLlanos:LLANOS:. Puede corresponder a cualquier herbario del país. Dos rangos con el mismo prefijo no pueden superponerse.">ⓘ</span></label><input type="text" name="prefijo" required placeholder="UniLlanos:LLANOS:"></div>
+  <div class="field"><label>Número inicial del rango <span class="helpball" title="Primer número de catálogo disponible para esta clase. El sistema lo asigna automáticamente, en orden, a cada registro nuevo de los estudiantes vinculados.">ⓘ</span></label><input type="number" name="rangoInicial" required></div>
+  <div class="field"><label>Número final del rango <span class="helpball" title="Último número de catálogo disponible para esta clase. Cuando se agota, los estudiantes no pueden crear más registros hasta que usted amplíe el rango.">ⓘ</span></label><input type="number" name="rangoFinal" required></div>
   <button type="submit">Crear código</button>
 </form>
 </div>

@@ -18,8 +18,8 @@
 <div class="card">
   <h2>Agregar / actualizar</h2>
   <form class="stack" method="post" action="/admin/organism-types">
-    <div class="field"><label>Phylum</label><input type="text" name="phylum" required></div>
-    <div class="field"><label>Tipo impreso</label><input type="text" name="tipoImpreso" required></div>
+    <div class="field"><label>Phylum <span class="helpball" title="Debe coincidir exactamente con el valor guardado en el campo phylum del registro (ej. Bryophyta) para que el sobre lo reconozca.">ⓘ</span></label><input type="text" name="phylum" required></div>
+    <div class="field"><label>Tipo impreso <span class="helpball" title="Palabra que se imprime en el sobre para ese phylum, seguida de un punto (ej. Musgo → 'Musgo.').">ⓘ</span></label><input type="text" name="tipoImpreso" required></div>
     <button type="submit">Guardar</button>
   </form>
 </div>
