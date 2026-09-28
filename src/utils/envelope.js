@@ -85,6 +85,20 @@ function buildEnvelopeModel(record, { organismTypeByPhylum, encabezado }) {
 const CM_TO_TWIP = 566.929;
 const CM_TO_PT = 28.3465;
 
+// Posiciones tomadas del documento modelo (SobresMusgos.docx): dos marcas de
+// doblez, la etiqueta arranca bien entrada la mitad inferior de la hoja.
+const PAGE_HEIGHT_TWIP = 15840;
+const MARGIN_TWIP = 2.5 * CM_TO_TWIP;
+const USABLE_HEIGHT_TWIP = PAGE_HEIGHT_TWIP - 2 * MARGIN_TWIP;
+const FOLD1_GAP_TWIP = USABLE_HEIGHT_TWIP * 0.24;
+const FOLD2_GAP_TWIP = USABLE_HEIGHT_TWIP * 0.32;
+
+const PAGE_HEIGHT_PT = 792; // Carta/Letter
+const MARGIN_PT = 2.5 * CM_TO_PT;
+const USABLE_HEIGHT_PT = PAGE_HEIGHT_PT - 2 * MARGIN_PT;
+const FOLD1_GAP_PT = USABLE_HEIGHT_PT * 0.24;
+const FOLD2_GAP_PT = USABLE_HEIGHT_PT * 0.32;
+
 function buildEnvelopeDocxSection(lines) {
   const children = [];
   for (const line of lines) {
@@ -107,6 +121,13 @@ function buildEnvelopeDocxSection(lines) {
             new TextRun({ text: line.cursiva, italics: true, font: 'Times New Roman', size: 22 }),
             new TextRun({ text: line.resto, font: 'Times New Roman', size: 22 }),
           ],
+        }));
+        break;
+      case 'det':
+        // El modelo (SobresMusgos.docx) centra el nombre de quien identifico el ejemplar.
+        children.push(new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: `Det.  ${line.text}`, font: 'Times New Roman', size: 22 })],
         }));
         break;
       case 'localidad':
@@ -154,7 +175,17 @@ function noBorders() {
   return { top: none, bottom: none, left: none, right: none };
 }
 
+function foldMarksTable() {
+  return new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [foldMarksRow()] });
+}
+
+function spacer(twips) {
+  return new Paragraph({ spacing: { after: Math.max(0, Math.round(twips)) }, children: [] });
+}
+
 // Genera un documento DOCX con un sobre por pagina (hoja Carta, seccion 9-10).
+// El modelo (SobresMusgos.docx) trae dos marcas de doblez y la etiqueta impresa
+// arranca bien pasada la mitad de la hoja, no arriba.
 async function generateEnvelopeDocx(records, options) {
   const sections = records.map((record, idx) => {
     const lines = buildEnvelopeModel(record, options);
@@ -167,12 +198,11 @@ async function generateEnvelopeDocx(records, options) {
         },
       },
       children: [
-        new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [foldMarksRow()] }),
-        new Paragraph({ text: '' }),
-        new Paragraph({ text: '' }),
-        new Paragraph({ text: '' }),
-        new Paragraph({ text: '' }),
-        new Paragraph({ text: '' }),
+        spacer(FOLD1_GAP_TWIP),
+        foldMarksTable(),
+        spacer(FOLD2_GAP_TWIP),
+        foldMarksTable(),
+        spacer(140),
         ...content,
       ],
     };
@@ -197,12 +227,21 @@ function generateEnvelopePdf(records, options) {
       if (idx > 0) doc.addPage();
       const lines = buildEnvelopeModel(record, options);
 
-      doc.font('Helvetica').fontSize(10).text('+', doc.page.margins.left - 20, doc.page.margins.top - 20);
-      doc.text('+', doc.page.width - doc.page.margins.right, doc.page.margins.top - 20);
-
-      let y = doc.page.margins.top + 10;
       const left = doc.page.margins.left;
       const width = doc.page.width - doc.page.margins.left - doc.page.margins.right;
+      const right = doc.page.width - doc.page.margins.right;
+
+      // Dos marcas de doblez, como en el modelo (SobresMusgos.docx).
+      const fold1Y = doc.page.margins.top + FOLD1_GAP_PT;
+      const fold2Y = fold1Y + FOLD2_GAP_PT;
+      doc.font('Helvetica').fontSize(10);
+      doc.text('+', left, fold1Y);
+      doc.text('+', right - 10, fold1Y);
+      doc.text('+', left, fold2Y);
+      doc.text('+', right - 10, fold2Y);
+
+      // La etiqueta arranca bien pasada la mitad de la hoja, no arriba.
+      let y = fold2Y + 20;
 
       for (const line of lines) {
         switch (line.kind) {
@@ -214,6 +253,10 @@ function generateEnvelopePdf(records, options) {
             break;
           case 'cientifico':
             doc.font('Times-Italic').fontSize(11).text(line.cursiva + line.resto, left, y, { width, continued: false });
+            break;
+          case 'det':
+            // El modelo (SobresMusgos.docx) centra el nombre de quien identifico el ejemplar.
+            doc.font('Times-Roman').fontSize(11).text(`Det.  ${line.text}`, left, y, { width, align: 'center' });
             break;
           case 'localidad':
             doc.font('Times-Bold').fontSize(11).text((line.pais || '') + (line.resto ? (line.pais ? ', ' : '') + line.resto : ''), left, y, { width });
