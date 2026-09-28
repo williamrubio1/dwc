@@ -19,6 +19,25 @@ async function toXlsx(rows) {
   return workbook.xlsx.writeBuffer();
 }
 
+function pad2(n) {
+  return String(n).padStart(2, '0');
+}
+
+// exceljs entrega tipos nativos por celda (Date, formulas, hipervinculos), no solo
+// texto. Si no se distinguen, Date termina como "Thu Apr 03 2025 00:00:00 GMT..."
+// (toString por defecto) en vez de la fecha que el usuario ve en la hoja.
+function cellToString(cell) {
+  if (cell == null) return '';
+  if (cell instanceof Date) {
+    return `${cell.getUTCFullYear()}-${pad2(cell.getUTCMonth() + 1)}-${pad2(cell.getUTCDate())}`;
+  }
+  if (typeof cell === 'object') {
+    if (cell.text != null) return String(cell.text);
+    if (cell.result != null) return cellToString(cell.result);
+  }
+  return String(cell);
+}
+
 // Seccion 3: importacion acepta CSV (UTF-8 o Latin-1/ISO-8859-1, separador ';') y XLSX.
 async function parseImportBuffer(buffer, filename) {
   const lower = filename.toLowerCase();
@@ -27,15 +46,14 @@ async function parseImportBuffer(buffer, filename) {
     await workbook.xlsx.load(buffer);
     const sheet = workbook.worksheets[0];
     const [headerRow, ...dataRows] = sheet.getRows(1, sheet.rowCount) || [];
-    const headers = (headerRow ? headerRow.values : []).map((v) => (v == null ? '' : String(v).trim()));
+    const headers = (headerRow ? headerRow.values : []).map((v) => cellToString(v).trim());
     return dataRows
-      .filter((row) => row.values.some((v) => v != null && String(v).trim() !== ''))
+      .filter((row) => row.values.some((v) => v != null && cellToString(v).trim() !== ''))
       .map((row) => {
         const record = {};
         headers.forEach((h, idx) => {
           if (!h) return;
-          const cell = row.values[idx];
-          record[h] = cell == null ? '' : String(cell.text != null ? cell.text : cell).trim();
+          record[h] = cellToString(row.values[idx]).trim();
         });
         return record;
       });
