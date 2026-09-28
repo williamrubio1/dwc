@@ -1,17 +1,29 @@
 <%- include('../partials/header', { title: 'Iniciar sesión' }) %>
-<div class="card" style="max-width:420px;margin:2rem auto;">
-  <h1>Iniciar sesión</h1>
-  <form class="stack" method="post" action="/login">
-    <div class="field">
-      <label>Usuario o correo</label>
-      <input type="text" name="username" required autofocus>
+<div class="login-hero">
+  <div class="scene" role="img" aria-label="Animación lenta de musgos y líquenes sobre una roca">
+    <div class="glow"></div><div class="ground"></div><div class="rock"></div>
+    <div class="moss" style="--x:24%;--w:190px;--h:70px;--t:16s"></div><div class="moss" style="--x:54%;--w:220px;--h:85px;--t:19s"></div><div class="moss" style="--x:40%;--w:130px;--h:55px;--t:14s"></div>
+    <div class="lichen" style="--x:31%;--b:29%;--w:120px;--h:75px;--t:21s"><i></i><i></i><i></i><i></i></div><div class="lichen" style="--x:63%;--b:28%;--w:145px;--h:90px;--t:24s"><i></i><i></i><i></i><i></i></div>
+    <div class="sprig" style="--x:21%;--h:95px;--t:9s"></div><div class="sprig" style="--x:28%;--h:115px;--t:12s"></div><div class="sprig" style="--x:38%;--h:78px;--t:10s"></div><div class="sprig" style="--x:52%;--h:105px;--t:13s"></div><div class="sprig" style="--x:69%;--h:90px;--t:11s"></div><div class="sprig" style="--x:77%;--h:75px;--t:9s"></div>
+    <div class="spore" style="--x:34%;--b:24%;--t:18s;--d:-4s"></div><div class="spore" style="--x:49%;--b:21%;--t:22s;--d:-13s"></div><div class="spore" style="--x:62%;--b:27%;--t:20s;--d:-8s"></div><div class="spore" style="--x:73%;--b:20%;--t:25s;--d:-17s"></div>
+    <div class="shade"></div>
+  </div>
+  <div class="login-card-wrap">
+    <div class="card">
+      <h1>Iniciar sesión</h1>
+      <form class="stack" method="post" action="/login">
+        <div class="field">
+          <label>Usuario o correo</label>
+          <input type="text" name="username" required autofocus>
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" name="password" required>
+        </div>
+        <button type="submit">Entrar</button>
+      </form>
+      <p style="margin-top:1rem;font-size:0.85rem;">¿Eres estudiante y no tienes cuenta? <a href="/register">Regístrate con tu correo @unillanos.edu.co</a></p>
     </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" name="password" required>
-    </div>
-    <button type="submit">Entrar</button>
-  </form>
-  <p style="margin-top:1rem;font-size:0.85rem;">¿Eres estudiante y no tienes cuenta? <a href="/register">Regístrate con tu correo @unillanos.edu.co</a></p>
+  </div>
 </div>
 <%- include('../partials/footer') %>

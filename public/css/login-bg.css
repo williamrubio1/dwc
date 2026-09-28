@@ -1,0 +1,42 @@
+/* Animación decorativa de musgos y líquenes para la pantalla de inicio de sesión. */
+.login-hero {
+  position: relative;
+  min-height: 65vh;
+  overflow: hidden;
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-hero .scene { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 80%, #526c4b, #263f30 45%, #10241b 100%); isolation: isolate; }
+.login-hero .glow { position: absolute; inset: -20%; background: radial-gradient(ellipse at 48% 20%, #d6dfb326, transparent 55%); filter: blur(28px); animation: login-bg-glow 24s ease-in-out infinite alternate; }
+.login-hero .ground { position: absolute; bottom: -15%; left: -10%; width: 120%; height: 45%; border-radius: 50% 50% 0 0; background: linear-gradient(#40583a, #172b20); box-shadow: 0 -20px 70px #0b1b1555; }
+.login-hero .rock { position: absolute; bottom: 8%; left: 50%; width: min(75vw, 780px); height: 30%; transform: translateX(-50%); border-radius: 48% 52% 20% 20%; background: linear-gradient(145deg, #69745d, #354535 65%, #1e3024); box-shadow: inset 16px 12px 25px #d6d9b522, inset -20px -18px 30px #0005, 0 20px 35px #0004; animation: login-bg-breathe 18s ease-in-out infinite; }
+.login-hero .moss { position: absolute; bottom: 23%; left: var(--x); width: var(--w); height: var(--h); border-radius: 50%; background: radial-gradient(ellipse at 30% 20%, #c0cb8b, #718d54 42%, #345638 85%); box-shadow: inset 2px 4px 8px #e6e9b533, 0 7px 15px #0003; animation: login-bg-sway var(--t) ease-in-out infinite alternate; }
+.login-hero .moss:before, .login-hero .moss:after { content: ""; position: absolute; top: -20%; width: 40%; height: 65%; border-radius: 60% 40%; background: linear-gradient(140deg, #c6d293, #53764a); }
+.login-hero .moss:before { left: 15%; transform: rotate(-25deg); }
+.login-hero .moss:after { right: 12%; transform: rotate(30deg); }
+.login-hero .lichen { position: absolute; left: var(--x); bottom: var(--b); width: var(--w); height: var(--h); animation: login-bg-sway var(--t) ease-in-out infinite alternate; }
+.login-hero .lichen i { position: absolute; width: 48%; height: 55%; border-radius: 55% 45% 60% 40%; background: linear-gradient(140deg, #e2dfb7, #b2b990 65%, #718363); box-shadow: inset 2px 3px 5px #fff6; }
+.login-hero .lichen i:nth-child(1) { left: 0; top: 25%; transform: rotate(-25deg); }
+.login-hero .lichen i:nth-child(2) { left: 30%; top: 0; transform: rotate(20deg); }
+.login-hero .lichen i:nth-child(3) { right: 0; top: 32%; transform: rotate(-10deg); }
+.login-hero .lichen i:nth-child(4) { left: 25%; bottom: 0; transform: rotate(12deg); }
+.login-hero .sprig { position: absolute; bottom: 22%; left: var(--x); height: var(--h); width: 3px; background: linear-gradient(#aaba7c, #426b43); transform-origin: bottom; animation: login-bg-sway var(--t) ease-in-out infinite alternate; }
+.login-hero .sprig:after { content: ""; position: absolute; top: 20%; left: -7px; width: 17px; height: 25px; border-radius: 100% 0 100% 0; background: linear-gradient(135deg, #c4ce8c, #53784b); transform: rotate(-30deg); box-shadow: 8px 20px 0 -3px #77945c; }
+.login-hero .spore { position: absolute; bottom: var(--b); left: var(--x); width: 4px; height: 4px; border-radius: 50%; background: #e3e3b9; box-shadow: 0 0 12px 3px #e3e3b966; animation: login-bg-float var(--t) linear infinite; animation-delay: var(--d); opacity: 0; }
+.login-hero .shade { position: absolute; inset: 0; box-shadow: inset 0 0 140px #07140e88; pointer-events: none; }
+
+.login-hero .login-card-wrap { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 1.5rem; }
+.login-hero .login-card-wrap .card { background: #fbfaf6f2; backdrop-filter: blur(2px); }
+
+@keyframes login-bg-sway { from { transform: rotate(-4deg) translateY(2px); } to { transform: rotate(5deg) translateY(-4px); } }
+@keyframes login-bg-breathe { 50% { transform: translateX(-50%) scaleY(1.018); } }
+@keyframes login-bg-glow { to { transform: translate(4%, -2%) scale(1.1); } }
+@keyframes login-bg-float { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: .65; } 85% { opacity: .3; } 100% { opacity: 0; transform: translate(24px, -180px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .login-hero * { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
+}
