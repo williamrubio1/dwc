@@ -12,6 +12,8 @@ body.immersive header.topbar {
 /* El titulo grande reemplaza a la marca chica del topbar en esta pantalla. */
 body.immersive header.topbar .brand { display: none; }
 body.immersive main { max-width: none; padding: 0; margin: 0; }
+/* El pie de contacto propio reemplaza al pie generico de la plataforma. */
+body.immersive footer.footnote { display: none; }
 
 /* Animación decorativa de musgos y líquenes para la pantalla de inicio de sesión. */
 .login-hero {
@@ -46,24 +48,19 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
 /* Mientras el panel de acceso esta abierto, el titulo cede protagonismo para no chocar con el. */
 .login-hero:has(.login-access[open]) .login-title { opacity: 0.1; }
 
-.login-hero .scene { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 80%, #526c4b, #263f30 45%, #10241b 100%); isolation: isolate; }
-.login-hero .glow { position: absolute; inset: -20%; background: radial-gradient(ellipse at 48% 20%, #d6dfb326, transparent 55%); filter: blur(28px); animation: login-bg-glow 24s ease-in-out infinite alternate; }
-.login-hero .ground { position: absolute; bottom: -15%; left: -10%; width: 120%; height: 45%; border-radius: 50% 50% 0 0; background: linear-gradient(#40583a, #172b20); box-shadow: 0 -20px 70px #0b1b1555; }
-.login-hero .rock { position: absolute; bottom: 8%; left: 50%; width: min(75vw, 780px); height: 30%; transform: translateX(-50%); border-radius: 48% 52% 20% 20%; background: linear-gradient(145deg, #69745d, #354535 65%, #1e3024); box-shadow: inset 16px 12px 25px #d6d9b522, inset -20px -18px 30px #0005, 0 20px 35px #0004; animation: login-bg-breathe 18s ease-in-out infinite; }
-.login-hero .moss { position: absolute; bottom: 23%; left: var(--x); width: var(--w); height: var(--h); border-radius: 50%; background: radial-gradient(ellipse at 30% 20%, #c0cb8b, #718d54 42%, #345638 85%); box-shadow: inset 2px 4px 8px #e6e9b533, 0 7px 15px #0003; animation: login-bg-sway var(--t) ease-in-out infinite alternate; }
-.login-hero .moss:before, .login-hero .moss:after { content: ""; position: absolute; top: -20%; width: 40%; height: 65%; border-radius: 60% 40%; background: linear-gradient(140deg, #c6d293, #53764a); }
-.login-hero .moss:before { left: 15%; transform: rotate(-25deg); }
-.login-hero .moss:after { right: 12%; transform: rotate(30deg); }
-.login-hero .lichen { position: absolute; left: var(--x); bottom: var(--b); width: var(--w); height: var(--h); animation: login-bg-sway var(--t) ease-in-out infinite alternate; }
-.login-hero .lichen i { position: absolute; width: 48%; height: 55%; border-radius: 55% 45% 60% 40%; background: linear-gradient(140deg, #e2dfb7, #b2b990 65%, #718363); box-shadow: inset 2px 3px 5px #fff6; }
-.login-hero .lichen i:nth-child(1) { left: 0; top: 25%; transform: rotate(-25deg); }
-.login-hero .lichen i:nth-child(2) { left: 30%; top: 0; transform: rotate(20deg); }
-.login-hero .lichen i:nth-child(3) { right: 0; top: 32%; transform: rotate(-10deg); }
-.login-hero .lichen i:nth-child(4) { left: 25%; bottom: 0; transform: rotate(12deg); }
-.login-hero .sprig { position: absolute; bottom: 22%; left: var(--x); height: var(--h); width: 3px; background: linear-gradient(#aaba7c, #426b43); transform-origin: bottom; animation: login-bg-sway var(--t) ease-in-out infinite alternate; }
-.login-hero .sprig:after { content: ""; position: absolute; top: 20%; left: -7px; width: 17px; height: 25px; border-radius: 100% 0 100% 0; background: linear-gradient(135deg, #c4ce8c, #53784b); transform: rotate(-30deg); box-shadow: 8px 20px 0 -3px #77945c; }
-.login-hero .spore { position: absolute; bottom: var(--b); left: var(--x); width: 4px; height: 4px; border-radius: 50%; background: #e3e3b9; box-shadow: 0 0 12px 3px #e3e3b966; animation: login-bg-float var(--t) linear infinite; animation-delay: var(--d); opacity: 0; }
-.login-hero .shade { position: absolute; inset: 0; box-shadow: inset 0 0 140px #07140e88; pointer-events: none; }
+.login-hero .scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 80%, #233e24 0%, #102719 45%, #07130e 100%);
+}
+.login-hero .scene svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.login-hero .scene .moss { transform-box: fill-box; transform-origin: 50% 100%; animation: login-bg-sway 8s ease-in-out infinite; }
+.login-hero .scene .moss.slow { animation-duration: 12s; }
+.login-hero .scene .stem { transform-box: fill-box; transform-origin: 50% 100%; animation: login-bg-sway 9s ease-in-out infinite; }
+.login-hero .scene .capsule { transform-box: fill-box; transform-origin: 50% 90%; animation: login-bg-nod 7s ease-in-out infinite; }
+.login-hero .scene .spore { animation: login-bg-drift var(--d) linear infinite; animation-delay: var(--delay); opacity: 0; }
+.login-hero .scene .glow { animation: login-bg-pulse 6s ease-in-out infinite; transform-origin: center; }
 
 /* Favicon de acceso: un icono que, al hacer clic, despliega usuario y contraseña.
    Va fijo en la esquina superior derecha, y el panel se abre debajo alineado a ese borde. */
@@ -141,15 +138,35 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
 .login-access-panel .hint { margin: 0.9rem 0 0; font: 12px system-ui; color: #d2ddc9; }
 .login-access-panel .hint a { color: #d6e2c9; }
 
+/* Pie de contacto de la empresa, dentro de la propia escena. */
+.login-hero .login-contact {
+  position: absolute;
+  left: 0; right: 0; bottom: 1.25rem;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem 0.7rem;
+  padding: 0 1rem;
+  font: 12px system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  color: #b9c7ac;
+  text-shadow: 0 1px 8px #000a;
+}
+.login-hero .login-contact .sep { opacity: 0.6; }
+.login-hero .login-contact a { color: #d6e2c9; }
+.login-hero .login-contact a:hover { color: #eef0df; }
+
 @keyframes login-panel-in {
   from { opacity: 0; transform: translateY(-14px) scale(0.97); }
   to { opacity: 1; transform: none; }
 }
 
-@keyframes login-bg-sway { from { transform: rotate(-4deg) translateY(2px); } to { transform: rotate(5deg) translateY(-4px); } }
-@keyframes login-bg-breathe { 50% { transform: translateX(-50%) scaleY(1.018); } }
-@keyframes login-bg-glow { to { transform: translate(4%, -2%) scale(1.1); } }
-@keyframes login-bg-float { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: .65; } 85% { opacity: .3; } 100% { opacity: 0; transform: translate(24px, -180px); } }
+@keyframes login-bg-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
+@keyframes login-bg-nod { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
+@keyframes login-bg-drift { 0% { opacity: 0; transform: translate(0, 25px) scale(.5); } 15% { opacity: .65; } 80% { opacity: .35; } 100% { opacity: 0; transform: translate(35px, -115px) scale(1.15); } }
+@keyframes login-bg-pulse { 0%, 100% { opacity: .12; } 50% { opacity: .35; } }
 
 @media (prefers-reduced-motion: reduce) {
   .login-hero * { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
