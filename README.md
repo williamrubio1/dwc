@@ -13,7 +13,7 @@ Plataforma de registros de ocurrencia bajo el estándar Darwin Core, con generac
 
 1. `npm install`
 2. Copiar `.env.example` a `.env` y completar credenciales de MySQL y `ADMIN_INITIAL_PASSWORD`.
-3. Crear la base ejecutando `db/schema.sql` contra el servidor MySQL.
+3. Crear la base de datos primero (en hosting compartido tipo Hostinger, desde hPanel) y luego importar `db/schema.sql` **con esa base ya seleccionada** — el script no crea la base ni hace `USE`, solo crea las tablas dentro de la base activa.
 4. `npm start` (o `npm run dev` para reinicio automático).
 
 Al primer arranque, si no existe la cuenta `admin`, se crea automáticamente usando `ADMIN_INITIAL_PASSWORD`. Cambie esa contraseña después del primer ingreso; no queda registrada en el repositorio.

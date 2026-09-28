@@ -5,10 +5,10 @@
 -- y de Plantilla.csv / Definiciones.csv (185 terminos Darwin Core)
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS darwin_core
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE darwin_core;
+-- En hosting compartido (p. ej. Hostinger) la base ya existe (se crea desde
+-- hPanel con su propio nombre con prefijo, no aqui) y el usuario solo tiene
+-- permisos sobre ella. Este script no crea ni cambia de base: importelo con
+-- esa base ya seleccionada/abierta en phpMyAdmin (o con `mysql <basename> < schema.sql`).
 
 -- ------------------------------------------------------------
 -- Usuarios y perfiles (administrador, profesor, estudiante)
