@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/login-bg.css">
 </head>
-<body>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
 <header class="topbar">
-  <div class="brand">Herbario Universidad de los Llanos · Darwin Core</div>
+  <div class="brand">Herbario Llanos</div>
   <% if (currentUser) { %>
   <nav class="mainnav">
     <a href="/dashboard">Inicio</a>

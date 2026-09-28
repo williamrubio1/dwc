@@ -1,4 +1,4 @@
-<%- include('../partials/header', { title: 'Iniciar sesión' }) %>
+<%- include('../partials/header', { title: 'Iniciar sesión', bodyClass: 'immersive' }) %>
 <div class="login-hero">
   <div class="scene" role="img" aria-label="Animación lenta de musgos y líquenes sobre una roca">
     <div class="glow"></div><div class="ground"></div><div class="rock"></div>
@@ -8,8 +8,15 @@
     <div class="spore" style="--x:34%;--b:24%;--t:18s;--d:-4s"></div><div class="spore" style="--x:49%;--b:21%;--t:22s;--d:-13s"></div><div class="spore" style="--x:62%;--b:27%;--t:20s;--d:-8s"></div><div class="spore" style="--x:73%;--b:20%;--t:25s;--d:-17s"></div>
     <div class="shade"></div>
   </div>
-  <div class="login-topbar">
-    <div class="login-topbar-row">
+
+  <details class="login-access">
+    <summary class="login-access-toggle" aria-label="Iniciar sesión">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
+      </svg>
+    </summary>
+    <div class="login-access-panel">
       <h1>Iniciar sesión</h1>
       <form method="post" action="/login">
         <div class="field">
@@ -22,8 +29,8 @@
         </div>
         <button type="submit">Entrar</button>
       </form>
+      <p class="hint">¿Eres estudiante y no tienes cuenta? <a href="/register">Regístrate con tu correo @unillanos.edu.co</a></p>
     </div>
-    <p class="hint">¿Eres estudiante y no tienes cuenta? <a href="/register">Regístrate con tu correo @unillanos.edu.co</a></p>
-  </div>
+  </details>
 </div>
 <%- include('../partials/footer') %>
