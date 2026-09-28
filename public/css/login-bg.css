@@ -9,7 +9,8 @@ body.immersive header.topbar {
   border-bottom: none;
   z-index: 2;
 }
-body.immersive header.topbar .brand { color: #eef0df; }
+/* El titulo grande reemplaza a la marca chica del topbar en esta pantalla. */
+body.immersive header.topbar .brand { display: none; }
 body.immersive main { max-width: none; padding: 0; margin: 0; }
 
 /* Animación decorativa de musgos y líquenes para la pantalla de inicio de sesión. */
@@ -22,10 +23,28 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
   margin-right: -50vw;
   min-height: 100vh;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
+
+.login-title {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  margin: 0;
+  width: 90%;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: #d4af5f;
+  text-shadow: 0 2px 28px #0a180fcc, 0 0 60px #d4af5f33;
+  transition: opacity 400ms ease;
+}
+/* Mientras el panel de acceso esta abierto, el titulo cede protagonismo para no chocar con el. */
+.login-hero:has(.login-access[open]) .login-title { opacity: 0.1; }
 
 .login-hero .scene { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 80%, #526c4b, #263f30 45%, #10241b 100%); isolation: isolate; }
 .login-hero .glow { position: absolute; inset: -20%; background: radial-gradient(ellipse at 48% 20%, #d6dfb326, transparent 55%); filter: blur(28px); animation: login-bg-glow 24s ease-in-out infinite alternate; }
@@ -46,8 +65,15 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
 .login-hero .spore { position: absolute; bottom: var(--b); left: var(--x); width: 4px; height: 4px; border-radius: 50%; background: #e3e3b9; box-shadow: 0 0 12px 3px #e3e3b966; animation: login-bg-float var(--t) linear infinite; animation-delay: var(--d); opacity: 0; }
 .login-hero .shade { position: absolute; inset: 0; box-shadow: inset 0 0 140px #07140e88; pointer-events: none; }
 
-/* Favicon de acceso: un icono que, al hacer clic, despliega usuario y contraseña. */
-.login-access { position: relative; z-index: 1; }
+/* Favicon de acceso: un icono que, al hacer clic, despliega usuario y contraseña.
+   Va fijo en la esquina superior derecha, y el panel se abre debajo alineado a ese borde. */
+.login-access {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 2;
+  text-align: right;
+}
 .login-access summary {
   list-style: none;
   width: 56px;
@@ -66,11 +92,13 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
 .login-access summary::-webkit-details-marker { display: none; }
 .login-access summary:hover { background: #1c3527; }
 .login-access summary:focus-visible { outline: 2px solid #c0cb8b; outline-offset: 2px; }
-.login-access[open] summary { margin: 0 auto 0.9rem; }
+.login-access summary { margin-left: auto; }
+.login-access[open] summary { margin-bottom: 0.9rem; }
 
 .login-access-panel {
   min-width: 320px;
-  max-width: 92vw;
+  max-width: min(92vw, 420px);
+  margin-left: auto;
   padding: 1.3rem 1.5rem;
   background: #10241b8f;
   backdrop-filter: blur(8px);
@@ -79,8 +107,9 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
   border-radius: 14px;
   color: #eef0df;
   text-align: center;
+  animation: login-panel-in 900ms ease-out;
 }
-.login-access-panel h1 { margin: 0 0 0.9rem; font-size: 1.1rem; font-weight: 400; letter-spacing: 0.02em; color: #eef0df; }
+.login-access-panel h2 { margin: 0 0 0.9rem; font-size: 1.1rem; font-weight: 400; letter-spacing: 0.02em; color: #eef0df; }
 .login-access-panel form { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 0.75rem; }
 .login-access-panel .field { display: flex; flex-direction: column; gap: 0.25rem; min-width: 180px; flex: 1 1 180px; text-align: left; }
 .login-access-panel .field label {
@@ -111,6 +140,11 @@ body.immersive main { max-width: none; padding: 0; margin: 0; }
 .login-access-panel button:hover { background: #a3c2a0; }
 .login-access-panel .hint { margin: 0.9rem 0 0; font: 12px system-ui; color: #d2ddc9; }
 .login-access-panel .hint a { color: #d6e2c9; }
+
+@keyframes login-panel-in {
+  from { opacity: 0; transform: translateY(-14px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
 
 @keyframes login-bg-sway { from { transform: rotate(-4deg) translateY(2px); } to { transform: rotate(5deg) translateY(-4px); } }
 @keyframes login-bg-breathe { 50% { transform: translateX(-50%) scaleY(1.018); } }
