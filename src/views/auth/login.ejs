@@ -8,22 +8,22 @@
     <div class="spore" style="--x:34%;--b:24%;--t:18s;--d:-4s"></div><div class="spore" style="--x:49%;--b:21%;--t:22s;--d:-13s"></div><div class="spore" style="--x:62%;--b:27%;--t:20s;--d:-8s"></div><div class="spore" style="--x:73%;--b:20%;--t:25s;--d:-17s"></div>
     <div class="shade"></div>
   </div>
-  <div class="login-card-wrap">
-    <div class="card">
+  <div class="login-topbar">
+    <div class="login-topbar-row">
       <h1>Iniciar sesión</h1>
-      <form class="stack" method="post" action="/login">
+      <form method="post" action="/login">
         <div class="field">
-          <label>Usuario o correo</label>
-          <input type="text" name="username" required autofocus>
+          <label for="login-username">Usuario o correo</label>
+          <input id="login-username" type="text" name="username" required autofocus>
         </div>
         <div class="field">
-          <label>Contraseña</label>
-          <input type="password" name="password" required>
+          <label for="login-password">Contraseña</label>
+          <input id="login-password" type="password" name="password" required>
         </div>
         <button type="submit">Entrar</button>
       </form>
-      <p style="margin-top:1rem;font-size:0.85rem;">¿Eres estudiante y no tienes cuenta? <a href="/register">Regístrate con tu correo @unillanos.edu.co</a></p>
     </div>
+    <p class="hint">¿Eres estudiante y no tienes cuenta? <a href="/register">Regístrate con tu correo @unillanos.edu.co</a></p>
   </div>
 </div>
 <%- include('../partials/footer') %>
