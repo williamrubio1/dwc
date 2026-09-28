@@ -41,8 +41,14 @@ body.immersive footer.footnote { display: none; }
   font-size: clamp(3rem, 9vw, 7.5rem);
   line-height: 1.05;
   letter-spacing: 0.01em;
+  /* Relieve dorado: degrade tipo luz natural + varias capas de sombra para dar
+     volumen (contacto, proyectada y resplandor), en vez de un color plano. */
+  background: linear-gradient(180deg, #f6e2a8 0%, #dcb567 45%, #b3823a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   color: #d4af5f;
-  text-shadow: 0 2px 28px #0a180fcc, 0 0 60px #d4af5f33;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 0 #8a6423aa, 0 3px 6px #00000070, 0 10px 26px #000000aa, 0 0 60px #d4af5f3d;
   transition: opacity 400ms ease;
 }
 /* Mientras el panel de acceso esta abierto, el titulo cede protagonismo para no chocar con el. */
@@ -109,19 +115,50 @@ body.immersive footer.footnote { display: none; }
 .login-access[open] summary { margin-bottom: 0.9rem; }
 
 .login-access-panel {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   min-width: 320px;
   max-width: min(92vw, 420px);
   margin-left: auto;
   padding: 1.3rem 1.5rem;
-  background: #10241b8f;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid #ffffff26;
-  border-radius: 14px;
+  background: linear-gradient(165deg, #1c3f35d9, #0c211ce3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid #bfe8db3d;
+  border-radius: 16px;
   color: #eef0df;
   text-align: center;
-  animation: login-panel-in 900ms ease-out;
+  /* Retraso de 2s antes de aparecer, luego una entrada suave (menos estatica). */
+  opacity: 0;
+  animation: login-panel-in 1100ms 2000ms cubic-bezier(.22, .8, .3, 1) both;
+  box-shadow:
+    0 18px 45px -14px #000000b0,
+    0 4px 14px #00000066,
+    inset 0 1px 0 #ffffff2e,
+    inset 0 -18px 34px -22px #5fd6c033;
 }
+/* Ondas de agua: un brillo que respira y un reflejo que la recorre en diagonal. */
+.login-access-panel::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(circle, #6fe0c93a, transparent 62%);
+  animation: login-panel-ripple 5s ease-in-out infinite;
+  animation-delay: 2100ms;
+  pointer-events: none;
+}
+.login-access-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, #ffffff2b 50%, transparent 65%);
+  background-size: 220% 220%;
+  animation: login-panel-shimmer 7s ease-in-out infinite;
+  animation-delay: 2100ms;
+  pointer-events: none;
+}
+.login-access-panel > * { position: relative; z-index: 1; }
 .login-access-panel h2 { margin: 0 0 0.9rem; font-size: 1.1rem; font-weight: 400; letter-spacing: 0.02em; color: #eef0df; }
 .login-access-panel form { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 0.75rem; }
 .login-access-panel .field { display: flex; flex-direction: column; gap: 0.25rem; min-width: 180px; flex: 1 1 180px; text-align: left; }
@@ -154,29 +191,58 @@ body.immersive footer.footnote { display: none; }
 .login-access-panel .hint { margin: 0.9rem 0 0; font: 12px system-ui; color: #d2ddc9; }
 .login-access-panel .hint a { color: #d6e2c9; }
 
-/* Pie de contacto de la empresa, dentro de la propia escena. */
+/* Pie de contacto de la empresa, agrupado en una tarjeta discreta. */
 .login-hero .login-contact {
   position: absolute;
-  left: 0; right: 0; bottom: 1.25rem;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
   z-index: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 0.35rem 0.7rem;
-  padding: 0 1rem;
+  gap: 0.4rem 1.75rem;
+  padding: 0.6rem 1.1rem;
+  max-width: 94vw;
+  background: #0d1f16a6;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid #ffffff1f;
+  border-radius: 12px;
   font: 12px system-ui, sans-serif;
   letter-spacing: 0.02em;
   color: #b9c7ac;
-  text-shadow: 0 1px 8px #000a;
 }
-.login-hero .login-contact .sep { opacity: 0.6; }
-.login-hero .login-contact a { color: #d6e2c9; }
+.login-hero .login-contact-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+}
+.login-hero .login-contact a,
+.login-hero .login-contact-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #d6e2c9;
+  white-space: nowrap;
+}
+.login-hero .login-contact a svg,
+.login-hero .login-contact-name svg { opacity: 0.85; flex: none; }
 .login-hero .login-contact a:hover { color: #eef0df; }
+.login-hero .login-contact-name { color: #b9c7ac; }
 
 @keyframes login-panel-in {
   from { opacity: 0; transform: translateY(-14px) scale(0.97); }
   to { opacity: 1; transform: none; }
+}
+@keyframes login-panel-ripple {
+  0%, 100% { transform: scale(1); opacity: .55; }
+  50% { transform: scale(1.18); opacity: .95; }
+}
+@keyframes login-panel-shimmer {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
 @keyframes login-bg-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
