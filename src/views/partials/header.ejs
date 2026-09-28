@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= typeof title !== 'undefined' ? title + ' · Darwin Core LLANOS' : 'Darwin Core LLANOS' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Herbario Universidad de los Llanos · Darwin Core</div>
+  <% if (currentUser) { %>
+  <nav class="mainnav">
+    <a href="/dashboard">Inicio</a>
+    <% if (currentUser.role === 'estudiante') { %>
+      <a href="/records">Mis registros</a>
+      <a href="/import">Importar</a>
+      <a href="/envelopes/consolidated">Sobres</a>
+    <% } %>
+    <% if (currentUser.role === 'profesor') { %>
+      <a href="/classes">Mis clases</a>
+    <% } %>
+    <% if (currentUser.role === 'administrador') { %>
+      <a href="/admin/users">Usuarios</a>
+      <a href="/admin/classes">Clases</a>
+      <a href="/admin/records">Toda la base</a>
+      <a href="/admin/organism-types">Tipos de organismo</a>
+      <a href="/admin/help-texts">Ayuda</a>
+      <a href="/admin/settings">Configuración</a>
+    <% } %>
+    <% if (currentUser.role !== 'administrador') { %><a href="/export">Exportar</a><% } %>
+    <a href="/profile">Perfil (<%= currentUser.nombre || currentUser.username %>)</a>
+    <form method="post" action="/logout" style="display:inline">
+      <button type="submit" class="btn secondary">Salir</button>
+    </form>
+  </nav>
+  <% } %>
+</header>
+<main>
+  <% if (typeof messages !== 'undefined') { %>
+    <% (messages.success || []).forEach(function(m) { %><div class="alert success"><%= m %></div><% }); %>
+    <% (messages.error || []).forEach(function(m) { %><div class="alert error"><%= m %></div><% }); %>
+  <% } %>

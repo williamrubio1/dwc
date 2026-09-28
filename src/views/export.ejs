@@ -1,0 +1,23 @@
+<%- include('partials/header', { title: 'Exportar' }) %>
+<h1>Exportar registros</h1>
+<div class="card">
+<form class="stack" method="get" action="/export/download" style="max-width:none;flex-direction:row;flex-wrap:wrap;align-items:end;">
+  <div class="field"><label>Formato</label>
+    <select name="formato"><option value="csv">CSV</option><option value="xlsx">XLSX</option></select>
+  </div>
+  <div class="field"><label>Creado desde</label><input type="date" name="fechaDesde"></div>
+  <div class="field"><label>Creado hasta</label><input type="date" name="fechaHasta"></div>
+  <div class="field"><label>recordNumber</label><input type="text" name="recordNumber"></div>
+  <% if (role !== 'estudiante') { %>
+  <div class="field"><label>Clase</label>
+    <select name="claseId">
+      <option value="">Todas</option>
+      <% clasesDisponibles.forEach(function(c){ %><option value="<%= c.id %>"><%= c.nombre_clase %></option><% }); %>
+    </select>
+  </div>
+  <div class="field"><label>Correo del estudiante</label><input type="text" name="estudianteEmail"></div>
+  <% } %>
+  <button type="submit">Descargar</button>
+</form>
+</div>
+<%- include('partials/footer') %>

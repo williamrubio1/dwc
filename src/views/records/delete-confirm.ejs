@@ -1,0 +1,12 @@
+<%- include('../partials/header', { title: 'Eliminar registro' }) %>
+<h1>Eliminar registro <%= record.occurrenceID %></h1>
+<div class="card">
+  <% if (perteneceAClase) { %>
+    <p class="alert error">Este registro pertenece a una clase. Su eliminación es lógica: desaparecerá de las vistas y exportaciones, pero se conservará para auditoría. Su occurrenceID no se reutilizará.</p>
+  <% } %>
+  <form method="post" action="/records/<%= record.id %>/delete">
+    <button type="submit" class="btn danger">Confirmar eliminación</button>
+    <a class="btn secondary" href="/records">Cancelar</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>

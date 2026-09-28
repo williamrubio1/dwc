@@ -1,0 +1,18 @@
+<%- include('../partials/header', { title: 'Textos de ayuda' }) %>
+<h1>Textos de ayuda por término Darwin Core</h1>
+<div class="card">
+<table>
+  <thead><tr><th>Sección</th><th>Término</th><th>Etiqueta</th><th></th></tr></thead>
+  <tbody>
+  <% rows.forEach(function(r) { %>
+    <tr>
+      <td><%= r.seccion %></td>
+      <td><%= r.term %></td>
+      <td><%= r.etiqueta %></td>
+      <td><a href="/admin/help-texts/<%= r.term %>/edit">Editar</a></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

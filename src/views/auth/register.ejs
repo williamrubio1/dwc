@@ -1,0 +1,18 @@
+<%- include('../partials/header', { title: 'Crear cuenta' }) %>
+<div class="card" style="max-width:520px;margin:2rem auto;">
+  <h1>Crear cuenta de estudiante</h1>
+  <p class="hint">Solo se admiten correos institucionales @unillanos.edu.co.</p>
+  <form class="stack" method="post" action="/register">
+    <div class="field"><label>Nombre completo</label><input type="text" name="nombre" required></div>
+    <div class="field"><label>Correo institucional</label><input type="email" name="email" required placeholder="usuario@unillanos.edu.co"></div>
+    <div class="field"><label>Contraseña</label><input type="password" name="password" required minlength="8"></div>
+    <div class="field"><label>Documento de identidad</label><input type="text" name="documento" required></div>
+    <div class="field"><label>Programa académico</label><input type="text" name="programa" required></div>
+    <div class="field"><label>Semestre</label><input type="text" name="semestre"></div>
+    <div class="field"><label>Código estudiantil</label><input type="text" name="codigoEstudiantil" required></div>
+    <div class="field"><label>Teléfono</label><input type="text" name="telefono"></div>
+    <button type="submit">Crear cuenta</button>
+  </form>
+  <p style="margin-top:1rem;font-size:0.85rem;"><a href="/login">Ya tengo cuenta</a></p>
+</div>
+<%- include('../partials/footer') %>

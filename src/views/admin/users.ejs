@@ -1,0 +1,26 @@
+<%- include('../partials/header', { title: 'Usuarios' }) %>
+<h1>Usuarios</h1>
+<p class="actions"><a class="btn" href="/admin/users/new-professor">+ Crear profesor</a></p>
+<div class="card">
+<table>
+  <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
+  <tbody>
+  <% users.forEach(function(u) { %>
+    <tr>
+      <td><%= u.nombre || u.username %></td>
+      <td><%= u.email %></td>
+      <td><%= u.role %></td>
+      <td><span class="badge <%= u.activo ? 'activo' : 'inactivo' %>"><%= u.activo ? 'activo' : 'inactivo' %></span></td>
+      <td>
+        <% if (u.role !== 'administrador') { %>
+        <form method="post" action="/admin/users/<%= u.id %>/toggle" style="display:inline">
+          <button type="submit" class="btn secondary"><%= u.activo ? 'Inactivar' : 'Activar' %></button>
+        </form>
+        <% } %>
+      </td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

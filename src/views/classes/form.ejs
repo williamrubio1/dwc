@@ -1,0 +1,13 @@
+<%- include('../partials/header', { title: 'Nuevo código de clase' }) %>
+<h1>Nuevo código de clase</h1>
+<div class="card">
+<form class="stack" method="post" action="/classes">
+  <div class="field"><label>Nombre de la clase o asignatura</label><input type="text" name="nombreClase" required></div>
+  <div class="field"><label>Periodo académico</label><input type="text" name="periodoAcademico" placeholder="2026-1"></div>
+  <div class="field"><label>Prefijo de occurrenceID</label><input type="text" name="prefijo" required placeholder="UniLlanos:LLANOS:"></div>
+  <div class="field"><label>Número inicial del rango</label><input type="number" name="rangoInicial" required></div>
+  <div class="field"><label>Número final del rango</label><input type="number" name="rangoFinal" required></div>
+  <button type="submit">Crear código</button>
+</form>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,23 @@
+<%- include('../partials/header', { title: 'Toda la base' }) %>
+<h1>Toda la base de registros</h1>
+<p class="actions"><a class="btn secondary" href="/export">Exportar</a></p>
+<div class="card">
+<table>
+  <thead><tr><th>occurrenceID</th><th>Estudiante</th><th>Clase</th><th>Científico</th><th>Fecha</th><th>Estado</th><th></th></tr></thead>
+  <tbody>
+  <% records.forEach(function(r) { %>
+    <tr>
+      <td><%= r.occurrenceID %></td>
+      <td><%= r.estudiante %></td>
+      <td><%= r.nombre_clase || '-' %></td>
+      <td><em><%= r.scientificName || '' %></em></td>
+      <td><%= r.eventDate || '' %></td>
+      <td><span class="badge <%= r.estado_validacion %>"><%= r.estado_validacion.replace('_',' ') %></span></td>
+      <td><a href="/admin/records/<%= r.id %>">Ver</a></td>
+    </tr>
+  <% }); %>
+  <% if (records.length === 0) { %><tr><td colspan="7">Sin registros.</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

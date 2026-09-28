@@ -1,0 +1,43 @@
+<%- include('partials/header', { title: 'Importar' }) %>
+<h1>Importar registros (CSV / XLSX)</h1>
+
+<% if (!preview) { %>
+<div class="card">
+  <p class="hint">CSV en UTF-8 o Latin-1 (ISO-8859-1), separador ';'. También se acepta XLSX. Use la <a href="/plantilla-descargable">plantilla descargable</a>.</p>
+  <form class="stack" method="post" action="/import/preview" enctype="multipart/form-data">
+    <div class="field"><label>Archivo</label><input type="file" name="archivo" accept=".csv,.xlsx" required></div>
+    <button type="submit">Validar archivo</button>
+  </form>
+</div>
+<% } else { %>
+<div class="card">
+  <h2>Resultado de la validación</h2>
+  <table>
+    <thead><tr><th>Fila</th><th>Bloqueantes</th><th>Advertencias</th><th>Posible duplicado en base</th></tr></thead>
+    <tbody>
+    <% preview.forEach(function(r) { %>
+      <tr>
+        <td><%= r.rowNumber %></td>
+        <td>
+          <% r.blocking.forEach(function(b) { %><div class="field-error"><%= b.field %>: <%= b.message %></div><% }); %>
+        </td>
+        <td>
+          <% r.warnings.forEach(function(w) { %><div class="hint"><%= w.field %>: <%= w.message %></div><% }); %>
+        </td>
+        <td>
+          <% if (r.duplicateInDb && r.duplicateInDb.length) { %>
+            <div class="hint">Coincide con occurrenceID <%= r.duplicateInDb.map(function(d){return d.occurrenceID;}).join(', ') %></div>
+          <% } %>
+        </td>
+      </tr>
+    <% }); %>
+    </tbody>
+  </table>
+  <p class="hint">Las filas con errores bloqueantes no se importarán. Corrija el archivo y vuelva a validar si es necesario.</p>
+  <form method="post" action="/import/confirm">
+    <button type="submit">Confirmar e importar filas válidas</button>
+  </form>
+  <a class="btn secondary" href="/import">Cargar otro archivo</a>
+</div>
+<% } %>
+<%- include('partials/footer') %>

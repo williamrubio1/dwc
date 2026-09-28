@@ -1,0 +1,12 @@
+<%- include('../partials/header', { title: 'Configuración' }) %>
+<h1>Configuración de la plantilla del sobre</h1>
+<div class="card">
+<form class="stack" method="post" action="/admin/settings">
+  <div class="field">
+    <label>Encabezado del sobre</label>
+    <input type="text" name="sobre_encabezado" value="<%= settings.sobre_encabezado || '' %>">
+  </div>
+  <button type="submit">Guardar</button>
+</form>
+</div>
+<%- include('../partials/footer') %>

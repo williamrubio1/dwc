@@ -1,0 +1,10 @@
+<%- include('../partials/header', { title: 'Editar ayuda' }) %>
+<h1>Editar ayuda &mdash; <%= term.term %> (<%= term.etiqueta %>)</h1>
+<div class="card">
+<form class="stack" method="post" action="/admin/help-texts/<%= term.term %>/edit">
+  <div class="field"><label>Definición</label><textarea name="definicion"><%= term.definicion %></textarea></div>
+  <div class="field"><label>Ejemplo</label><textarea name="ejemplo"><%= term.ejemplo %></textarea></div>
+  <button type="submit">Guardar</button>
+</form>
+</div>
+<%- include('../partials/footer') %>

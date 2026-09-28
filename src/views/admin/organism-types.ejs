@@ -1,0 +1,26 @@
+<%- include('../partials/header', { title: 'Tipos de organismo' }) %>
+<h1>Tipos de organismo según phylum</h1>
+<p class="hint">Usado para la línea "Tipo de organismo" del sobre (sección 9).</p>
+<div class="card">
+<table>
+  <thead><tr><th>Phylum</th><th>Tipo impreso</th><th></th></tr></thead>
+  <tbody>
+  <% rows.forEach(function(r) { %>
+    <tr>
+      <td><%= r.phylum %></td>
+      <td><%= r.tipo_impreso %></td>
+      <td><form method="post" action="/admin/organism-types/<%= r.id %>/delete" style="display:inline"><button class="btn secondary" type="submit">Eliminar</button></form></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+</div>
+<div class="card">
+  <h2>Agregar / actualizar</h2>
+  <form class="stack" method="post" action="/admin/organism-types">
+    <div class="field"><label>Phylum</label><input type="text" name="phylum" required></div>
+    <div class="field"><label>Tipo impreso</label><input type="text" name="tipoImpreso" required></div>
+    <button type="submit">Guardar</button>
+  </form>
+</div>
+<%- include('../partials/footer') %>

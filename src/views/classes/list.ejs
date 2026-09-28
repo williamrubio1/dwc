@@ -1,0 +1,28 @@
+<%- include('../partials/header', { title: 'Mis clases' }) %>
+<h1>Mis códigos de clase</h1>
+<p class="actions"><a class="btn" href="/classes/new">+ Nuevo código de clase</a></p>
+<div class="card">
+<table>
+  <thead><tr><th>Código</th><th>Clase</th><th>Periodo</th><th>Estado</th><th>Prefijo</th><th>Rango</th><th>Siguiente</th><th></th></tr></thead>
+  <tbody>
+  <% clases.forEach(function(c) { %>
+    <tr>
+      <td><strong><%= c.codigo_unico %></strong></td>
+      <td><%= c.nombre_clase %></td>
+      <td><%= c.periodo_academico || '-' %></td>
+      <td><span class="badge <%= c.estado %>"><%= c.estado %></span></td>
+      <td><%= c.prefijo_occurrence_id %></td>
+      <td><%= c.rango_inicial %> &ndash; <%= c.rango_final %></td>
+      <td><%= c.siguiente_numero %><%= c.siguiente_numero > c.rango_final ? ' (agotado)' : '' %></td>
+      <td class="actions">
+        <a href="/classes/<%= c.id %>/records">Registros</a>
+        <a href="/classes/<%= c.id %>/students">Estudiantes</a>
+        <a href="/classes/<%= c.id %>/expand">Ampliar rango</a>
+      </td>
+    </tr>
+  <% }); %>
+  <% if (clases.length === 0) { %><tr><td colspan="8">Aún no ha creado códigos de clase.</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

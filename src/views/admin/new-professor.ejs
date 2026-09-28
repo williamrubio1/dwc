@@ -1,0 +1,14 @@
+<%- include('../partials/header', { title: 'Crear profesor' }) %>
+<h1>Crear profesor</h1>
+<div class="card">
+<form class="stack" method="post" action="/admin/users/new-professor">
+  <div class="field"><label>Nombre completo</label><input type="text" name="nombre" required></div>
+  <div class="field"><label>Correo institucional</label><input type="email" name="email" required placeholder="usuario@unillanos.edu.co"></div>
+  <div class="field"><label>Contraseña inicial</label><input type="password" name="password" required minlength="8"></div>
+  <div class="field"><label>Documento</label><input type="text" name="documento"></div>
+  <div class="field"><label>Dependencia o programa</label><input type="text" name="dependenciaPrograma"></div>
+  <div class="field"><label>Teléfono</label><input type="text" name="telefono"></div>
+  <button type="submit">Crear</button>
+</form>
+</div>
+<%- include('../partials/footer') %>

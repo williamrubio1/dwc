@@ -1,0 +1,31 @@
+{
+  "name": "darwin-core-llanos",
+  "version": "1.0.0",
+  "description": "Plataforma de registros de ocurrencia Darwin Core - Herbario Universidad de los Llanos (LLANOS)",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "csv-parse": "^7.0.3",
+    "csv-stringify": "^6.5.0",
+    "docx": "^9.0.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "iconv-lite": "^0.6.3",
+    "method-override": "^3.0.0",
+    "multer": "^2.4.0",
+    "mysql2": "^3.11.4",
+    "pdfkit": "^0.15.1"
+  }
+}

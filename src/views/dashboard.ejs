@@ -1,0 +1,31 @@
+<%- include('partials/header', { title: 'Inicio' }) %>
+<h1>Hola, <%= currentUser.nombre || currentUser.username %></h1>
+
+<% if (currentUser.role === 'estudiante') { %>
+  <div class="grid">
+    <div class="stat"><div class="value"><%= stats.registros.total || 0 %></div><div class="label">Registros totales</div></div>
+    <div class="stat"><div class="value"><%= stats.registros.incompletos || 0 %></div><div class="label">Incompletos</div></div>
+    <div class="stat"><div class="value"><%= stats.registros.con_advertencias || 0 %></div><div class="label">Con advertencias</div></div>
+    <div class="stat"><div class="value"><%= stats.registros.completos || 0 %></div><div class="label">Completos para sobre</div></div>
+  </div>
+  <div class="card">
+    <% if (!stats.vinculado) { %>
+      <p>No tiene un código de clase vinculado. <a href="/profile">Vincule uno en su perfil</a> para poder crear registros.</p>
+    <% } else { %>
+      <p><a class="btn" href="/records/new">Crear nuevo registro</a> &nbsp; <a class="btn secondary" href="/records">Ver mis registros</a></p>
+    <% } %>
+  </div>
+<% } else if (currentUser.role === 'profesor') { %>
+  <div class="grid">
+    <div class="stat"><div class="value"><%= stats.clases %></div><div class="label">Códigos de clase</div></div>
+    <div class="stat"><div class="value"><%= stats.registros %></div><div class="label">Registros de sus clases</div></div>
+  </div>
+  <div class="card"><a class="btn" href="/classes/new">Crear código de clase</a> &nbsp; <a class="btn secondary" href="/classes">Ver mis clases</a></div>
+<% } else { %>
+  <div class="grid">
+    <div class="stat"><div class="value"><%= stats.usuarios %></div><div class="label">Usuarios</div></div>
+    <div class="stat"><div class="value"><%= stats.registros %></div><div class="label">Registros activos</div></div>
+    <div class="stat"><div class="value"><%= stats.clases %></div><div class="label">Códigos de clase</div></div>
+  </div>
+<% } %>
+<%- include('partials/footer') %>

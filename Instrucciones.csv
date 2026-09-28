@@ -1,0 +1,76 @@
+"Esta plantilla contiene todos los elementos del estándar Darwin Core (DwC) para la documentación de registros biológicos y corresponde a una adaptación del estándar, en idioma español, para cubrir las necesidades de publicación de datos sobre biodiversidad en Colombia (versión 2024-05-02).
+
+La documentación oficial del estándar puede ser consultada en la siguiente URL: https://dwc.tdwg.org/terms/ ";;;;;;;;;
+Sobre la plantilla;;;;;;;;;
+"Esta plantilla Excel cuenta con cuatro (4) hojas o pestañas:
+
+        1. Instrucciones: Contiene la guía de uso y los puntos a tener en cuenta antes de iniciar la documentación de los registros biológicos.
+        2. Plantilla: Contiene la tabla con los elementos DwC para documentar los registros biológicos.
+        3. Definiciones: Contiene el glosario de los elementos DwC.
+        4. Vocabulario: Contiene la lista del vocabulario controlado para algunos de los elementos DwC.
+
+Antes de documentar la plantilla se recomienda leer la documentación disponible en: https://biodiversidad.co/recursos/plantillas-dwc
+
+En la pestaña Plantilla encontrará que cada elemento DwC corresponde a una columna. Documente solo aquellos elementos de los que posea información, pueda inferirla o corresponda a un elemento obligatorio. 
+
+Para conocer la definición de cada elemento DwC de la pestaña Plantilla, puede hacer clic sobre el nombre del elemento DwC y será redirigido a su respectiva definición y ejemplos disponibles en la pestaña Definiciones.
+
+Una vez finalice, elimine las columnas que no documentó.
+
+A tener en cuenta: esta plantilla sirve para documentar eventos de muestreo siempre y cuando se documenten los elementos obligatorios para este tipo de datos. También puede usar la plantilla diseñada para eventos de muestreo documentando en paralelo esta plantilla de registros biológicos a modo de extensión.";;;;;;;;;
+;;;;;;;;;
+;;;;;;;;;
+Convenciones;;;;;;;;;
+;;;;;;;;;
+Elemento DwC;Obligatorio para la publicación de los registros biológicos a través del SiB Colombia;;;;;;;;
+Elemento DwC;Obligatorio según el origen de los datos  y recomendado para la documentación de un buen registro biológico;;;;;;;;
+Elemento DwC;Esencial o recomendado en la documentación de un buen registro biológico;;;;;;;;
+Elemento DwC;Opcional y que puede documentarse si posee la información o si el publicador lo desea;;;;;;;;
+«;Botón para regresar a la Plantilla;;;;;;;;
+;;;;;;;;;
+?;Botón para ir desde las Definiciones al Vocabulario controlado del elemento DwC, en caso de contar con uno.;;;;;;;;
+;;;;;;;;;
+Elementos obligatorios según el origen de los datos;;;;;;;;;
+Los elementos obligatorios pueden variar según el origen de los datos:;;;;;;;;;
+;;;;;;;;;
+;;Fuente de los registros biológicos;;;;;;;
+Elemento Darwin Core;Elemento Darwin Core - es;Asociados a un permiso de recolección o acceso a recursos genéticos;Colección biológica;Eventos de muestreo;Marinos;Otros*;;;
+occurrenceID;ID del registro biológico;x;x;x;x;x;;;
+basisOfRecord;Base del registro;x;x;x;x;x;;;
+institutionCode;Código de la institución;x;x;x;x;x;;;
+collectionCode;Código de la colección;;x;;;;;;
+type;Tipo;x;x;x;x;x;;;
+catalogNumber;Número de catálogo;;x;;;;;;
+institutionID;ID de la institución;x;x;x;x;x;;;
+collectionID;ID de la colección;;x;;;;;;
+individualCount**;Cantidad de individuos;x;;;;;;;
+organismQuantity**;Cantidad del organismo;x;;;;;;;
+organismQuantityType**;Tipo de cantidad del organismo;x;;;;;;;
+recordedBy;Registrado por;x;;;;;;;
+occurrenceStatus;Estado del registro biológico;;;;x;;;;
+preparations;Preparaciones;x;;;;;;;
+disposition;Disposición;x;x;;;;;;
+eventID;ID del evento;;;x;x;;;;
+eventDate;Fecha del evento;x;;x;x;;;;
+country;País;x;x;x;x;x;;;
+stateProvince;Departamento;x;;;;;;;
+county;Municipio;x;;;;;;;
+locality;Localidad;x;;;;;;;
+minimumElevationInMeters;Elevación mínima en metros;x;;;;;;;
+decimalLatitude;Latitud decimal;x;;;;;;;
+decimalLongitude;Longitud decimal;x;;;;;;;
+geodeticDatum;Datum geodésico;x;;;;;;;
+scientificNameID;ID del nombre científico;;;;x;;;;
+scientificName;Nombre científico;x;x;x;x;x;;;
+taxonRank;Categoría del taxón;x;x;x;x;x;;;
+Extensión de permisos GGBN ;;x;;;;;;;
+* Otros: Puede hacer referencia a observaciones en campo fortuitas u otros orígenes no contemplados en la tabla;;;;;;;;;
+;;;;;;;;;
+;;;;;;;;;
+"Este material circula bajo una licencia Creative Commons CC BY-SA 4.0
+
+
+Puedes remezclar, modificar y crear a partir de esta obra, incluso con fines comerciales, siempre y cuando des los créditos correspondientes y licencies las nuevas creaciones bajo las mismas condiciones. Para ver una copia de esta licencia visita: https://creativecommons.org/licenses/by-sa/4.0/deed.es_ES";;;;;;;;;
+Plata C, Ortiz R, Marentes E, Velásquez J, Diaz J, Escobar D, Castro C, Leuro N, Sánchez L. 2024. Plantilla para la publicación de registros biológicos. Sistema de Información sobre Biodiversidad de Colombia. versión 4.1, Bogotá, D.C. ;;;;;;;;;
+;;;;;;;;;
+Ultima revisión: Mayo 2024;;;;;;;;;

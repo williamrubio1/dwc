@@ -1,0 +1,40 @@
+<%- include('../partials/header', { title: 'Mis registros' }) %>
+<h1>Mis registros</h1>
+<p class="actions">
+  <a class="btn" href="/records/new">+ Nuevo registro</a>
+  <a class="btn secondary" href="/import">Importar CSV/XLSX</a>
+  <a class="btn secondary" href="/export">Exportar</a>
+  <a class="btn secondary" href="/plantilla-descargable">Descargar plantilla</a>
+</p>
+
+<div class="legend">
+  <span class="item"><span class="badge incompleto">Incompleto</span> falta algún campo que imprime el sobre</span>
+  <span class="item"><span class="badge con_advertencias">Con advertencias</span> tiene los campos del sobre pero con inconsistencias</span>
+  <span class="item"><span class="badge completo_para_sobre">Completo para sobre</span> listo para generar el sobre</span>
+</div>
+
+<div class="card">
+<table>
+  <thead><tr><th>occurrenceID</th><th>Nombre científico</th><th>Familia</th><th>Fecha</th><th>Estado</th><th>Versión</th><th></th></tr></thead>
+  <tbody>
+  <% records.forEach(function(r) { %>
+    <tr>
+      <td><%= r.occurrenceID %></td>
+      <td><em><%= r.scientificName || '' %></em></td>
+      <td><%= r.family || '' %></td>
+      <td><%= r.eventDate || '' %></td>
+      <td><span class="badge <%= r.estado_validacion %>"><%= r.estado_validacion.replace('_',' ') %></span></td>
+      <td><%= r.version %></td>
+      <td class="actions">
+        <a href="/records/<%= r.id %>/edit">Editar</a>
+        <a href="/records/<%= r.id %>/history">Historial</a>
+        <a href="/records/<%= r.id %>/envelope/preview" target="_blank">Vista previa sobre</a>
+        <a href="/records/<%= r.id %>/delete">Eliminar</a>
+      </td>
+    </tr>
+  <% }); %>
+  <% if (records.length === 0) { %><tr><td colspan="7">Aún no tiene registros.</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

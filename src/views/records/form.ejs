@@ -1,0 +1,64 @@
+<%- include('../partials/header', { title: isNew ? 'Nuevo registro' : 'Editar registro' }) %>
+<h1><%= isNew ? 'Nuevo registro' : ('Editar registro ' + (record.occurrenceID || '')) %></h1>
+
+<% if (warnings && warnings.length) { %>
+<div class="card" style="border-color:#e8d9b5;">
+  <strong>Advertencias (no impiden guardar, sección 4):</strong>
+  <ul>
+    <% warnings.forEach(function(w) { %><li><strong><%= w.field %>:</strong> <%= w.message %></li><% }); %>
+  </ul>
+</div>
+<% } %>
+
+<form class="stack" method="post" action="<%= isNew ? '/records' : ('/records/' + record.id) %>" style="max-width:none;">
+<% sectionOrder.forEach(function(section, idx) { %>
+  <details <%= idx === 0 ? 'open' : '' %>>
+    <summary><%= section %></summary>
+    <div class="section-body">
+    <% sections[section].forEach(function(term) { %>
+      <% if (term.name === 'occurrenceID') { %>
+        <div class="field">
+          <label>occurrenceID <span class="helpball" title="Lo asigna el sistema automáticamente según el rango de su clase. El estudiante no puede editarlo.">?</span></label>
+          <input type="text" value="<%= record.occurrenceID || '(se asignará al guardar)' %>" disabled>
+        </div>
+      <% } else if (derivedFields.has(term.name)) {
+           var val = record[term.name] || '';
+      %>
+        <div class="field">
+          <label><%= term.name %> <span class="helpball" title="Campo calculado automáticamente por el sistema.">?</span></label>
+          <input type="text" value="<%= val %>" disabled>
+        </div>
+      <% } else {
+           var raw = record[term.name];
+           var val = raw == null ? '' : raw;
+           if (term.name === 'eventDate' && /^\d{4}-\d{2}-\d{2}$/.test(val)) val = isoToDisplay(val);
+           var tip = (term.definicion || '').replace(/"/g, '&quot;') + (term.ejemplo ? ('\n\nEjemplo: ' + term.ejemplo) : '');
+      %>
+        <div class="field">
+          <label><%= term.name %> &mdash; <%= term.label %>
+            <span class="helpball" title="<%= tip %>">?</span>
+          </label>
+          <% if (term.name === 'eventDate') { %>
+            <input type="text" name="<%= term.name %>" value="<%= val %>" placeholder="dd/mm/aaaa">
+          <% } else if (['verbatimLatitude'].includes(term.name)) { %>
+            <input type="text" name="<%= term.name %>" value="<%= val %>" placeholder="03° 43' 56.8'' (Norte por defecto)">
+          <% } else if (['verbatimLongitude'].includes(term.name)) { %>
+            <input type="text" name="<%= term.name %>" value="<%= val %>" placeholder="073° 50' 35.7'' (Oeste por defecto)">
+          <% } else { %>
+            <input type="text" name="<%= term.name %>" value="<%= val %>">
+          <% } %>
+          <% if (fieldErrors[term.name]) { %><div class="field-error"><%= fieldErrors[term.name] %></div><% } %>
+        </div>
+      <% } %>
+    <% }); %>
+    </div>
+  </details>
+<% }); %>
+
+<div class="actions">
+  <button type="submit"><%= isNew ? 'Crear registro' : 'Guardar cambios' %></button>
+  <a class="btn secondary" href="/records">Cancelar</a>
+  <% if (!isNew) { %><a class="btn secondary" href="/records/<%= record.id %>/envelope/preview" target="_blank">Vista previa del sobre</a><% } %>
+</div>
+</form>
+<%- include('../partials/footer') %>

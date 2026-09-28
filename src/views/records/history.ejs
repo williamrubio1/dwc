@@ -1,0 +1,22 @@
+<%- include('../partials/header', { title: 'Historial' }) %>
+<h1>Historial de <%= record.occurrenceID %></h1>
+<div class="card">
+<table>
+  <thead><tr><th>Fecha</th><th>Usuario</th><th>Campo</th><th>Valor anterior</th><th>Valor nuevo</th><th>Versión</th></tr></thead>
+  <tbody>
+  <% history.forEach(function(h) { %>
+    <tr>
+      <td><%= h.fecha %></td>
+      <td><%= h.usuario_nombre %></td>
+      <td><%= h.campo %></td>
+      <td><%= h.valor_anterior %></td>
+      <td><%= h.valor_nuevo %></td>
+      <td><%= h.version_resultante %></td>
+    </tr>
+  <% }); %>
+  <% if (history.length === 0) { %><tr><td colspan="6">Sin modificaciones registradas.</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<a class="btn secondary" href="/records/<%= record.id %>/edit">Volver al registro</a>
+<%- include('../partials/footer') %>

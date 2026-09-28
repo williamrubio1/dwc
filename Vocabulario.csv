@@ -1,0 +1,87 @@
+ Vocabulario;
+basisOfRecord (Base del registro);
+PreservedSpecimen;"El organismo está preservado (muerto), vivió dentro de tiempos históricos y existe (o alguna vez existió) una parte física que podría ser evaluada nuevamente.
+
+Exclusivo para uso de las colecciones biológicas, las cuales custodian la evidencia física del espécimen preservado. 
+
+Siempre va acompañado del elemento type documentado como “PhysicalObject”.
+"
+LivingSpecimen;"Existe un espécimen vivo (crece o metaboliza) disponible en una colección.
+
+Exclusivo para uso de las colecciones biológicas vivas y zoológicos, las cuales custodian la evidencia física del espécimen. No aplica para partes dormantes de un espécimen preservado.
+
+Siempre va acompañado del elemento type documentado como “PhysicalObject”."
+HumanObservation;"Se emplea para observaciones directas de un organismo completo y colectas temporales (captura y liberación del espécimen in situ). 
+
+También se emplea este valor si el espécimen observado fue posteriormente colectado y depositado en una colección biológica, pero el conjunto de datos no corresponde a la publicación de la colección biológica. En dicho caso se deben documentar los elementos collectionID y collectionCode para informar en qué colección se depositó el espécimen, y el Número de Catálogo (catalogNumber) dentro de la colección (o número de catálogo provisional), si este ya fue asignado.
+
+Por lo general va acompañado del elemento type documentado como “Event”; en caso de ser un registro sonoro detectado de forma directa por un humano, el elemento type se documenta como “Sound”."
+MachineObservation;"Se emplea para cualquier tipo de observación indirecta de un organismo por medio de un equipo o medio digital (grabadora de sonido, cámara trampa, entre otros), donde la evidencia del registro puede ser evaluada nuevamente:
+
+Según el caso, va acompañado del elemento type documentado como “StillImage”, “MovingImage” o “Sound”."
+MaterialSample;"Se emplea cuando la evidencia del organismo es indirecta y corresponde solo a una parte de este, por ejemplo: sangre, tejido, pelo, heces, etc.
+
+Siempre va acompañado del elemento type documentado como “PhysicalObject”."
+FossilSpecimen;"Se emplea con organismos prehistóricos con evidencia fósil que soporta su existencia.
+
+Siempre va acompañado del elemento type documentado como “PhysicalObject”."
+type (Tipo);
+PhysicalObject;"Evidencia física que soporta el registro biológico.
+Siempre complementa la base del registro (basisOfRecord): PreservedSpecimen, LivingSpecimen, MaterialSample y FossilSpecimen"
+StillImage;"Una fotografía.
+Complementa la base del registro (basisOfRecord): MachineObservation"
+MovingImage;"Un video, puede incluir sonido.
+Complementa la base del registro (basisOfRecord): MachineObservation"
+Sound;"Registro de audio.
+Puede complementar la base del registro (basisOfRecord): MachineObservation y HumanObservation"
+Event;"Observación de los especímenes en campo.
+Siempre complementa la base del registro (basisOfRecord): HumanObservation"
+language (Idioma);
+Utilizar el vocabulario controlado para el idioma en la norma ISO 639-1. Solamente se usan 2 letras en minúscula, consulte la información en la página oficial de ISO http://www.loc.gov/standards/iso639-2/php/code_list.php;
+vitality (Estado de vitalidad);
+alive;Vivo
+dead;Muerto
+mixedLot;Grupo mixto
+uncertain;Incierto
+notAssessed;No evaluado
+establishmentMeans (Medios de establecimiento);
+native;Nativo
+nativeReintroduced;Nativo reintroducido
+introduced;Introducido
+introducedAssistedColonisation;Introducido con colonización asistida
+vagrant;Errante
+uncertain;Incierto
+Éndémica;Endémica
+degreeOfEstablishment (Grado de establecimiento);
+native;Nativo
+captive;Cautivo
+cultivated;Cultivado
+released;Liberado
+failing;Fallido
+casual;Casual
+reproducing;Reproduciéndose
+established;Establecido
+colonising;Colonizando
+invasive;Invasor
+widespreadInvasive;Invasor ampliamente distribuido
+pathway (Ruta de introducción);
+La lista completa de vocabularios controlados se encuentra disponible en https://dwc.tdwg.org/pw/#4-vocabulary. Utilice la palabra en la columna llamada controlled value. Se presentan los vocabularios más comunes a continuación:;
+releasedForUse;Liberado
+otherEscape;Escape accidental
+transportContaminant;Contaminación en transporte
+transportStowaway;Polizón en transporte
+corridor;Corredor
+unaided;Sin ayuda
+occurrenceStatus (Estado del registro biológico);
+present;Se encontró evidencia de la presencia de un organismo en el momento y lugar del registro biológico
+absent;No se encontró evidencia de la presencia de un organismo en el momento y lugar de la toma del registro biológico bajo un protocolo establecido específicamente para su detección
+continent (Continente);
+América del Sur;
+América del Norte;
+África;
+Asia;
+Europa;
+Oceanía;
+Antártida;
+countryCode (Código del país);
+Utilizar el vocabulario controlado de la norma ISO 3166-1-alfa-2 de códigos de países. Solamente se usan 2 letras en mayúscula, consulte la información en la página https://es.wikipedia.org/wiki/ISO_3166-1_alfa-2#CO;

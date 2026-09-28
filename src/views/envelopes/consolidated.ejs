@@ -1,0 +1,26 @@
+<%- include('../partials/header', { title: 'Sobres consolidados' }) %>
+<h1>Generar sobres</h1>
+<div class="card">
+<form method="post" action="/envelopes/consolidated">
+  <table>
+    <thead><tr><th></th><th>occurrenceID</th><th>Científico</th><th>Familia</th></tr></thead>
+    <tbody>
+    <% records.forEach(function(r) { %>
+      <tr>
+        <td><input type="checkbox" name="ids" value="<%= r.id %>"></td>
+        <td><%= r.occurrenceID %></td>
+        <td><em><%= r.scientificName || '' %></em></td>
+        <td><%= r.family || '' %></td>
+      </tr>
+    <% }); %>
+    <% if (records.length === 0) { %><tr><td colspan="4">No hay registros disponibles.</td></tr><% } %>
+    </tbody>
+  </table>
+  <div class="field" style="max-width:220px;margin-top:1rem;">
+    <label>Formato</label>
+    <select name="formato"><option value="docx">DOCX</option><option value="pdf">PDF</option></select>
+  </div>
+  <button type="submit">Generar documento consolidado</button>
+</form>
+</div>
+<%- include('../partials/footer') %>

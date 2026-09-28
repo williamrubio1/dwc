@@ -1,0 +1,24 @@
+<%- include('../partials/header', { title: 'Códigos de clase' }) %>
+<h1>Todos los códigos de clase</h1>
+<div class="card">
+<table>
+  <thead><tr><th>Código</th><th>Clase</th><th>Profesor</th><th>Estado</th><th>Rango</th><th></th></tr></thead>
+  <tbody>
+  <% clases.forEach(function(c) { %>
+    <tr>
+      <td><%= c.codigo_unico %></td>
+      <td><%= c.nombre_clase %></td>
+      <td><%= c.profesor_nombre %></td>
+      <td><span class="badge <%= c.estado %>"><%= c.estado %></span></td>
+      <td><%= c.prefijo_occurrence_id %> <%= c.rango_inicial %>&ndash;<%= c.rango_final %></td>
+      <td>
+        <form method="post" action="/admin/classes/<%= c.id %>/toggle" style="display:inline">
+          <button type="submit" class="btn secondary"><%= c.estado === 'activo' ? 'Inactivar' : 'Activar' %></button>
+        </form>
+      </td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

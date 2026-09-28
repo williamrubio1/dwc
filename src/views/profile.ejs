@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: 'Perfil' }) %>
+<h1>Mi perfil</h1>
+<div class="card">
+  <p><strong>Nombre:</strong> <%= user.nombre %></p>
+  <p><strong>Correo:</strong> <%= user.email %></p>
+  <% if (user.documento) { %><p><strong>Documento:</strong> <%= user.documento %></p><% } %>
+  <% if (user.role === 'profesor') { %><p><strong>Dependencia / programa:</strong> <%= user.dependencia_programa || '-' %></p><% } %>
+  <% if (user.role === 'estudiante') { %>
+    <p><strong>Programa:</strong> <%= user.programa || '-' %> &middot; <strong>Semestre:</strong> <%= user.semestre || '-' %></p>
+    <p><strong>Código estudiantil:</strong> <%= user.codigo_estudiantil || '-' %></p>
+  <% } %>
+  <p><strong>Teléfono:</strong> <%= user.telefono || '-' %></p>
+</div>
+
+<% if (user.role === 'estudiante') { %>
+<div class="card">
+  <h2>Código de clase</h2>
+  <% if (clase) { %>
+    <p>Vinculado a: <strong><%= clase.nombre_clase %></strong> (<%= clase.codigo_unico %>) &mdash; estado: <span class="badge <%= clase.estado %>"><%= clase.estado %></span></p>
+    <p class="hint">Si cambia de código, sus registros anteriores conservan la clase original.</p>
+  <% } else { %>
+    <p>Aún no tiene un código de clase vinculado.</p>
+  <% } %>
+  <form class="stack" method="post" action="/profile/link-class">
+    <div class="field">
+      <label>Nuevo código de clase</label>
+      <input type="text" name="codigo" required placeholder="Ej: A1B2C3D4">
+    </div>
+    <button type="submit">Vincular código</button>
+  </form>
+</div>
+<% } %>
+<%- include('partials/footer') %>

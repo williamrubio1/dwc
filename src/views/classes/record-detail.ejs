@@ -1,0 +1,35 @@
+<%- include('../partials/header', { title: 'Detalle del registro' }) %>
+<h1>Registro <%= record.occurrenceID %> <span class="badge <%= record.estado_validacion %>"><%= record.estado_validacion.replace('_',' ') %></span></h1>
+<p class="hint">Consulta de solo lectura. Versión <%= record.version %>.</p>
+
+<% dwcTerms.SECTION_ORDER.forEach(function(section) { %>
+  <% var terms = dwcTerms.groupedBySection()[section].filter(function(t){ return record[t.name] != null && record[t.name] !== ''; }); %>
+  <% if (terms.length) { %>
+  <details>
+    <summary><%= section %></summary>
+    <div class="section-body">
+      <% terms.forEach(function(t) { %>
+        <div class="field">
+          <label><%= t.name %></label>
+          <div><%= record[t.name] %></div>
+        </div>
+      <% }); %>
+    </div>
+  </details>
+  <% } %>
+<% }); %>
+
+<div class="card">
+  <h2>Historial</h2>
+  <table>
+    <thead><tr><th>Fecha</th><th>Usuario</th><th>Campo</th><th>Anterior</th><th>Nuevo</th></tr></thead>
+    <tbody>
+    <% history.forEach(function(h) { %>
+      <tr><td><%= h.fecha %></td><td><%= h.usuario_nombre %></td><td><%= h.campo %></td><td><%= h.valor_anterior %></td><td><%= h.valor_nuevo %></td></tr>
+    <% }); %>
+    <% if (history.length === 0) { %><tr><td colspan="5">Sin modificaciones.</td></tr><% } %>
+    </tbody>
+  </table>
+</div>
+<% if (clase) { %><a class="btn secondary" href="/classes/<%= clase.id %>/records">Volver</a><% } %>
+<%- include('../partials/footer') %>

@@ -1,0 +1,10 @@
+<%- include('../partials/header', { title: 'Ampliar rango' }) %>
+<h1>Ampliar rango &mdash; <%= clase.nombre_clase %></h1>
+<div class="card">
+  <p>Rango actual: <%= clase.rango_inicial %> &ndash; <%= clase.rango_final %> (prefijo <%= clase.prefijo_occurrence_id %>)</p>
+  <form class="stack" method="post" action="/classes/<%= clase.id %>/expand">
+    <div class="field"><label>Nuevo número final</label><input type="number" name="nuevoRangoFinal" required min="<%= clase.rango_final + 1 %>"></div>
+    <button type="submit">Ampliar</button>
+  </form>
+</div>
+<%- include('../partials/footer') %>

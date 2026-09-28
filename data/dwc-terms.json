@@ -1,0 +1,1297 @@
+[
+ {
+  "name": "occurrenceID",
+  "section": "Registro",
+  "label": "ID del Registro biológico",
+  "definicion": "Un identificador único del registro biológico (observación, ejemplar, fotografía, etc.). \n\nEn ausencia de un identificador único global persistente, se recomienda construir uno a partir de la combinación:\n\nCuando pertenece a una observación: [código corto de la institución]:[palabra(s) clave del recurso]:[número de campo/número consecutivo] \nCuando pertenece a una colección: [código corto de la institución]:[código de la colección]:[número de catálogo]. No debe contener espacios en blanco o caracteres especiales.\n\nSi usted ya maneja en su conjunto de datos un identificador único por registros biológico, puede usarlo como identificador en el conjunto de datos.",
+  "ejemplo": "Promigas:Compensacion-SanJuan:Fauna-00001\nUCO:RESCATE_FAUNA_MULATOSII:1\nUNIVALLE:CRM-UV:1974-001-1"
+ },
+ {
+  "name": "basisOfRecord",
+  "section": "Ocurrencia",
+  "label": "Base del registro",
+  "definicion": "Denota el origen o evidencia específica de la que se deriva el organismo. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado. Para este elemento se debe emplear el vocabulario controlado en inglés.\n\nSólo las colecciones biológicas pueden documentar PreservedSpecimen, si el registro corresponde a un espécimen depositado, pero el reporte no lo genera la colección biológica, se documenta HumanObservation y se documentan los elementos collectionCode, catalogNumber y disposition.",
+  "ejemplo": "PreservedSpecimen\nLivingSpecimen\nHumanObservation\nMachineObservation\nMaterialSample\nFossilSpecimen"
+ },
+ {
+  "name": "type",
+  "section": "Ocurrencia",
+  "label": "Tipo",
+  "definicion": "Especifica el tipo de evidencia que da origen al registro, ampliando la información presente en el elemento basisOfRecord. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado.",
+  "ejemplo": "PhysicalObject\nEvent\nStillImage\nMovingImage\nSound"
+ },
+ {
+  "name": "institutionCode",
+  "section": "Ocurrencia",
+  "label": "Código de la institución",
+  "definicion": "El nombre completo de la institución que custodia el espécimen o la información del registro; seguido por su acrónimo en paréntesis, si tiene.",
+  "ejemplo": "Ministerio de Ambiente y Desarrollo Sostenible (MADS)\nUniversidad de Antioquia (UdeA)\nJardín Botánico de Bogotá José Celestino Mutis (JBB)"
+ },
+ {
+  "name": "institutionID",
+  "section": "Ocurrencia",
+  "label": "ID de la institución",
+  "definicion": "Un identificador, preferiblemente el NIT, de la institución registrada en el elemento institutionCode.",
+  "ejemplo": "586.697.465-1\n890.105.528-3\n860.030.197-0"
+ },
+ {
+  "name": "collectionCode",
+  "section": "Ocurrencia",
+  "label": "Código de la colección",
+  "definicion": "El nombre, acrónimo, código alfanumérico, o iniciales que identifican la colección o conjunto de datos del que procede el organismo. Aunque es válido el uso del acrónimo que implemente la colección internamente, se recomienda hacer uso del acrónimo registrado en:\n\n- GBIF Registry of Scientific Collections (https://www.gbif.org/grscicoll/collection/search)\n- Registro Único Nacional de Colecciones Biológicas-RNC (http://rnc.humboldt.org.co/admin/index.php/registros/colecciones)",
+  "ejemplo": "COL\nANDES-E\nFMB"
+ },
+ {
+  "name": "collectionID",
+  "section": "Ocurrencia",
+  "label": "ID de la colección",
+  "definicion": "Un identificador de la colección registrada en el elemento collectionCode. Se recomienda hacer uso de los identificadores registrados en:\n\n-  GBIF Registry of Scientific Collections (https://www.gbif.org/grscicoll/collection/search)\n-  Registro Único Nacional de Colecciones Biológicas-RNC (http://rnc.humboldt.org.co/admin/index.php/registros/colecciones)",
+  "ejemplo": "https://www.gbif.org/grscicoll/collection/0d0e813e-dc60-4357-82b1-810d0af640a5\nRNC:250"
+ },
+ {
+  "name": "catalogNumber",
+  "section": "Registro",
+  "label": "Número de catálogo",
+  "definicion": "Un identificador (preferiblemente único) asignado al espécimen, muestra o lote en la colección biológica. Puede repetirse en caso de que los especímenes están agrupados en la colección (Lote, Frasco, Caja, etc).\n\nDebe documentarse de la misma forma que está en la etiqueta.",
+  "ejemplo": "00001\n1974-001-1\n1732a\nANDES-E0813\nLepid0784"
+ },
+ {
+  "name": "datasetName",
+  "section": "Ocurrencia",
+  "label": "Nombre del conjunto de datos",
+  "definicion": "El nombre del conjunto de datos del cual se deriva el registro biológico.\n\nPara documentar la información de permiso utilice la Extensión de permisos GGBN (GGBN Permit Extension).",
+  "ejemplo": "Colombia Bio\nFondo Adaptación\nBoyacá Bio\nProyecto elitros del campo\nCenipalma"
+ },
+ {
+  "name": "datasetID",
+  "section": "Ocurrencia",
+  "label": "ID del conjunto de datos",
+  "definicion": "Un identificador del conjunto de datos del cual se deriva el registro biológico (observación, colecta o evento). \n\nPara documentar la información de permisio utiliice la Extensión de permisos GGBN (GGBN Permit Extension).",
+  "ejemplo": "b15d4952-7d20-46f1-8a3e-556a512b04c5\ndoi.org/10.15472/zi9yqb\nIAvH:CE16-062:8956:2016\nSINCHI:CE17-845:2017"
+ },
+ {
+  "name": "modified",
+  "section": "Ocurrencia",
+  "label": "Modificado",
+  "definicion": "La fecha más reciente en la que se haya modificado el registro. Debe estar documentada en el esquema de codificación ISO 8601 (AAAA-MM-DD o para un intervalo de fechas: AAAA-MM-DD/AAAA-MM-DD).",
+  "ejemplo": "2010\n2010-01\n2010-01-17\n2009/2010\n2009-02/2010-01\n2009-02/10\n2009-02-12/2009-10-08\n2010-01-17/18"
+ },
+ {
+  "name": "language",
+  "section": "Ocurrencia",
+  "label": "Idioma",
+  "definicion": "El idioma del conjunto de datos.\n\nDocumente este elemento de acuerdo al vocabulario controlado de la norma ISO 639-1 de 2 letras en minúscula, como se muestra a continuación:\nes (=Para español)\nen (=Para inglés)",
+  "ejemplo": "es\nen"
+ },
+ {
+  "name": "license",
+  "section": "Ocurrencia",
+  "label": "Licencia",
+  "definicion": "Información sobre los derechos, licencias o permisos que establece el publicador sobre el uso del recurso. Se recomienda no documentar este elemento debido a que la licencia se especifica con mayor detalle en los metadatos que acompañan la publicación del conjunto de datos.",
+  "ejemplo": ""
+ },
+ {
+  "name": "rightsHolder",
+  "section": "Ocurrencia",
+  "label": "Titular de los derechos",
+  "definicion": "El nombre de persona u organización propietaria o administradora de los derechos sobre el recurso.",
+  "ejemplo": "Secretaria de Agricultura\nMinisterio de Medio Ambiente\nSecretaría Distrital de Ambiente"
+ },
+ {
+  "name": "accessRights",
+  "section": "Ocurrencia",
+  "label": "Derechos de acceso",
+  "definicion": "Información sobre los derechos de acceso o restricciones basadas en políticas de privacidad, seguridad, u otras.",
+  "ejemplo": "Sólo para uso no comercial."
+ },
+ {
+  "name": "bibliographicCitation",
+  "section": "Ocurrencia",
+  "label": "Citación bibliográfica",
+  "definicion": "Indica la manera de citar el registro cuando sea utilizado, incluyendo la referencia del recurso al que pertenece el registro. Se recomienda incluir el doi si se tiene junto con los detalles bibliográficos para identificar el recurso claramente.",
+  "ejemplo": "Raz L, Agudelo H (2019). Herbario Nacional Colombiano (COL). Versión 13.12. Universidad Nacional de Colombia. Occurrence dataset https://doi.org/10.15472/ea8sek. occurrenceID: 1a399be0-9ca9-4efe-84be-b8974a5548fc"
+ },
+ {
+  "name": "references",
+  "section": "Ocurrencia",
+  "label": "Referencias",
+  "definicion": "Una URL a un recurso asociado, el cual es de alguna forma referenciado o citado por el registro descrito.",
+  "ejemplo": "http://arctos.database.museum/guid/MVZ:Mamm:165861\nhttps://www.gbif.org/species/2474724"
+ },
+ {
+  "name": "ownerInstitutionCode",
+  "section": "Ocurrencia",
+  "label": "Código de la institución propietaria",
+  "definicion": "El nombre completo (o acrónimo) de la institución que tiene la propiedad del objeto o de la información consignada en el registro. Usar sólo si la organización propietaria de los datos es diferente a la organización publicadora consignada en el elemento institutionCode.",
+  "ejemplo": "Ministerio de Ambiente y Desarrollo Sostenible (MADS)\nCelsia S.A. E.S.P."
+ },
+ {
+  "name": "informationWithheld",
+  "section": "Ocurrencia",
+  "label": "Información retenida",
+  "definicion": "Información adicional que existe sobre el registro, pero que no ha sido compartida en la publicación.",
+  "ejemplo": "La información de ubicación no es provista para especies amenazadas\nLa identidad de los colectores es retenida\nPregunte acerca de muestras de tejido"
+ },
+ {
+  "name": "dataGeneralizations",
+  "section": "Ocurrencia",
+  "label": "Generalización de los datos",
+  "definicion": "Medidas adoptadas para que los datos compartidos sean menos específicos o completos. Sugiere que los datos con mayor detalle existen y pueden estar disponibles bajo petición.",
+  "ejemplo": "Coordenadas generalizadas a partir de las coordenadas originales del GPS a la celda más cercana de la grilla"
+ },
+ {
+  "name": "dynamicProperties",
+  "section": "Ocurrencia",
+  "label": "Propiedades dinámicas",
+  "definicion": "Una lista de las medidas, hechos o características adicionales sobre el organismo. Su intención es proporcionar un mecanismo estructurado para la representación de los datos. Debe estar documentado en el esquema de codificación JSON {\"Medida\":\"Valor\"}. Por facilidad en la documentación se recomienda el uso de la extensión del estándar Darwin Core de Medidas y Hechos en lugar de este elemento.",
+  "ejemplo": "{\"pesoEnGramos\":\"120\", \"evidenciaDeLaIdentificación\": \"secuencia de citocromo B\"}\n{\"alturaEnMetros\":\"1.5\", \"distribuciónDelTaxón\": \"Amazonas, Colombia\", \"temperaturaDelAireEnCelsius\": \"22\"}\n{\"naturalezaDelID\":\"identificación de experto\"}"
+ },
+ {
+  "name": "recordNumber",
+  "section": "Registro",
+  "label": "Número del registro",
+  "definicion": "Un identificador dado al registro biológico en el momento en que fue registrado, sirve como un vínculo entre las anotaciones de campo y el registro biológico. No es el mismo catalogNumber, el cual es usualmente asignado una vez el espécimen ingresa a la colección.",
+  "ejemplo": "OPP 7107\nJARM-0008\nAFT 143"
+ },
+ {
+  "name": "recordedBy",
+  "section": "Registro",
+  "label": "Registrado por",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los nombres de las personas (observadores o recolectores) responsables de realizar el registro.\n\nEl colector u observador principal, especialmente si está asociado al recordNumber tomado en campo, se debe listar en primer lugar. Se debe mantener el mismo formato del nombre a lo largo de todos los registros y se recomienda evitar el uso de solo iniciales ya que esto genera ambigüedades para reconocer a las personas que realizaron el registro, de ser posible siempre escriba nombres completos. Documente el nombre de las personas y evite documentar nombres de grupos u organizaciones.",
+  "ejemplo": "Eduardo Amat García\nJavier Maldonado Ocampo\nMónica Andrea Sánchez Torres | Esteban Andrés Novoa López"
+ },
+ {
+  "name": "recordedByID",
+  "section": "Registro",
+  "label": "ID del colector",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los ID de las personas (observadores o recolectores), grupos u organizaciones responsables de realizar el registro. Estos identificadores deben corresponder al ORCID, Wikidata u algún otro identificador único controlado. El orden en este elemento no indica una prioridad en la citación ni ningún otro tipo de relación jerárquica.",
+  "ejemplo": "https://orcid.org/0000-0001-6215-3617 | https://orcid.org/0000-0003-1691-239X\nhttps://www.wikidata.org/entity/Q28913658"
+ },
+ {
+  "name": "organismID",
+  "section": "Organismo",
+  "label": "ID del organismo",
+  "definicion": "Un identificador del organismo. Pretende facilitar el remuestreo del mismo individuo con fines generalmente de monitoreo. Aves anilladas, fotos de mamíferos acuáticos, árboles remuestreados, etc.",
+  "ejemplo": "U.amer. 44\nCC09477\nOrca J 23"
+ },
+ {
+  "name": "individualCount",
+  "section": "Registro",
+  "label": "Número de individuos",
+  "definicion": "Número de individuos presentes en el momento del registro biológico (observación, ejemplar, fotografía, etc.).\nUtilice este elemento si todos los conteos corresponden a individuos, de lo contrario utilice organismQuantity y organismQuanitityType.",
+  "ejemplo": "1\n25\n282"
+ },
+ {
+  "name": "organismQuantity",
+  "section": "Registro",
+  "label": "Cantidad del organismo",
+  "definicion": "Valor que representa una cantidad colectada u observada del organismo, expresada en un sistema de medida estándar para el organismo como cepas, células, porcentaje de biomasa, etc. Documentar este elemento junto con el elemento organismQuantityType.\n\nEl sistema de medida se debe documentar en el elemento organismQuantityType, como se muestra en el ejemplo a continuación:\n\nPara el registro de cobertura de líquenes: organismQuantity: 30 / organismQuantityType: % de cobertura\nPara la abundancia de fitoplancton: organismQuantity: 253 / organismQuantityType: Células/L\nPara comunidades vegetales: organismQuantity: r / organismQuantityType: Escala Braun-Blanquet",
+  "ejemplo": "30\n253\nr"
+ },
+ {
+  "name": "organismQuantityType",
+  "section": "Registro",
+  "label": "Tipo de cantidad del organismo",
+  "definicion": "Valor que representa una cantidad colectada u observada del organismo, expresada en un sistema de medida estándar para el organismo como cepas, células, porcentaje de biomasa, etc. Documentar este elemento junto con el elemento organismQuantityType.\n\nLa cantidad de organismos se debe documentar en el elemento organismQuantity, como se muestra a continuación:\n\nPara el registro de cobertura de líquenes: organismQuantity: 30 / organismQuantityType: % de cobertura\nPara la abundancia de fitoplancton: organismQuantity: 253 / organismQuantityType: Células/L\nPara comunidades vegetales: organismQuantity: r / organismQuantityType: Escala Braun-Blanquet",
+  "ejemplo": "Porcentaje de cobertura\nCélulas/L\nEscala Braun-Blanquet"
+ },
+ {
+  "name": "organismName",
+  "section": "Organismo",
+  "label": "Nombre del organismo",
+  "definicion": "El nombre textual dado a un organismo en un estudio o el nombre en la etiqueta asignada originalmente.",
+  "ejemplo": "Huberta\nWilly la Ballena Asesina\nCheeta"
+ },
+ {
+  "name": "organismScope",
+  "section": "Organismo",
+  "label": "Alcance del organismo",
+  "definicion": "Puede ser utilizado para indicar si la instancia del organismo representa un organismo discreto o un tipo particular de agregación. Se sugiere emplear un vocabulario controlado. Este elemento no está destinado a ser utilizado para especificar una categoría taxonómica.",
+  "ejemplo": "Organismo multicelular\nManada\nClon\nColonia"
+ },
+ {
+  "name": "associatedOrganisms",
+  "section": "Organismo",
+  "label": "Organismos asociados",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los identificadores de otros organismos y su relación con el organismo documentado. Aplica para relaciones con organismos del mismo grupo taxonómico. Se recomienda hacer uso la extensión Resource Relationship para documentar en más detalle la relación entre los organismos asociados.",
+  "ejemplo": "Hermano de: FMNH:Mamífero:1234 | Hermano de: FMNH:Mamífero:1235\nHijo de: MLS:sau:438"
+ },
+ {
+  "name": "previousIdentifications",
+  "section": "Organismo",
+  "label": "Identificaciones previas",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de asignaciones taxonómicas que se le han dado al organismo anteriormente. Puede contener la información de quién y cuándo realizó la identificación anterior. Se recomienda hacer uso de la extensión Identification (https://tools.gbif.org/dwca-validator/extension.do?id=dwc:Identification#Identification) para el caso de colecciones biológicas.",
+  "ejemplo": "Pinus abies\nAnthus sp., identificado en campo por G. Iglesias  | Anthus correndera, Identificado por el experto C. Cicero 2009-02-12 basado en morfología\nLeptolyngbya cf. polysiphoniae | Leptolyngbya sp."
+ },
+ {
+  "name": "organismRemarks",
+  "section": "Organismo",
+  "label": "Comentarios del organismo",
+  "definicion": "Comentarios o anotaciones sobre el organismo registrado. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Uno de una camada de seis\nFruto inmaduro cubierto por un indumento rojizo"
+ },
+ {
+  "name": "sex",
+  "section": "Registro",
+  "label": "Sexo",
+  "definicion": "El sexo de el(los) organismo(s) representado(s) en el registro. Si en un mismo registro cuenta con varios organismos de diferentes sexos, genere registros (filas) diferentes por cada sexo. \nSe recomienda el uso del vocabulario sugerido disponible para este elemento.",
+  "ejemplo": "Hembra\nHermafrodita\nMacho\nDesconocido"
+ },
+ {
+  "name": "lifeStage",
+  "section": "Registro",
+  "label": "Etapa de desarrollo",
+  "definicion": "La etapa de vida de el(los) organismo(s) en el momento del registro. Si en un mismo registro cuenta con varios organismos en diferentes etapas de vida, genere registros (filas) diferentes por cada etapa de vida. Se recomienda el uso del vocabulario sugerido disponible para este elemento.",
+  "ejemplo": "Huevo\nJuvenil\nAdulto\nCigoto\nEmbrión\nLarva\nEsporófito\nEspora\nGametofito\nGameto\nPupa\nPlántula \nFloración\nFructificación"
+ },
+ {
+  "name": "reproductiveCondition",
+  "section": "Registro",
+  "label": "Condición reproductiva",
+  "definicion": "Condición reproductiva de el(los) organismo(s) en el momento del registro. Se recomienda el uso de un vocabulario controlado.",
+  "ejemplo": "No reproductiva\nEn gestación\nFloración\nFructificación"
+ },
+ {
+  "name": "caste",
+  "section": "Registro",
+  "label": "Casta",
+  "definicion": "La categorización de individuos para especies eusociales de algunos artrópodos. Se recomienda el uso de un vocabulario controlado para cada taxón específico.",
+  "ejemplo": "Reina\nMacho alado\nIntercasta\nTrabajador menor\nSoldado\nErgatoide"
+ },
+ {
+  "name": "vitality",
+  "section": "Registro",
+  "label": "Estado de vitalidad",
+  "definicion": "Indicación de la vitalidad del organismo en el momento de la colecta u observación (vivo o muerto). \n\nSe requiere el uso de un vocabulario controlado. Usar este elemento en registros documentados como PreservedSpecimen, MaterialSample, o HumanObservation en el elemento basisOfRecord.",
+  "ejemplo": "Vivo\nMuerto\nGrupo mixto\nIncierto\nNo evaluado"
+ },
+ {
+  "name": "behavior",
+  "section": "Registro",
+  "label": "Comportamiento",
+  "definicion": "Descripción del comportamiento de el(los) organismo(s) en el momento del registro. Se recomienda el uso de un vocabulario controlado.",
+  "ejemplo": "Posando\nAlimentándose\nCorriendo"
+ },
+ {
+  "name": "establishmentMeans",
+  "section": "Registro",
+  "label": "Medios de establecimiento",
+  "definicion": "Una afirmación que de cuenta si un organismo ha sido introducido a un lugar y tiempo determinado a través de actividad humana directa o indirecta. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado. Para este elemento se debe emplear el vocabulario controlado en inglés. Se recomienda documentar este elemento acompañado de los elementos degreeOfEstablishment y pathway.\n\nActualmente el estándar DwC no posee un elemento que permita documentar de manera adecuada la información de endemismos, este elemento es el más cercano para la documentación de esta información por lo cual se incluye el vocabulario 'Endémica'.",
+  "ejemplo": "native\nintroduced\nvagrant\nuncertain\nEndémica"
+ },
+ {
+  "name": "degreeOfEstablishment",
+  "section": "Registro",
+  "label": "Grado de establecimiento",
+  "definicion": "El grado en cual el organismo sobrevive, se reproduce y expande su rango de distribución en un lugar y tiempo determinado. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado. Para este elemento se debe emplear el vocabulario controlado en inglés. Se recomienda documentar este elemento acompañado de los elementos establishmentMeans y pathway.",
+  "ejemplo": "native\ncultivated\nreleased\nestablished\ncolonising\nwidespreadInvasive"
+ },
+ {
+  "name": "pathway",
+  "section": "Registro",
+  "label": "Ruta de introducción",
+  "definicion": "El proceso por el cual un organismo llegó a un lugar y tiempo determinado. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado. Para este elemento se debe emplear el vocabulario controlado en inglés. Se recomienda documentar este elemento acompañado de los elementos establishmentMeans y degreeOfEstablishment.",
+  "ejemplo": "releasedForUse\notherEscape\ntransportContaminant\ntransportStowaway\ncorridor\nunaided"
+ },
+ {
+  "name": "occurrenceStatus",
+  "section": "Registro",
+  "label": "Estado del registro biológico",
+  "definicion": "Estado que da cuenta de la presencia o ausencia de un taxón en una ubicación. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado. Para este elemento se debe emplear el vocabulario controlado en inglés.",
+  "ejemplo": "present\nabsent"
+ },
+ {
+  "name": "preparations",
+  "section": "Registro",
+  "label": "Preparaciones",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de las preparaciones y los métodos de conservación de un ejemplar o una muestra del ejemplar.\n\nAdicionalmente, si el espécimen fue colectado bajo un permiso de recolección de especímenes o acceso a recursos genéticos, debe indicar si fue una colecta temporal o una colecta definitiva seguido por el tipo de preparación.",
+  "ejemplo": "Colecta definitiva: Animal completo (ETOH)\nColecta definitiva: Preparación de muestra microbiológica\nColecta temporal: Extracción de ADN\nPiel | Cráneo | Esqueleto\nAnimal completo (ETOH) | Tejido (EDTA)\nFósil\nMolde\nFotografía"
+ },
+ {
+  "name": "disposition",
+  "section": "Registro",
+  "label": "Disposición",
+  "definicion": "El estado actual de un espécimen en relación a la colección identificada en collectionCode o collectionID. Se recomienda el uso de un vocabulario controlado. Si el espécimen fue colectado bajo un permiso de recolección de especímenes o acceso a recursos genéticos y fue entregado a una colección biológica se debe documentar \"En colección\", de lo contrario dejar vacío el elemento.",
+  "ejemplo": "En colección\nExtraviado\nEjemplar testigo\nDuplicados en otro lugar"
+ },
+ {
+  "name": "verbatimLabel",
+  "section": "Registro",
+  "label": "Etiqueta original",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de números de catálogos anteriores o alternos, u otros identificadores usados por personas para el mismo registro biológico, ya sea en el actual o cualquier otro conjunto de datos o colección.\n\nEl contenido de este elemento no debe incluir ningún tipo de embellecimiento, prefijos, encabezados u otras adiciones al texto original. Las abreviaciones no deben ser extendidas y posibles errores de tipeo no deben ser corregidos. Las nuevas líneas presentes en la etiqueta se deben representar utilizando una barra vertical  | . La práctica recomendada es utilizar solamente caracteres en la codificación UTF-8 y poner el comentario \"El elemento verbatimLabel es derivado de una transcripción humana\" en el elemento occurrenceRemarks.",
+  "ejemplo": "CARACTERIZACION DE LA FLORA DEL DEPARTAMENTO DEL CASANARE | PIPER* | Peperomia quadrangularis (J.V.Thmps.) A. Dietr. | Det: M.P. Córdoba /sep 2011 | Enredadera | COLOMBIA: Dpto Casanare, Mpio Tauramena, Vda La Urama, Localidad La Mata de la Urama Lat: 5° 03,19,2 N, Long: 72° 48 58,8 W . Altitud: 182 m s.n.m., 28 Enero 2011. | Col: M .P.Córdoba, R. Ávila, L.Miranda y C. Pérez. | No. Col.: M.P.Córdoba 6161 | GOBERNACIÓN DEL CASANARE-WWF-FUNDACIÓN OMACHA | 119"
+ },
+ {
+  "name": "otherCatalogNumbers",
+  "section": "Registro",
+  "label": "Otros números de catálogo",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de números de catálogos anteriores o alternos, u otros identificadores usados por personas para el mismo registro biológico, ya sea en el actual o cualquier otro conjunto de datos o colección.",
+  "ejemplo": "FMNH:Mammal:1234\nNPS YELLO6778 | MBG 33424\nICN- 47992, Field series JDL 21151"
+ },
+ {
+  "name": "associatedMedia",
+  "section": "Registro",
+  "label": "Medios asociados",
+  "definicion": "Un identificador del conjunto de datos del cual se deriva el registro biológico (observación, colecta o evento). \n\nPara documentar la información de permisio utilice la Extensión de permisos GGBN (GGBN Permit Extension)",
+  "ejemplo": "https://sinchi.org.co/ciacol/ficha/24/Hypoclinemus%20mentalis\nhttps://ia801004.us.archive.org/0/items/staphylococcusaureus/Staphylococcus%20aureus.JPG | https://ia903100.us.archive.org/33/items/CMPUJH012-macro/CMPUJH012-anverso.jpg"
+ },
+ {
+  "name": "associatedOccurrences",
+  "section": "Registro",
+  "label": "Registros biológicos asociados",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los identificadores de otros registros biológicos y su relación con este registro. Aplica para relaciones con organismos de diferente grupo taxonómico y se recomiendo documentar junto a el elemento associatedTaxa. Se recomienda hacer uso de la extensión Resource Relationship para documentar en más detalle la relación entre los registros biológicos asociados.",
+  "ejemplo": "http://arctos.database.museum/guid/MSB:Mamm:292063?seid=3175067 | http://arctos.database.museum/guid/MSB:Mamm:292063?seid=3177393\nSELVA:Anillamiento:AA7330a"
+ },
+ {
+  "name": "associatedReferences",
+  "section": "Registro",
+  "label": "Referencias asociadas",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los identificadores (publicación, referencia bibliográfica, identificador único global, URI) de la literatura asociada al registro biológico. Se recomienda hacer uso de la extensión Literature References la cual cuenta con más elementos para describir la información de referencias asociada.",
+  "ejemplo": "http://www.sciencemag.org/cgi/content/abstract/322/5899/261\nChristopher J. Conroy, Jennifer L. Neuwald. 2008. Phylogeographic study of the California vole, Microtus californicus Journal of Mammalogy, 89(3):755-767."
+ },
+ {
+  "name": "associatedSequences",
+  "section": "Registro",
+  "label": "Secuencias asociadas",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los identificadores (publicación, identificador único global, URI) de la información de la secuencia genética asociada al registro biológico. Se recomienda hacer uso de la extensión GGBN Amplification Extensión la cual cuenta con más elementos para describir la información de secuencia genética asociada.",
+  "ejemplo": "https://www.ncbi.nlm.nih.gov/nuccore/U34853.1\nhttps://www.boldsystems.org/index.php/Public_RecordView?processid=ABBAC141-12"
+ },
+ {
+  "name": "associatedTaxa",
+  "section": "Registro",
+  "label": "Taxones asociados",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los identificadores o nombres de taxones y su asociación con el registro biológico.",
+  "ejemplo": "Huésped: Quercus alba\nParásito: Apis mellifera"
+ },
+ {
+  "name": "occurrenceRemarks",
+  "section": "Registro",
+  "label": "Comentarios del registro biológico",
+  "definicion": "Comentarios o anotaciones sobre el registro biológico. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Muerto en la vía\nRegistrado en el campus de la Universidad"
+ },
+ {
+  "name": "materialSampleID",
+  "section": "Muestra",
+  "label": "ID de muestra del material",
+  "definicion": "Un identificador para muestras de material (no hace referencia a muestras digitales sino físicas, como exicados o tejidos). En ausencia de un identificador único global persistente, puede construir uno usando una combinación a partir del occurrenceID, de tal forma que el materialSampleID sea globalmente único. Se recomienda hacer uso de la extensión GGBN Material Sample Extension para documentar en más detalle la información relacionada con la muestra.",
+  "ejemplo": "IAvH:IAvH-CT-1:Tejido\n06809dc5-f143-459a-be1a-6f03e63fc083\nIAvH-ABJ788"
+ },
+ {
+  "name": "parentEventID",
+  "section": "Evento",
+  "label": "ID parental del evento",
+  "definicion": "Un identificador único para la categoría superior del evento de muestreo. Por ejemplo, el identificador del muestreo de un cuadrante, parcela o transecto independientemente del tiempo o temporada cuando se realice el muestreo. Este identificador es más general que el eventID y puede agrupar varios eventID.\n\nEste elemento debe estar acompañado siempre del elemento eventID, como se muestra en el ejemplo a continuación:\n\nA1 como parentEventID para identificar una parcela, cada sub-parcela con su propio eventID (A1:1, A1:2, etc.)\nBENTOS como parentEventID para identificar un evento de muestreo y cada parte del evento con su propio eventID( BENTOS:E-1, BENTOS:E-2, etc.)",
+  "ejemplo": "A1\nBENTOS"
+ },
+ {
+  "name": "eventID",
+  "section": "Evento",
+  "label": "ID del evento",
+  "definicion": "Un identificador único para el Evento de muestreo  - que ocurre en un lugar y tiempo determinado. Por ejemplo, el identificador del muestreo de un cuadrante, parcela o transecto en un tiempo o temporada específicos. Este identificador es más específico que el parentEventID.\n\nEste elemento puede estar acompañado del elemento parentEventID, como se muestra en el ejemplo a continuación:\n\nA1:1 | A1:2 como eventID para identificar cada sub-parcela perteneciente a la parcela A1\nBENTOS:E-1 | BENTOS:E-2 como EventID para identificar cada parte del evento de muestreo perteneciente al evento BENTOS",
+  "ejemplo": "A1:1\nBENTOS:E-1"
+ },
+ {
+  "name": "eventType",
+  "section": "Evento",
+  "label": "Tipo de evento",
+  "definicion": "La naturaleza del evento. Se recomienda el uso de un vocabulario controlado.",
+  "ejemplo": "Muestra\nObservación\nVisita al sitio\nInteracción biótica\nBioblitz\nExpedición\nEncuesta\nProyecto"
+ },
+ {
+  "name": "samplingProtocol",
+  "section": "Evento",
+  "label": "Protocolo de muestreo",
+  "definicion": "El nombre, la descripción o la referencia del método o protocolo de muestreo usado para realizar el muestreo. Se recomienda acompañar este elemento con el elemento samplingEffort. \n\nSi un mismo evento cuenta con varios protocolos de muestreo diferentes, la recomendación es generar un evento (filas) diferente por cada protocolo de muestreo. En el caso que el evento agrupe múltiples protocolos que no puedan ser atribuidos a un registro particular, la práctica recomendada es separar los protocolos por una barra vertical  | .",
+  "ejemplo": "Colecta fortuita\nTrampa de luz UV\nRed de niebla\nArrastre de fondo\nObservación ad hoc\nPunto de conteo"
+ },
+ {
+  "name": "sampleSizeValue",
+  "section": "Evento",
+  "label": "Valor del tamaño de la muestra",
+  "definicion": "Un valor numérico para una medición del tamaño (duración de tiempo, longitud, área o volumen) de una muestra en un evento de muestreo. Documentar este elemento junto con el elemento sampleSizeUnit. Se recomienda hacer uso del Sistema Internacional de Unidades (SI) cuando sea posible.",
+  "ejemplo": "5.5\n10\n1"
+ },
+ {
+  "name": "sampleSizeUnit",
+  "section": "Evento",
+  "label": "Unidad del tamaño de la muestra",
+  "definicion": "La unidad de medida de la magnitud (tiempo de duración, longitud, área o volumen) de una muestra en un evento de muestreo. Documentar este elemento junto con el elemento sampleSizeValue.",
+  "ejemplo": "m (= Metros)\nh (= Horas)\nTrampas-noche\nLitros"
+ },
+ {
+  "name": "samplingEffort",
+  "section": "Evento",
+  "label": "Esfuerzo de muestreo",
+  "definicion": "El esfuerzo de muestreo en tiempo y/o espacio realizado durante el evento de muestreo. Documentar este elemento junto con el elemento samplingProtocol.",
+  "ejemplo": "40 trampas-noche\n10 horas-observador\n10 km caminando\n30 km en carro\n7 días-trampa\n5 horas muestra por 30 eventos de muestreo"
+ },
+ {
+  "name": "eventDate",
+  "section": "Evento",
+  "label": "Fecha del evento",
+  "definicion": "La fecha o el intervalo durante el cual se produjo el evento de observación o colecta de un organismo o muestra. No es adecuado para una fecha en un contexto geológico. Debe estar documentada en el esquema de codificación ISO 8601 (AAAA-MM-DD o para un intervalo de fechas: AAAA-MM-DD/AAAA-MM-DD).",
+  "ejemplo": "2010\n2010-01\n2010-01-17\n2009/2010\n2009-02/10\n2010-01-17/18\n2009-02/2010-01\n2009-08-08/2009-10-26"
+ },
+ {
+  "name": "startDayOfYear",
+  "section": "Evento",
+  "label": "Día inicial del año",
+  "definicion": "Día inicial del evento, contando a partir del primer día del año del evento y documentado en formato de números ordinales (siendo \"1\" el primero de enero y \"365\" el 31 de diciembre en año no bisiesto).",
+  "ejemplo": "1\n220\n365"
+ },
+ {
+  "name": "endDayOfYear",
+  "section": "Evento",
+  "label": "Día final del año",
+  "definicion": "Día final del evento, contando a partir del primer día del año del evento y documentado en formato de números ordinales (siendo \"1\" el primero de enero y \"365\" el 31 de diciembre en año no bisiesto).",
+  "ejemplo": "30\n300\n366"
+ },
+ {
+  "name": "year",
+  "section": "Evento",
+  "label": "Año",
+  "definicion": "Los cuatro dígitos del año durante el cual se produjo el evento de observación o colecta de un organismo o muestra.\n\nSi el rango de fechas presente en EventDate abarca varios años, no debe documentar este elemento:\neventDate:2021-02-01/2022-05-23\nyear:\nmonth:\nday:",
+  "ejemplo": "2008\n1901"
+ },
+ {
+  "name": "month",
+  "section": "Evento",
+  "label": "Mes",
+  "definicion": "El mes en números enteros en que ocurrió durante el cual se produjo el evento de observación o colecta de un organismo o muestra.\n\nSi el rango de fechas presente en EventDate abarca más de un mes, no debe documentar este elemento:\neventDate:2022-02-10/05-23\nyear:2022\nmonth:\nday:",
+  "ejemplo": "01\n11"
+ },
+ {
+  "name": "day",
+  "section": "Evento",
+  "label": "Día",
+  "definicion": "El día en números enteros durante el cual se produjo el evento de observación o colecta de un organismo o muestra.\n\nSi el rango de fechas presente en EventDate se encuentra dentro del mismo mes, no debe documentar este elemento:\neventDate:2022-02-12/15\nyear:2022\nmonth:02\nday:",
+  "ejemplo": "09\n28"
+ },
+ {
+  "name": "verbatimEventDate",
+  "section": "Evento",
+  "label": "Fecha original del evento",
+  "definicion": "La representación textual original (según la libreta de campo, formato de datos, o etiqueta de colección) de la información de fecha durante la cual se produjo el evento de observación o colecta de un organismo o muestra.",
+  "ejemplo": "primavera 1910\n4/11/2020\nmarzo 2002\n1999-03-XX\n17IV1934"
+ },
+ {
+  "name": "eventTime",
+  "section": "Evento",
+  "label": "Hora del evento",
+  "definicion": "La hora o el intervalo de horas en la cual se produjo el evento de observación o colecta de un organismo o muestra. Debe estar documentado en el esquema de codificación ISO 8601.",
+  "ejemplo": "14:07\n08:40:21\n13:00:00/15:30:00"
+ },
+ {
+  "name": "habitat",
+  "section": "Evento",
+  "label": "Hábitat",
+  "definicion": "Una categoría estandarizada o la descripción del hábitat en el que ocurrió el evento.",
+  "ejemplo": "Sabana de roble\nEstepa de la pre-cordillera"
+ },
+ {
+  "name": "fieldNumber",
+  "section": "Evento",
+  "label": "Número de campo",
+  "definicion": "Un identificador dado al evento en campo. A menudo sirve como un vínculo entre las anotaciones de campo y el evento.",
+  "ejemplo": "RV Sol 87-03-08\nMBZ-067"
+ },
+ {
+  "name": "fieldNotes",
+  "section": "Evento",
+  "label": "Notas de campo",
+  "definicion": "Un indicador sobre la existencia o referencia (publicación URI) a las notas de campo; o el texto de las notas tomadas en campo sobre el evento.",
+  "ejemplo": "Notas disponibles en la Biblioteca Grinnell-Miller\nEste espécimen fue colectado en un árbol de caracolí, una nota de campo fue descrita para mencionar este evento, eran depredados por Epicrates maurus"
+ },
+ {
+  "name": "eventRemarks",
+  "section": "Evento",
+  "label": "Comentarios del evento",
+  "definicion": "Comentarios o anotaciones sobre el evento. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Después de las lluvias recientes, el río estuvo cercano a un estado de desbordamiento"
+ },
+ {
+  "name": "locationID",
+  "section": "Ubicación",
+  "label": "ID de la ubicación",
+  "definicion": "Un identificador de la región geográfica, división político administrativa o del sitio específico donde se realizó el registro.\n\nSe sugiere utilizar un identificador persistente, como el código de la División Política Administrativa de Colombia - DANE, (http://www.dane.gov.co/Divipola) precedida por \"CO:\" o utilizar MarineRegions (marineregions.org) para regiones marinas, como se muestra a continuación:\n\nCO:15572 (Código Divipola para el Municipio de Puerto Boyacá en Boyacá)\nCO:68 (Código Divipola para el Departamento de Santander)\nhttp://marineregions.org/mrgid/32556 (Islas del Rosario)",
+  "ejemplo": "CO:15572\nCO:68\nhttp://marineregions.org/mrgid/32556\ngeonames.org/3674545/"
+ },
+ {
+  "name": "higherGeography",
+  "section": "Ubicación",
+  "label": "Geografía superior",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de la geografía inmediatamente superior al sitio o ubicación donde se realizó el registro. Si hay modificaciones en la localidad para estandarizar su contenido puede documentar en este elemento los datos originales (sin estandarizar) de esos términos.\n\nEste elemento debe estar acompañado de otros elementos del estándar, como se muestra en el ejemplo a continuación:\n\nAmérica | Sudamérica | Colombia | Región del Pacífico | Valle del Cauca | La Cumbre | Bitaco (Con los valores resultantes de América del Sur en continent, Colombia en country, Valle del Cauca en stateProvince, La Cumbre en county y Bitaco en municipality).",
+  "ejemplo": "América | Sudamérica | Colombia | Región del Pacífico | Valle del Cauca | La Cumbre | Bitaco"
+ },
+ {
+  "name": "higherGeographyID",
+  "section": "Ubicación",
+  "label": "ID de la geografía superior",
+  "definicion": "Un identificador de la región geográfica inmediatamente superior a la ubicación donde se realizó el registro. Este identificador debe ser acorde con la geografía superior documentada en el elemento higherGeography.\n\nCO:15572 (Código Divipola para el Municipio de Puerto Boyacá en Boyacá)\nCO:68 (Código Divipola para el Departamento de Santander)\nTGN: 7005075 (San Agustín (Huila), Colombia)",
+  "ejemplo": "CO:15572\nCO:68\nTGN: 7005075"
+ },
+ {
+  "name": "continent",
+  "section": "Ubicación",
+  "label": "Continente",
+  "definicion": "El nombre del continente en el que tiene lugar la ubicación. Documente este elemento de acuerdo a las definiciones e indicaciones que acompañan el vocabulario controlado.",
+  "ejemplo": "América del Sur\nAmérica del Norte\nEuropa\nÁfrica\nAsia\nOceanía\nAntártida"
+ },
+ {
+  "name": "waterBody",
+  "section": "Ubicación",
+  "label": "Cuerpo de agua",
+  "definicion": "El nombre y tipo del cuerpo de agua en el que tiene lugar la ubicación. Se recomienda usar este elemento solamente si el evento ocurrió en el cuerpo de agua propiamente dicho, no en cercanías de este.",
+  "ejemplo": "Mar Caribe\nOcéano Pacífico\nRío Lebrija\nGolfo de Urabá\nCaño Mojana"
+ },
+ {
+  "name": "islandGroup",
+  "section": "Ubicación",
+  "label": "Grupo de islas",
+  "definicion": "El nombre del grupo de islas en que tiene lugar la ubicación.",
+  "ejemplo": "Cayos de Albuquerque\nIslas del Rosario"
+ },
+ {
+  "name": "island",
+  "section": "Ubicación",
+  "label": "Isla",
+  "definicion": "El nombre de la isla en o cerca al lugar de la ubicación.",
+  "ejemplo": "Isla de Providencia\nIsla Gorgona\nIsla de Tierra Bomba"
+ },
+ {
+  "name": "country",
+  "section": "Ubicación",
+  "label": "País",
+  "definicion": "El nombre del país o unidad administrativa de mayor jerarquía de la ubicación. Se recomienda utilizar un identificador persistente de un vocabulario controlado como el Tesauro Getty de Nombres Geográficos o la norma ISO 3166. Se recomienda acompañar este elemento con el elemento countryCode. \n\nLa práctica recomendada es dejar este elemento en blanco si la información presente en la sección Ubicación abarca múltiples entidades en este mismo nivel administrativo o si hay incertidumbre sobre la entidad a la que corresponden los datos. Esta información de multiplicidad e incertidumbre se puede documentar en los elementos higherGeography y locality. Por ejemplo, si hay dos entidades \"Colombia y Brasil\", la recomendación es dejar este elemento vacío y dejar el comentario en higherGeography y locality.",
+  "ejemplo": "Colombia\nEspaña\nDinamarca"
+ },
+ {
+  "name": "countryCode",
+  "section": "Ubicación",
+  "label": "Código del país",
+  "definicion": "El código estándar para el país de la ubicación.\n\nLa práctica recomendada es dejar este elemento en blanco si la información presente en la sección Ubicación abarca múltiples entidades en este mismo nivel administrativo o si hay incertidumbre sobre la entidad a la que corresponden los datos. Esta información de multiplicidad e incertidumbre se puede documentar en los elementos higherGeography y locality. Por ejemplo, si hay dos entidades \"Colombia y Brasil\", la recomendación es dejar este elemento vacío y dejar el comentario en higherGeography y locality.\n\nDocumente este elemento de acuerdo al vocabulario controlado de la norma ISO 3166-1-alfa-2 de códigos de países, como se muestra a continuación:\n\nCO (=Para Colombia)\nAR (=Para Argentina)",
+  "ejemplo": "CO"
+ },
+ {
+  "name": "stateProvince",
+  "section": "Ubicación",
+  "label": "Departamento",
+  "definicion": "El nombre completo y sin abreviar de la siguiente región administrativa de menor jerarquía que País de la ubicación (Departamento). Se recomienda usar los nombres asignados en la División Política Administrativa de Colombia - DANE, (http://www.dane.gov.co/Divipola). \n\nLa práctica recomendada es dejar este elemento en blanco si la información presente en la sección Ubicación abarca múltiples entidades en este mismo nivel administrativo o si hay incertidumbre sobre la entidad a la que corresponden los datos. Esta información de multiplicidad e incertidumbre se puede documentar en los elementos higherGeography y locality. Por ejemplo, si hay dos entidades \"Santander y Boyacá\", la recomendación es dejar este elemento vacío y dejar el comentario en higherGeography y locality.",
+  "ejemplo": "Antioquia\nAtlántico\nBogotá, D.C."
+ },
+ {
+  "name": "county",
+  "section": "Ubicación",
+  "label": "Municipio",
+  "definicion": "El nombre completo y sin abreviar de la siguiente región administrativa de menor jerarquía que Departamento de la ubicación (Municipio). Se recomienda usar los nombres asignados en la División Política Administrativa de Colombia - DANE, (http://www.dane.gov.co/Divipola).\n\nLa práctica recomendada es dejar este elemento en blanco si la información presente en la sección Ubicación abarca múltiples entidades en este mismo nivel administrativo o si hay incertidumbre sobre la entidad a la que corresponden los datos. Esta información de multiplicidad e incertidumbre se puede documentar en los elementos higherGeography y locality. Por ejemplo, si hay dos entidades \"San Juan del Cesar o Riohacha\", la recomendación es dejar este elemento vacío y dejar el comentario en higherGeography y locality.",
+  "ejemplo": "Medellín\nPuerto Colombia\nBogotá, D.C."
+ },
+ {
+  "name": "municipality",
+  "section": "Ubicación",
+  "label": "Cabecera municipal / Centro poblado",
+  "definicion": "El nombre completo y sin abreviar de la siguiente región administrativa de menor jerarquía que Municipio de la ubicación. Puede ser un centro poblado, cabecera municipal, corregimiento o inspección de policía. No utilice este elemento para el nombre de un lugar cercano que no contiene la ubicación real. Se recomienda usar los nombres asignados en la División Política Administrativa de Colombia - DANE, (http://www.dane.gov.co/Divipola).\n\nLa práctica recomendada es dejar este elemento en blanco si la información presente en la sección Ubicación abarca múltiples entidades en este mismo nivel administrativo o si hay incertidumbre sobre la entidad a la que corresponden los datos. Esta información de multiplicidad e incertidumbre se puede documentar en los elementos higherGeography y locality. Por ejemplo, si hay dos entidades \"San Luis o Punta Sur\", la recomendación es dejar este elemento vacío y dejar el comentario en higherGeography y locality.",
+  "ejemplo": "Palmitas\nPuerto Colombia\nBogotá, Distrito Capital"
+ },
+ {
+  "name": "locality",
+  "section": "Ubicación",
+  "label": "Localidad",
+  "definicion": "La información geográfica más específica de la ubicación. Información geográfica de menor especificidad puede ser provista en otros elementos geográficos (higherGeography, continent, country, stateProvince, county, municipality, waterBody, island, islandGroup). Este elemento puede contener información modificada de la original para corregir errores o estandarizar la descripción.",
+  "ejemplo": "Ruta del Sol, kilómetro 25 entre Guaduas y La Dorada\nVereda Santa Ana\nQuebrada Aguasclaras\nParque Nacional Natural Serranía de Chiribiquete"
+ },
+ {
+  "name": "verbatimLocality",
+  "section": "Ubicación",
+  "label": "Localidad original",
+  "definicion": "La descripción textual original del lugar (como fue tomada en campo o documentada en el voucher).",
+  "ejemplo": "km 25 Rutal del Sol, Guaduas-La Dorada\nVda Santa ana\nQ. Aguasclaras\nPNN Chiribiquete"
+ },
+ {
+  "name": "verbatimElevation",
+  "section": "Ubicación",
+  "label": "Elevación original",
+  "definicion": "La descripción textual de la elevación (altitud, por lo general por encima del nivel del mar) de la ubicación.",
+  "ejemplo": "100-200 m\n1560 msnm"
+ },
+ {
+  "name": "minimumElevationInMeters",
+  "section": "Ubicación",
+  "label": "Elevación mínima en metros",
+  "definicion": "El límite inferior del rango de elevación (altitud, generalmente por encima del nivel del mar), no utilice ningún indicador de unidad (metros, m, msnm) ya que el elemento especifica que los valores anotados son en metros.",
+  "ejemplo": "100\n1600"
+ },
+ {
+  "name": "maximumElevationInMeters",
+  "section": "Ubicación",
+  "label": "Elevación máxima en metros",
+  "definicion": "El límite superior del rango de elevación (altitud, generalmente por encima del nivel del mar), no utilice ningún indicador de unidad (metros, m, msnm) ya que el elemento especifica que los valores anotados son en metros.",
+  "ejemplo": "200\n3050"
+ },
+ {
+  "name": "verticalDatum",
+  "section": "Ubicación",
+  "label": "Datum vertical",
+  "definicion": "El datum vertical usado como referencia para la obtención de los valores de elevación. Se recomienda usar un vocabulario controlado a partir de código epsg o el código del geoide de referencia.",
+  "ejemplo": "GRS80\nEGM84 \nEGM96 \nEGM2008 \nepsg:7030\nDesconocido"
+ },
+ {
+  "name": "verbatimDepth",
+  "section": "Ubicación",
+  "label": "Profundidad original",
+  "definicion": "La descripción textual de la profundidad bajo la superficie local.",
+  "ejemplo": "0-20 m\n-15 a -30"
+ },
+ {
+  "name": "minimumDepthInMeters",
+  "section": "Ubicación",
+  "label": "Profundidad mínima en metros",
+  "definicion": "La menor profundidad de un rango de profundidad por debajo de la superficie local. No utilice ningún indicador de unidad (metros, m) ya que el elemento especifica que los valores anotados son en metros.",
+  "ejemplo": "0\n10"
+ },
+ {
+  "name": "maximumDepthInMeters",
+  "section": "Ubicación",
+  "label": "Profundidad máxima en metros",
+  "definicion": "La mayor profundidad de un rango de profundidad por debajo de la superficie local. No utilice ningún indicador de unidad (metros, m) ya que el campo especifica que los valores anotados son en metros.",
+  "ejemplo": "2\n50"
+ },
+ {
+  "name": "minimumDistanceAboveSurfaceInMeters",
+  "section": "Ubicación",
+  "label": "Distancia mínima de la superficie en metros",
+  "definicion": "La menor distancia en metros en un rango de distancias, desde una superficie de referencia en dirección vertical. Si las medidas de profundidad son proporcionadas, la superficie de referencia es la ubicación determinada por la profundidad, de lo contrario la superficie de referencia es la ubicación dada por la elevación.\n\nUtilice valores positivos para las ubicaciones por encima de la superficie y valores negativos para ubicaciones por debajo, como se muestra a continuación:\n\n-1.5 (Para un evento entre 1.5 metros y 4.5 metros desde el fondo de un lago)",
+  "ejemplo": "-1.5\n2.8"
+ },
+ {
+  "name": "maximumDistanceAboveSurfaceInMeters",
+  "section": "Ubicación",
+  "label": "Distancia máxima de la superficie en metros",
+  "definicion": "La mayor distancia en metros, en un rango de distancia desde una superficie de referencia en dirección vertical. Si las medidas de profundidad son proporcionadas, la superficie de referencia es la ubicación determinada por la profundidad, de lo contrario la superficie de referencia es la ubicación dada por la elevación.\n\nUtilice valores positivos para las ubicaciones por encima de la superficie, valores negativos para las ubicaciones por debajo, como se muestra a continuación:\n\n-4.5 (Para un evento entre 1.5 metros y 4.5 metros desde el fondo de un lago)",
+  "ejemplo": "-4.5\n8.2"
+ },
+ {
+  "name": "locationAccordingTo",
+  "section": "Ubicación",
+  "label": "Ubicación de acuerdo con",
+  "definicion": "La información sobre la fuente de la ubicación. Podría ser una publicación (gacetero), institución o grupo de individuos.",
+  "ejemplo": "Tesauro Getty de Nombres Geográficos\nGADM\nGeonames\nGoogle Earth"
+ },
+ {
+  "name": "locationRemarks",
+  "section": "Ubicación",
+  "label": "Comentarios de la ubicación",
+  "definicion": "Comentarios o anotaciones sobre la ubicación. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Bajo agua desde 2005"
+ },
+ {
+  "name": "verbatimLatitude",
+  "section": "Ubicación",
+  "label": "Latitud original",
+  "definicion": "La latitud original de la ubicación. El elipsoide de coordenadas, el datum geodésico o el sistema de referencia espacial completo (SRS) para estas coordenadas debe ser documentado en el elemento verbatimSRS, y el sistema de coordenadas en el elemento verbatimCoordinateSystem.",
+  "ejemplo": "41° 05' 56.03\" S\n1631599"
+ },
+ {
+  "name": "verbatimLongitude",
+  "section": "Ubicación",
+  "label": "Longitud original",
+  "definicion": "La longitud original de la ubicación. El elipsoide de coordenadas, datum geodésico o el sistema de referencia espacial completo (SRS) para estas coordenadas, debe ser documentado en el elemento verbatimSRS y el sistema de coordenadas en el elemento verbatimCoordinateSystem.",
+  "ejemplo": "75° 08' 36.83\" W\n834549"
+ },
+ {
+  "name": "verbatimCoordinates",
+  "section": "Ubicación",
+  "label": "Coordenadas originales",
+  "definicion": "Las coordenadas de la ubicación en su formato original. El elipsoide de las coordenadas, el datum geodésico, o el sistema de referencia espacial completo (SRS) para estas coordenadas, debe ser documentado en el elemento verbatimSRS, y el sistema de coordenadas en el elemento verbatimCoordinateSystem.",
+  "ejemplo": "4° 05' 56.03\" S, 75° 08' 36.83\" W\n17T 1631599  834549"
+ },
+ {
+  "name": "verbatimCoordinateSystem",
+  "section": "Ubicación",
+  "label": "Sistema original de coordenadas",
+  "definicion": "El sistema de coordenadas espaciales para verbatimLatitude y verbatinLongitude original o verbatimCoordinates de la ubicación. Se recomienda el uso del vocabulario sugerido disponible para este elemento.",
+  "ejemplo": "Grados decimales\nGrados, minutos decimales\nGrados, minutos, segundos\nUTM\nCoordenadas planas\nCoordenadas proyectadas"
+ },
+ {
+  "name": "verbatimSRS",
+  "section": "Ubicación",
+  "label": "SRS original",
+  "definicion": "El elipsoide, datum geodésico, o sistema de referencia espacial (SRS) en el que se basan las coordenadas provistas en verbatimLatitude y verbatinLongitude o verbatimCoordinates. Se recomienda usar el código EPSG, si se conoce. Caso contrario, utilice un lenguaje controlado para el nombre o código del datum geodésico, o un vocabulario controlado para el nombre o código del elipsoide, si se conoce. Si ninguno de estos se conoce, utilice el valor \"Desconocido\".",
+  "ejemplo": "EPSG: 4326\nEPSG: 3116\nWGS84\nUTM zone 17T\nMAGNA-SIRGAS origen Bogotá\nMAGNA-SIRGAS origen Oeste\nMAGNA-SIRGAS origen CTM-12\nDesconocido"
+ },
+ {
+  "name": "decimalLatitude",
+  "section": "Ubicación",
+  "label": "Latitud decimal",
+  "definicion": "La latitud geográfica (en grados decimales, utilizando el sistema de referencia espacial provisto en geodeticDatum) del centro geográfico de una ubicación. Los valores positivos se encuentran al norte del ecuador, los valores negativos están al sur del mismo. Los valores admitidos se encuentran entre -90 y 90.",
+  "ejemplo": "6.05486\n12.584877"
+ },
+ {
+  "name": "decimalLongitude",
+  "section": "Ubicación",
+  "label": "Longitud decimal",
+  "definicion": "La longitud geográfica (en grados decimales, mediante el sistema de referencia espacial provisto en geodeticDatum) del centro geográfico de una ubicación. Los valores positivos se encuentran al este del meridiano de Greenwich, los valores negativos se encuentran al oeste de la misma. Los valores admitidos se encuentran entre -180 y 180.",
+  "ejemplo": "-75.05486\n-72.78945"
+ },
+ {
+  "name": "geodeticDatum",
+  "section": "Ubicación",
+  "label": "Datum geodésico",
+  "definicion": "El elipsoide, datum geodésico, o sistema de referencia espacial (SRS) en el que se basan las coordenadas geográficas provistas en decimalLatitude y decimalLongitude. Se recomienda usar el código EPSG, si se conoce. Caso contrario, utilice un lenguaje controlado para el nombre o código del datum geodésico, o utilice un lenguaje controlado para el nombre o código del elipsoide, si se conoce. Si ninguno de estos se conoce, utilice el valor \"Desconocido\".\n\nAunque el estándar no es restrictivo en el datum a usar, desde el SiB Colombia se recomienda documentar las coordenadas decimales usando el datum WGS84 dado que facilita la espacialización de los datos publicados por diferentes organizaciones bajo un mismo sistema de referencia espacial, lo que minimiza el riesgo de desplazamiento de las coordenadas.",
+  "ejemplo": "WGS84\nEPSG:4326\nDesconocido"
+ },
+ {
+  "name": "coordinateUncertaintyInMeters",
+  "section": "Ubicación",
+  "label": "Incertidumbre de las coordenadas en metros",
+  "definicion": "La distancia horizontal (en metros) de la decimalLatitude y decimalLongitude provistas describiendo el círculo más pequeño que contiene la totalidad de la ubicación. Deje el valor vacío si la incertidumbre es desconocida, no se puede estimar, o no es aplicable (porque no hay coordenadas). Cero no es un valor válido para este elemento.\n\nDocumente este elemento de acuerdo a las siguientes explicaciones:\n\n30 (límite inferior razonable de incertidumbre en metros para lecturas de GPS tomadas bajo buenas condiciones después de 2000-05-01, cuando la precisión no fue tomada en campo)\n100 (Límite inferior razonable de incertidumbre en metros para lecturas de GPS tomadas bajo buenas condiciones antes de 2000-05-1, cuando la precisión no fue tomada en campo)\n71 (Incertidumbre para coordenadas originales tomadas bajo el sistema de coordenadas UTM teniendo 100 metros de precisión y un sistema de referencia espacial conocido)",
+  "ejemplo": "30\n100\n71"
+ },
+ {
+  "name": "coordinatePrecision",
+  "section": "Ubicación",
+  "label": "Precisión de las coordenadas",
+  "definicion": "Una representación decimal de la precisión de las coordenadas provistas en decimalLatitude y decimalLongitude.\n\nDocumente este elemento de acuerdo a las siguientes explicaciones:\n\n0.00001 (Límite normal de GPS para grados decimales)\n0.000278 (Para coordenadas reportadas al minuto más cercano. 1/3600)\n0.01 (Para una coordenada decimal con dos grados decimales)\n1.0 (Grado más próximo)",
+  "ejemplo": "0.00001\n0.000278\n0.01\n1.0"
+ },
+ {
+  "name": "pointRadiusSpatialFit",
+  "section": "Ubicación",
+  "label": "Ajuste espacial del radio-punto",
+  "definicion": "La relación entre el área del radio-punto (decimalLatitude, decimalLongitude y coordinateUncertaintyInMeters) y el área de la verdadera  representación espacial de la ubicación (original, o más específica). Los valores válidos son 0, 1, mayor que 1, o indefinido. Un valor de 1 es una coincidencia exacta o superposición de 100%. Un valor de 0 se debe utilizar si el radio-punto dado no contiene por completo la representación original. El Ajuste espacial del radio-punto no está definido (y se debe dejar en blanco) si la representación original es cualquier geometría sin área (un punto o polilínea) y la georreferencia asignada no corresponde a esa misma geometría (sin incertidumbre). Si tanto el original como la georreferencia dada están en el mismo punto el ajuste espacial del radio-punto es 1.",
+  "ejemplo": "0\n1\n1.5708\nIndefinido"
+ },
+ {
+  "name": "footprintWKT",
+  "section": "Ubicación",
+  "label": "WKT footprint",
+  "definicion": "Una representación Well-Known Text (WKT) de la forma (footprint, geometría) que define la ubicación. Una ubicación puede tener una representación de radio-punto (véase decimalLatitude) y una representación footprint, y pueden diferir entre sí.\n\nDocumente este elemento de acuerdo a las siguientes explicaciones:\n\nPOLYGON ((10 20, 11 20, 11 21, 10 21, 10 20)) (Para un cuadrante con esquinas opuestas (longitud=10, latitud=20) y (longitud=11, latitud=21))\nLINESTRING (-74.139299 10.689195, -74.13791 10.689422) (Para un transecto de muestreo con coordenadas iniciales (longitud=-74.139299, latitud=10.689195) y finales (longitud=-74.13791, latitud=10.689422))",
+  "ejemplo": "POLYGON ((10 20, 11 20, 11 21, 10 21, 10 20))\nLINESTRING (-74.139299 10.689195, -74.13791 10.689422)"
+ },
+ {
+  "name": "footprintSRS",
+  "section": "Ubicación",
+  "label": "SRS footprint",
+  "definicion": "El Elipsoide, datum geodésico o sistema de referencia espacial sobre el cual está referenciada la geometría en el elemento footprintWKT. \n\nSe recomienda usar un código EPSG para el sistema de referencia si este es conocido. De lo contrario usar un nombre del sistema de referencia, datum, o elipsoide (SRS) bajo un vocabulario controlado. También es permitida la representación en Well-Known Text (WKT) del sistema de referencia espacial (SRS). No utilice este elemento para describir el SRS de decimalLatitude y decimalLongitude, incluso si es la misma que para WKT footprint - utilice el geodeticDatum en su lugar.",
+  "ejemplo": "EPSG:4326\nWGS84\nSRS GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\",6378137,298.257223563]], PRIMEM[\"Greenwich\",0], UNIT[\"Degree\",0.0174532925199433]]"
+ },
+ {
+  "name": "footprintSpatialFit",
+  "section": "Ubicación",
+  "label": "Ajuste espacial de footprint",
+  "definicion": "La relación del área de footprint (WKT footprint) y el área de la verdadera representación espacial de la ubicación (original, o más específica). Los valores válidos son 0, 1, mayor que 1, o indefinido. Un valor de 1 es una coincidencia exacta o superposición de 100%. Un valor de 0 debe ser utilizado si el footprint dado no contiene la representación original completamente. El footprintSpatialFit es indefinido (y se debe dejar en blanco) si la representación original es cualquier geometría sin área (un punto o polilínea) y la georreferencia asignada no corresponde a esa misma geometría (sin incertidumbre). Si el original y la georreferencia dada son el mismo punto, el footprintSpatialFit es 1.",
+  "ejemplo": "0\n1\n1.5708\nIndefinido"
+ },
+ {
+  "name": "georeferencedBy",
+  "section": "Ubicación",
+  "label": "Georreferenciado por",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los nombres de las personas, grupos u organizaciones que determinaron la georreferencia (representación espacial) para la ubicación.",
+  "ejemplo": "Kristina Yamamoto (MVZ)\nMiguel B.  |  María Isabel H."
+ },
+ {
+  "name": "georeferencedDate",
+  "section": "Ubicación",
+  "label": "Fecha de georreferenciación",
+  "definicion": "La fecha en que fue georreferenciada la ubicación. Debe estar documentada en el esquema de codificación ISO 8601 (AAAA-MM-DD o para un intervalo de fechas: AAAA-MM-DD/AAAA-MM-DD).",
+  "ejemplo": "2010\n2010-01\n2010-01-17\n2009/2010\n2009-02/2010-01\n2009-02/10\n2009-02-12/2009-10-08\n2010-01-17/18"
+ },
+ {
+  "name": "georeferenceProtocol",
+  "section": "Ubicación",
+  "label": "Protocolo de georreferenciación",
+  "definicion": "Una descripción o referencia a los métodos utilizados para determinar el footprint espacial, coordenadas, e incertidumbres.",
+  "ejemplo": "Chapman AD & Wieczorek JR (2020) Georeferencing Best Practices. Copenhagen: GBIF Secretariat. https://doi.org/10.15468/doc-gg7h-s853 \nMaNIS/HerpNet/ORNIS Georeferencing Guidelines\nBioGeomancer"
+ },
+ {
+  "name": "georeferenceSources",
+  "section": "Ubicación",
+  "label": "Fuentes de georreferenciación",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los mapas, gaceteros, u otros recursos utilizados para georreferenciar la ubicación, lo suficientemente específica como para permitir que cualquier persona en el futuro utilice los mismos recursos.",
+  "ejemplo": "USGS 1:24000 Florence Montana Quad\nGoogle. (n.d.). Jardín Botánico de la Universidad de Caldas. Recuperado de:  https://goo.gl/maps/zPCiUySVnZ7CN2Vs7\nIGAC. Cartografía básica 1:100000. Plancha 124\nGoogle Maps, 2020, maps.google.com"
+ },
+ {
+  "name": "georeferenceVerificationStatus",
+  "section": "Ubicación",
+  "label": "Estado de la verificación de la georreferenciación",
+  "definicion": "Una descripción categórica sobre la verificación de la georreferencia usada para representar la descripción espacial de la ubicación del registro. Se recomienda el uso del vocabulario sugerido disponible para este elemento.",
+  "ejemplo": "Inviable para georreferenciar\nRequiere georreferenciación\nRequiere verificación\nVerificado por el custodio de los datos\nVerificado por el proveedor de los datos"
+ },
+ {
+  "name": "georeferenceRemarks",
+  "section": "Ubicación",
+  "label": "Comentarios de la georreferenciación",
+  "definicion": "Comentarios o anotaciones acerca de la determinación de la descripción espacial, los supuestos hechos que explican las adiciones formalizadas en el método referido en  georeferenceProtocol. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Distancia asumida a partir de la carretera (Autopista 101)"
+ },
+ {
+  "name": "geologicalContextID",
+  "section": "Contexto geológico",
+  "label": "ID del contexto geológico",
+  "definicion": "Un identificador para el conjunto de la información asociada con un contexto geológico (la ubicación dentro de un contexto geológico, tal como estratigrafía). Puede ser un identificador único global o un identificador específico para el conjunto de datos.",
+  "ejemplo": "https://opencontext.org/subjects/e54377f7-4452-4315-b676-40679b10c4d9"
+ },
+ {
+  "name": "earliestEonOrLowestEonothem",
+  "section": "Contexto geológico",
+  "label": "Eón temprano o eonotema inferior",
+  "definicion": "El nombre completo del eón geocronológico más temprano o el eratema cronoestratigráfico más bajo, o el nombre informal (\"Precámbrico\") atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Fanerozoico\nProterozoico"
+ },
+ {
+  "name": "latestEonOrHighestEonothem",
+  "section": "Contexto geológico",
+  "label": "Eón tardío o eonotema superior",
+  "definicion": "El nombre completo del eón geocronológico más tardío o el eratema cronoestratigráfico más alto posible, o el nombre informal (\"Precámbrico\") atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Fanerozoico\nProterozoico"
+ },
+ {
+  "name": "earliestEraOrLowestErathem",
+  "section": "Contexto geológico",
+  "label": "Era temprana o eratema inferior",
+  "definicion": "El nombre completo de la era geocronológica más temprana o el eratema cronoestratigráfico más bajo, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Cenozoico\nMesozoico"
+ },
+ {
+  "name": "latestEraOrHighestErathem",
+  "section": "Contexto geológico",
+  "label": "Era tardía o eratema superior",
+  "definicion": "El nombre completo de la era geocronológica más tardía o el eratema cronoestratigráfico más alto posible, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Cenozoico\nMesozoico"
+ },
+ {
+  "name": "earliestPeriodOrLowestSystem",
+  "section": "Contexto geológico",
+  "label": "Periodo temprano o sistema inferior",
+  "definicion": "El nombre completo del periodo geocronológico más temprano posible o el sistema cronoestratigráfico más bajo, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Neógeno\nTerciario\nCuaternario"
+ },
+ {
+  "name": "latestPeriodOrHighestSystem",
+  "section": "Contexto geológico",
+  "label": "Periodo tardío o sistema superior",
+  "definicion": "El nombre completo del período geocronológico más tardío posible o del sistema cronoestratigráfico más alto, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Neógeno\nTerciario\nCuaternario"
+ },
+ {
+  "name": "earliestEpochOrLowestSeries",
+  "section": "Contexto geológico",
+  "label": "Época temprana o serie inferior",
+  "definicion": "El nombre completo de la época geocronológica más temprana o la serie cronoestratigráfica más baja posible, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Holoceno\nPleistoceno\nSerie Ibexian"
+ },
+ {
+  "name": "latestEpochOrHighestSeries",
+  "section": "Contexto geológico",
+  "label": "Época tardía o serie superior",
+  "definicion": "El nombre completo de la época geocronológica más tardía posible o la serie cronoestratigráfica más alta, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Holoceno\nPleistoceno\nSerie Ibexian"
+ },
+ {
+  "name": "earliestAgeOrLowestStage",
+  "section": "Contexto geológico",
+  "label": "Edad temprana o piso inferior",
+  "definicion": "El nombre completo de la edad geocronológica más temprana posible o piso cronoestratigráfico más bajo, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Atlántico\nBoreal"
+ },
+ {
+  "name": "latestAgeOrHighestStage",
+  "section": "Contexto geológico",
+  "label": "Edad tardía o piso superior",
+  "definicion": "El nombre completo de la edad geocronológica más tardía posible o piso cronoestratigráfico más alto, atribuible al horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Atlántico\nBoreal"
+ },
+ {
+  "name": "lowestBiostratigraphicZone",
+  "section": "Contexto geológico",
+  "label": "Zona bioestratigráfica inferior",
+  "definicion": "El nombre completo de la zona geológica bioestratigráfica más baja posible del horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Maastrichtiense"
+ },
+ {
+  "name": "highestBiostratigraphicZone",
+  "section": "Contexto geológico",
+  "label": "Zona bioestratigráfica superior",
+  "definicion": "El nombre completo de la zona geológica bioestratigráfica más alta posible del horizonte estratigráfico donde se recolectó el objeto catalogado.",
+  "ejemplo": "Blancan"
+ },
+ {
+  "name": "lithostratigraphicTerms",
+  "section": "Contexto geológico",
+  "label": "Términos litoestratigráficos",
+  "definicion": "La combinación de todos los nombres litoestratigráficos de la roca de donde se colectó el objeto catalogado.",
+  "ejemplo": "Pleistoceno-Weichseliense"
+ },
+ {
+  "name": "group",
+  "section": "Contexto geológico",
+  "label": "Grupo",
+  "definicion": "El nombre completo del grupo litoestratigráfico del cual se colectó el objeto catalogado.",
+  "ejemplo": "Grupo Bathurst"
+ },
+ {
+  "name": "formation",
+  "section": "Contexto geológico",
+  "label": "Formación",
+  "definicion": "El nombre completo de la formación litoestratigráfica de la cual se colectó el objeto catalogado.",
+  "ejemplo": "Formación Notch Peak\nFormación Fillmore"
+ },
+ {
+  "name": "member",
+  "section": "Contexto geológico",
+  "label": "Miembro",
+  "definicion": "El nombre completo del miembro litoestratigráfico del cual se colectó el elemento catalogado.",
+  "ejemplo": "Miembro Hellnmaria"
+ },
+ {
+  "name": "bed",
+  "section": "Contexto geológico",
+  "label": "Capa",
+  "definicion": "El nombre completo de la capa litoestratigráfica de la cual se colectó el elemento catalogado.",
+  "ejemplo": "Carbón Harlem"
+ },
+ {
+  "name": "identificationID",
+  "section": "Identificación",
+  "label": "ID de la identificación",
+  "definicion": "Un identificador para la identificación (el cuerpo de la información asociada con la asignación de un nombre científico) del organismo. Puede ser un identificador único global o un identificador específico para el conjunto de datos.",
+  "ejemplo": "1231135\n10560964"
+ },
+ {
+  "name": "identifiedBy",
+  "section": "Identificación",
+  "label": "Identificado por",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los nombres de las personas responsables de identificar el organismo. \n\nSe debe mantener el mismo formato del nombre a lo largo de todos los registros y se recomienda evitar el uso de solo iniciales ya que esto genera ambigüedades para reconocer a las personas que realizaron la identificación, de ser posible siempre escriba nombres completos. Documente el nombre de las personas y evite documentar nombres de grupos u organizaciones.",
+  "ejemplo": "Luis Gabriel Pérez Salamanca\nJennifer Andrea Parra Ortíz | Jaime Enrique Correa Sánchez"
+ },
+ {
+  "name": "identifiedByID",
+  "section": "Identificación",
+  "label": "ID del identificador",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los identificadores (ORCID o Wikidata) de las personas que identificaron el organismo. Mantenga el mismo orden de las personas documentadas en el elemento identifiedBy; el orden en este campo no indica una prioridad en la citación ni ningún otro tipo de relación jerárquica.",
+  "ejemplo": "https://orcid.org/0000-0001-6215-3617 | https://orcid.org/0000-0003-1691-239X\nhttps://www.wikidata.org/entity/Q28913658"
+ },
+ {
+  "name": "dateIdentified",
+  "section": "Identificación",
+  "label": "Fecha de la identificación",
+  "definicion": "La fecha o el intervalo durante el cual  fue identificado taxonómicamente la observación, colecta o muestra. Debe estar documentada en el esquema de codificación ISO 8601 (AAAA-MM-DD o para un intervalo de fechas: AAAA-MM-DD/AAAA-MM-DD).",
+  "ejemplo": "2010\n2010-01\n2010-01-17\n2009/2010\n2009-02/10\n2010-01-17/18\n2009-02/2010-01\n2009-08-08/2009-10-26"
+ },
+ {
+  "name": "identificationReferences",
+  "section": "Identificación",
+  "label": "Referencias de la identificación",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \")  de las referencias (publicación, identificador único global, URI) usadas en la identificación.",
+  "ejemplo": "Aves del Noroeste Patagónico. Christie et al. 2004"
+ },
+ {
+  "name": "identificationVerificationStatus",
+  "section": "Identificación",
+  "label": "Estado de la verificación de la identificación",
+  "definicion": "Un indicador sobre el nivel de verificación de la identificación taxonómica. Puede ser un valor categórico o un porcentaje para los registros identificados con métodos genéticos.\n\nSe recomienda el uso de categorías claras o un vocabulario controlado como el de HISPID/ABCD (https://hiscom.rbg.vic.gov.au/wiki/Talk:HISPID/ABCD_Workshop_Executive_Summary#Verification_Level_Flag_.28vlev.29), como se muestra a continuación:\n\n0 - El nombre del registro no ha sido revisado por ninguna autoridad (del vocabulario HISPID/ABCD)\n1 - El nombre del registro se determinó por medio de comparación contra otro ejemplar (del vocabulario HISPID/ABCD)\n2 - El nombre del registro fue determinado por un taxónomo usando material de una colección (del vocabulario HISPID/ABCD)\n3 - El nombre del registro fue determinado por un taxónomo involucrado en la revisión sistemática del grupo (del vocabulario HISPID/ABCD)\n4 - El registros es derivado de forma asexual de un material tipo (del vocabulario HISPID/ABCD)\nVerificado",
+  "ejemplo": "0\n1\n2\n3\n4\nVerificado\nNo verificado\n97.3% a género"
+ },
+ {
+  "name": "typeStatus",
+  "section": "Identificación",
+  "label": "Tipo nomeclatural",
+  "definicion": "Una lista (en una fila continua y separada por una barra vertical \" | \") de los tipos de nomenclatura (estado del tipo, nombre científico tipificado, publicación) aplicados al organismo. Se recomienda el uso del vocabulario sugerido disponible para este elemento con traducción a español (https://tools.gbif.org/dwca-validator/vocabulary.do?id=http://rs.gbif.org/vocabulary/gbif/type_status).",
+  "ejemplo": "Holotipo de Ctenomys sociabilis. Pearson O. P.; y M. I. Christie. 1985. Historia Natural; 5(37):388\nParatipo\nAlotipo\nIsotipo\nNeotipo\nPlastotipo\nSintipo\nTopotipo"
+ },
+ {
+  "name": "verbatimIdentification",
+  "section": "Identificación",
+  "label": "Identificación original",
+  "definicion": "La identificación original del organismo (como fue tomada en campo o documentada en el voucher). Este elemento permite documentar la identificación o determinación original inalterada, incluidos los calificadores de identificación, fórmulas híbridas, incertidumbres, etc.",
+  "ejemplo": "Peromyscus sp.\nMinistrymon sp. nov. 1 \nAnser anser X Branta canadensis\nPachyporidae?"
+ },
+ {
+  "name": "identificationRemarks",
+  "section": "Identificación",
+  "label": "Comentarios de la identificación",
+  "definicion": "Comentarios o anotaciones sobre la identificación. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Se distingue entre Anthus correndera y Anthus hellmayri basado en las longitudes comparativas de las uñas\nAmplificación del gen 16S rRNA | Identificación bioquímica"
+ },
+ {
+  "name": "identificationQualifier",
+  "section": "Identificación",
+  "label": "Calificador de la identificación",
+  "definicion": "El grado de incertidumbre de la identificación puede indicarse agregando varios términos, como aff. y cf. al nombre científico. El calificador se aplica a la parte del nombre que sigue inmediatamente al calificador y se pueden colocar delante de cualquier elemento del nombre.\n\ncf.  del latín confer significa comparado con. Su uso indica que no hay certeza de la identidad de la especie (o rango taxonómico superior) hasta que se pueda hacer una comparación más detallada, por ejemplo, con algún tipo o material de referencia. \n\naff. del latín affinis significa similar o limítrofe. Su uso indica que el material o la evidencia disponible sugiere que la especie propuesta está relacionada, tiene afinidad, pero no es idéntica, a la especie o taxón que le sigue.\n\nDocumente este elemento de acuerdo a las siguientes explicaciones:\n\ncf. agrifolia  (Para Quercus cf. agrifolia, con valores acompañantes scientificName: Quercus , genus: Quercus, taxonRank: Género.) \n\naff. Sparassidae (Para aff. Sparassidae, con valores acompañantes  scientificName: Araneae, order: Araneae, taxonRank: Orden.)",
+  "ejemplo": "cf. agrifolia\naff. Sparassidae"
+ },
+ {
+  "name": "scientificName",
+  "section": "Taxón",
+  "label": "Nombre científico",
+  "definicion": "El nombre científico canónico (sin la autoría) correspondiente a la categoría taxonómica a la que se logró la determinación del organismo observado o colectado. El nombre debe ser congruente con el elemento taxonRank, de modo que se informe a que nivel (especie, género, familia, etc.) se encuentra el nombre documentado.\n\nPara tener en cuenta:\n- El nombre científico puede pertenecer a cualquier categoría taxonómica (reino, filo, clase, orden, familia, género, especie entre otros), en ningún caso es obligatorio la identificación a nivel de especie.\n- No debe documentar la autoría del taxón en este elemento, para ello utilice el elemento scientificNameAuthorship.\n- No debe documentar calificadores de identificación (cf., aff., etc.), para ello utilice el elemento identificationQualifier y deje en el nombre científico la categoría superior sobre la cual se tiene certeza.\n- No debe documentar abreviaciones que no dan cuenta de el nombre específico o hacen referencia  a morfotipos (sp., sp1., spp.), para ello utilice el elemento verbatimTaxonRank.\n- Nombres de híbridos para algas, hongos y plantas deberían seguir las reglas del Código Internacional de Nomenclatura para algas, hongos y plantas (Schenzhen Code Articles H.1, H.2 and H.3). Utilizando el signo de multiplicación × (Unicode U+00D7, HTML ×) para identificar un híbrido, evitando usar una \"x\" o \"X\".\n\n*Aunque oficialmente scientificName se define como el \"nombre científico completo, con información de autoría y fecha si se conoce\", desde el SiB Colombia se recomienda documentar solo el nombre canónico ya que hemos notado un detrimento de la calidad de este elemento por errores de tipeo cuando se incluye siguiendo la definición oficial.",
+  "ejemplo": "Coleoptera\nBacteria\nCtenomys sociabilis\nAbrus pulchellus subsp. tenuiflorus"
+ },
+ {
+  "name": "scientificNameAuthorship",
+  "section": "Taxón",
+  "label": "Autoría del nombre científico",
+  "definicion": "La información de autoría correspondiente al scientificName, usando el formato acorde a las convenciones del Código Nomenclatural aplicable.",
+  "ejemplo": "(Torr.) J.T. Howell\n(Martinovský) Tzvelev\n(Györfi, 1952)"
+ },
+ {
+  "name": "taxonID",
+  "section": "Taxón",
+  "label": "ID del Taxón",
+  "definicion": "Un identificador único global del taxón (datos asociados a la clasificación del Taxón) de acuerdo al nombre científico documentado en el elemento scientificName. Puede ser un identificador único global o un identificador específico para el conjunto de datos.\nEste puede ser obtenido de bases de datos o catálogos taxonómicos globales.",
+  "ejemplo": "gbif.org/species/3056437\nurn:lsid:marinespecies.org:taxname:124821\nurn:lsid:gbif.org:usages:32567\n8fa58e08-08de-4ac1-b69c-1235340b7001"
+ },
+ {
+  "name": "scientificNameID",
+  "section": "Taxón",
+  "label": "ID del nombre científico",
+  "definicion": "Un identificador de los detalles de la nomenclatura (no taxonómica) de acuerdo al nombre científico documentado en el elemento scientificName.\nEste puede ser obtenido de catálogos taxonómicos globales.",
+  "ejemplo": "urn:lsid:ipni.org:names:37829-1:1.3\nurn:lsid:marinespecies.org:taxname:493567"
+ },
+ {
+  "name": "higherClassification",
+  "section": "Taxón",
+  "label": "Clasificación superior",
+  "definicion": "Una lista de los nombres de los taxones inmediatamente superiores a la categoría del taxón del scientificName. Se recomienda ordenar la lista comenzando con la categoría más alta y separando los nombres de cada categoría, con una barra vertical \" | \". Permite documentar categorías taxonómicas que no incluye el estándar (suborden, superfamilia, etc).",
+  "ejemplo": "Animalia | Chordata | Vertebrata | Mammalia | Theria | Eutheria | Rodentia | Hystricognatha | Hystricognathi | Ctenomyidae | Ctenomyini | Ctenomys\nAnimalia | Arthropoda | Arachnida | Araneae | Paratropididae | Paratropis"
+ },
+ {
+  "name": "kingdom",
+  "section": "Taxón",
+  "label": "Reino",
+  "definicion": "El nombre científico completo del reino al que pertenece el taxón.",
+  "ejemplo": "Animalia\nPlantae\nBacteria\nChromista\nFungi\nProtozoa\nArchaea"
+ },
+ {
+  "name": "phylum",
+  "section": "Taxón",
+  "label": "Filo",
+  "definicion": "El nombre científico completo del filo o división al que pertenece el taxón.",
+  "ejemplo": "Chordata\nBryophyta"
+ },
+ {
+  "name": "class",
+  "section": "Taxón",
+  "label": "Clase",
+  "definicion": "El nombre científico completo de la clase al que pertenece el taxón.",
+  "ejemplo": "Mammalia\nHepaticopsida"
+ },
+ {
+  "name": "order",
+  "section": "Taxón",
+  "label": "Orden",
+  "definicion": "El nombre científico completo del orden al que pertenece el taxón.",
+  "ejemplo": "Carnivora\nMonocleales"
+ },
+ {
+  "name": "family",
+  "section": "Taxón",
+  "label": "Familia",
+  "definicion": "El nombre científico completo de la familia al que pertenece el taxón.",
+  "ejemplo": "Felidae\nMonocleaceae"
+ },
+ {
+  "name": "subfamily",
+  "section": "Taxón",
+  "label": "Subfamilia",
+  "definicion": "El nombre científico completo de la subfamilia al que pertenece el taxón.",
+  "ejemplo": "Periptyctinae\nOrchidoideae\nSphindociinae"
+ },
+ {
+  "name": "tribe",
+  "section": "Taxón",
+  "label": "Tribu",
+  "definicion": "El nombre científico completo de la tribu a la que pertenece el taxón.",
+  "ejemplo": "Ortaliini\nArethuseae"
+ },
+ {
+  "name": "subtribe",
+  "section": "Taxón",
+  "label": "Subtribu",
+  "definicion": "El nombre científico completo de la subtribu a la que pertenece el taxón.",
+  "ejemplo": "Plotinini\nTyphaeini"
+ },
+ {
+  "name": "genus",
+  "section": "Taxón",
+  "label": "Género",
+  "definicion": "El nombre científico completo del género al que pertenece el taxón.",
+  "ejemplo": "Puma\nMonoclea"
+ },
+ {
+  "name": "genericName",
+  "section": "Taxón",
+  "label": "Nombre genérico",
+  "definicion": "El nombre científico completo del género no aceptado al que pertenece el taxón.\n\nEl elemento genericName solo debe usarse para combinaciones como se muestra a continuación:\n\nFelis (para el scientificName \"Felis concolor\", con los valores correspondientes de \"Puma concolor\" en acceptNameUsage y \"Puma\" en genus).",
+  "ejemplo": "Felis"
+ },
+ {
+  "name": "subgenus",
+  "section": "Taxón",
+  "label": "Subgénero",
+  "definicion": "El nombre científico completo del subgénero al que pertenece el taxón. Se debe incluir el género para evitar la confusión de homonimia.",
+  "ejemplo": "Strobus (Pinus)\nPuma (Puma)\nLoligo (Amerigo)\nHieracium subgen. Pilosella"
+ },
+ {
+  "name": "infragenericEpithet",
+  "section": "Taxón",
+  "label": "Epíteto infragenérico",
+  "definicion": "El nombre científico del epíteto infragenérico (por encima, de la especie pero por debajo del género) al que pertenece el taxón.\n\nSe usa por ejemplo para secciones en botánica como se muestra a continuación:\n\nCracca (para scientificName Vicia sect. Cracca)",
+  "ejemplo": "Cracca"
+ },
+ {
+  "name": "specificEpithet",
+  "section": "Taxón",
+  "label": "Epíteto Específico",
+  "definicion": "El nombre del epíteto específico presente en el scientificName cuando la determinación se hizo hasta especie u otra categoría menor.",
+  "ejemplo": "concolor\ngottschei"
+ },
+ {
+  "name": "infraspecificEpithet",
+  "section": "Taxón",
+  "label": "Epíteto infraespecífico",
+  "definicion": "El nombre del epíteto infraespecífico presente en el scientificName cuando la determinación se hizo con la categoría de taxón más baja o más especifica por debajo del epíteto específico (parte terminal del nombre), excluyendo cualquier otra denominación de categoría. \n\nEn botánica, los nombres en la literatura y las identificaciones pueden tener múltiples rangos infraespecíficos. De acuerdo al Código Internacional de Nomenclatura para algas, hongos y plantas (Schenzhen Code Articles 6.7 & Art. 24.1), los nombres válidos tienen solamente dos epítetos, con el rango más bajo presente en infraspecificEpithet. Por ejemplo el epíteto infraespecífico para Indigofera charlieriana subsp. sessilis var. scaberrima es \"scaberrima\".",
+  "ejemplo": "concolor\noxyadenia\nsayi"
+ },
+ {
+  "name": "cultivarEpithet",
+  "section": "Taxón",
+  "label": "Epíteto cultivar",
+  "definicion": "El nombre de un cultivar, grupo de cultivares, o grex (horticultura) que sigue al nombre científico.\n\nDe acuerdo con las Reglas del Código de Plantas Cultivadas, el nombre de un cultivar consiste en un nombre botánico seguido de un epíteto de cultivar.\n\nDocumentar de acuerdo a como se muestra a continuación:\n\nKing Edward (para el scientificName \"Solanum tuberosum 'King Edward'\" y taxonRank \"cultivar\")\nMishmiense (para el scientificName \"Rhododendron boothii Mishmiense Group\" y taxonRank \"grupo de cultivares\")\nAtlantis (para scientificName \"Paphiopedilum Atlantis grex\" y taxonRank \"grex\")",
+  "ejemplo": "King Edward\nMishmiense\nAtlantis"
+ },
+ {
+  "name": "taxonRank",
+  "section": "Taxón",
+  "label": "Categoría del taxón",
+  "definicion": "La categoría taxonómica del nombre más específico presente en el scientificName. Se recomienda el uso del vocabulario sugerido disponible para este elemento.",
+  "ejemplo": "Reino\nSubreino\nFilo\nDivisión\nSubfilo\nSubdivisión\nClase\nSubclase\nOrden\nSuborden\nFamilia\nSubfamilia\nTribu\nSubtribu\nGénero\nSubgénero\nNothogénero\nSección\nSubsección\nSerie\nSubserie\nEspecie\nNothoespecie\nSubespecie\nNothosubespecie\nVariedad\nSubvariedad\nForma\nSubforma"
+ },
+ {
+  "name": "verbatimTaxonRank",
+  "section": "Taxón",
+  "label": "Categoría original del taxón",
+  "definicion": "La categoría taxonómica del nombre más específico tal y como aparece en el registro original. Se utiliza para documentar abreviaciones que dan cuenta de incertidumbres o morfotipos en el registro.",
+  "ejemplo": "sp1.\nsp2.\nMorfotipo1.\nsub-lesus\nprole\napomict\nspp."
+ },
+ {
+  "name": "vernacularName",
+  "section": "Taxón",
+  "label": "Nombre común",
+  "definicion": "El nombre o nombres comunes del taxón (en una fila continua y separada por una barra vertical \" | \").",
+  "ejemplo": "Cóndor Andino\nÁguila Americana\nBuitre | Chulo"
+ },
+ {
+  "name": "taxonomicStatus",
+  "section": "Taxón",
+  "label": "Estado taxonómico",
+  "definicion": "El estado taxonómico que define el uso del scientificName de acuerdo a un árbol taxonómico u opinión de experto.",
+  "ejemplo": "Inválido\nVálido\nAceptado\nSinónimo\nSinónimo homotípico\nSinónimo heterotípico\nAmbiguo\nMal aplicado"
+ },
+ {
+  "name": "acceptedNameUsage",
+  "section": "Taxón",
+  "label": "Nombre aceptado usado",
+  "definicion": "El nombre completo, con autoría e información de fecha si se conoce, del taxón actualmente válido (zoológico) o aceptado (botánico) cuando el nombre documentado en scientificName no corresponda al nombre válido o aceptado.",
+  "ejemplo": "Tamias minimus Bachman, 1839"
+ },
+ {
+  "name": "acceptedNameUsageID",
+  "section": "Taxón",
+  "label": "ID del nombre aceptado usado",
+  "definicion": "Un identificador para el acceptedNameUsage (significado del nombre, documentado de acuerdo con alguna fuente) del taxón actualmente válido (zoológico) o aceptado (botánico).\n\nEste elemento debe usarse cuando el elemento scientificName hace referencia a un sinónimo o a un nombre ambiguo mal aplicado, para dar claridad sobre el taxón válido al que hace referencia. \n\nEste puede ser obtenido de bases de datos o catálogos taxonómicos globales.",
+  "ejemplo": "gbif.org/species/2435099\ntsn:552479\nurn:lsid:ipni.org:names:320035-2"
+ },
+ {
+  "name": "parentNameUsage",
+  "section": "Taxón",
+  "label": "Nombre parental usado",
+  "definicion": "El nombre completo, con autoría e información de fecha si se conoce, del taxón parental directo válido (zoológico) o aceptado (botánico), más próximo de nivel superior (en una clasificación) del elemento más específico presente en el scientificName.",
+  "ejemplo": "Rubiaceae\nArcytophyllum Willd.\nTestudinae"
+ },
+ {
+  "name": "parentNameUsageID",
+  "section": "Taxón",
+  "label": "ID del Nombre Parental usado",
+  "definicion": "Un identificador para el uso del nombre (significado del nombre, documentado de acuerdo con alguna fuente) del taxón parental directo del taxón indicado en el scientificName.\n\nPor ejemplo si el scientificName corresponde a una especie, el parentNameUsageID corresponder al nombre científico del género si este hace referencia a un sinónimo o a un nombre ambiguo mal aplicado\n\nEste puede ser obtenido de bases de datos o catálogos taxonómicos globales.",
+  "ejemplo": "gbif.org/species/2435099\ntsn:552479\nurn:lsid:ipni.org:names:320035-2"
+ },
+ {
+  "name": "originalNameUsage",
+  "section": "Taxón",
+  "label": "Nombre original usado",
+  "definicion": "El nombre del taxón, con autoría e información de fecha si se conoce, tal como apareció originalmente cuando se estableció por primera vez bajo las reglas del nomenclaturalCode asociado. El basiónimo (botánica) o basónimo (bacteriología) correspondiente al scientificName o el homónimo anterior de los nombres sustituidos.",
+  "ejemplo": "Gasterosteus saltatrix Linnaeus 1768"
+ },
+ {
+  "name": "originalNameUsageID",
+  "section": "Taxón",
+  "label": "ID del Nombre original usado",
+  "definicion": "Un identificador para el uso del nombre (significado del nombre, documentado de acuerdo con alguna fuente) en el que se estableció originalmente el scientificName, bajo las reglas del nomenclaturalCode asociado (el protónimo en zoología, basiónimo en botánica). \n\nEste puede ser obtenido de bases de datos o catálogos taxonómicos globales.",
+  "ejemplo": "gbif.org/species/2435099\ntsn:552479\nurn:lsid:ipni.org:names:320035-2"
+ },
+ {
+  "name": "nameAccordingTo",
+  "section": "Taxón",
+  "label": "Nombre de acuerdo con",
+  "definicion": "La referencia a la fuente en la que está definida o implícita la definición conceptual del taxón, tradicionalmente representado por el Latín \"sensu\" o \"sec.\" (de secundum, que significa \"según\"). Para los taxones que resultan de las identificaciones, una referencia a las claves, monografías, expertos y otras fuentes debe ser provista.",
+  "ejemplo": "Franz NM, Cardona-Duque J (2013) Description of two new species and phylogenetic reassessment of Perelleschus Wibmer & OBrien, 1986 (Coleoptera: Curculionidae), with a complete taxonomic concept history of Perelleschus sec. Franz & Cardona-Duque, 2013. Syst Biodivers. 11: 209236"
+ },
+ {
+  "name": "nameAccordingToID",
+  "section": "Taxón",
+  "label": "ID del nombre de acuerdo con",
+  "definicion": "Un identificador de la fuente/publicación en la que está definida o implícita la definición conceptual del taxón específico. Véase nameAccordingTo.\n\nEste término debe usarse para referirse al ID de taxón de un registro de taxón que representa la combinación original del nombre (el protónimo en zoología, el basiónimo en botánica).",
+  "ejemplo": "doi:10.1016/S0269-915X(97)80026-2\n19thcenturyscience.org/HMSC/HMSC-Reports/Zool-40/README.htm"
+ },
+ {
+  "name": "namePublishedIn",
+  "section": "Taxón",
+  "label": "Nombre publicado en",
+  "definicion": "Una referencia para la publicación en que se estableció originalmente el taxón presente en el scientificName, bajo las reglas del nomeclaturalCode asociado. \n\nLa citación de la primera publicación del nombre científico documentado en este registro, no el basónimo/nombre original. Las recombinaciones usualmente no se publican en zoología, en ese caso namePublishedIn debe estar vacío.",
+  "ejemplo": "Pearson O. P., and M. I. Christie. 1985. Historia Natural, 5(37):388; Forel, Auguste, Diagnosies provisoires de quelques espèces nouvelles de fourmis de Madagascar, récoltées par M. Grandidier., Annales de la Societe Entomologique de Belgique, Comptes-rendus des Seances 30, 1886"
+ },
+ {
+  "name": "namePublishedInID",
+  "section": "Taxón",
+  "label": "ID del nombre publicado en",
+  "definicion": "Un identificador de la publicación en que se estableció originalmente el taxón presente en el scientificName, bajo las reglas del nomeclaturalCode asociado. \n\nLa citación de la primera publicación del nombre científico documentado en este registro, no el basónimo/nombre original. Las recombinaciones usualmente no se publican en zoología, en ese caso namePublishedIn debe estar vacío.",
+  "ejemplo": "doi:10.1016/S0269-915X(97)80026-2\n19thcenturyscience.org/HMSC/HMSC-Reports/Zool-40/README.htm"
+ },
+ {
+  "name": "namePublishedInYear",
+  "section": "Taxón",
+  "label": "Nombre publicado en el año",
+  "definicion": "El año de cuatro dígitos en el que se publicó el taxón presente en el scientificName.",
+  "ejemplo": "1915\n2008"
+ },
+ {
+  "name": "taxonConceptID",
+  "section": "Taxón",
+  "label": "ID del concepto del taxón",
+  "definicion": "Un identificador para el concepto taxonómico al que se refiere el registro, no para los detalles de nomenclatura de un taxón.",
+  "ejemplo": "urn:lsid:zoobank.org:act:040832DB-2A58-4EFE-B234-AEBF222586FC"
+ },
+ {
+  "name": "nomenclaturalCode",
+  "section": "Taxón",
+  "label": "Código nomenclatural",
+  "definicion": "El código nomenclatural (o códigos en el caso de un nombre ambireinal) en virtud del cual se construye el scientificName. Se recomienda el uso del vocabulario sugerido disponible para este elemento.",
+  "ejemplo": "ICN\nICZN\nBC\nICNCP\nBioCode\nPhyloCode"
+ },
+ {
+  "name": "nomenclaturalStatus",
+  "section": "Taxón",
+  "label": "Estado nomenclatural",
+  "definicion": "typeStatus (Tipo nomenclatural)",
+  "ejemplo": "nom. ambig.\nnom. illeg.\nnom. subnud."
+ },
+ {
+  "name": "taxonRemarks",
+  "section": "Taxón",
+  "label": "Comentarios del taxón",
+  "definicion": "Comentarios o anotaciones sobre el taxón o nombre. Se recomienda que la longitud de la descripción no supere 20 palabras.",
+  "ejemplo": "Este nombre está mal escrito en uso común\nSin estado de amenaza reportada"
+ }
+]
