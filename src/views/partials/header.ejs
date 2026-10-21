@@ -38,7 +38,8 @@
   <% } %>
 </header>
 <main>
-  <% if (typeof messages !== 'undefined') { %>
+  <% /* En la pantalla inmersiva (login) los mensajes se muestran dentro del cuadro de acceso. */ %>
+  <% if (typeof messages !== 'undefined' && !(typeof bodyClass !== 'undefined' && bodyClass === 'immersive')) { %>
     <% (messages.success || []).forEach(function(m) { %><div class="alert success"><%= m %></div><% }); %>
     <% (messages.error || []).forEach(function(m) { %><div class="alert error"><%= m %></div><% }); %>
   <% } %>

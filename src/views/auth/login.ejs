@@ -124,7 +124,12 @@
 
   <h1 class="login-title">Herbario Llanos</h1>
 
-  <details class="login-access">
+  <%
+    var loginErrors = (typeof messages !== 'undefined' && messages.error) || [];
+    var loginNotices = (typeof messages !== 'undefined' && messages.success) || [];
+    var hasLoginMsg = loginErrors.length > 0 || loginNotices.length > 0;
+  %>
+  <details class="login-access<%= hasLoginMsg ? ' has-msg' : '' %>" <%= hasLoginMsg ? 'open' : '' %>>
     <summary class="login-access-toggle" aria-label="Iniciar sesión">
       <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="8" r="4"></circle>
@@ -133,6 +138,18 @@
     </summary>
     <div class="login-access-panel">
       <h2>Iniciar sesión</h2>
+      <% loginErrors.forEach(function(m) { %>
+        <div class="login-msg login-msg--error" role="alert">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.1"/></svg>
+          <span><%= m %></span>
+        </div>
+      <% }); %>
+      <% loginNotices.forEach(function(m) { %>
+        <div class="login-msg login-msg--ok" role="status">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.4 2.8 2.8L16.2 9.6"/></svg>
+          <span><%= m %></span>
+        </div>
+      <% }); %>
       <form method="post" action="/login">
         <div class="field">
           <label for="login-username">Usuario o correo</label>

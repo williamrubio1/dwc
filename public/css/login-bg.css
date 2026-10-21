@@ -188,6 +188,39 @@ body.immersive footer.footnote { display: none; }
   white-space: nowrap;
 }
 .login-access-panel button:hover { background: #a3c2a0; }
+/* Mensajes del login (error de credenciales, cuenta creada) dentro del cuadro, con la paleta de la escena. */
+.login-access-panel .login-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 0 0 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  font: 13px/1.45 system-ui, sans-serif;
+  text-align: left;
+  animation: login-msg-in 450ms ease-out both;
+}
+.login-access-panel .login-msg svg { flex: none; margin-top: 1px; }
+.login-access-panel .login-msg--error {
+  color: #f7d9d1;
+  background: linear-gradient(135deg, #a8404899, #6e2a3299);
+  border: 1px solid #f0a39a99;
+  box-shadow: inset 0 1px 0 #ffffff14, 0 4px 14px -6px #00000088;
+  animation: login-msg-in 450ms ease-out both, login-msg-shake 520ms 500ms ease-in-out;
+}
+.login-access-panel .login-msg--error svg { color: #f0a69b; }
+.login-access-panel .login-msg--ok {
+  color: #dcf3e2;
+  background: linear-gradient(135deg, #2f6b4a55, #1d4a3466);
+  border: 1px solid #8fd6aa55;
+  box-shadow: inset 0 1px 0 #ffffff14, 0 4px 14px -6px #00000088;
+}
+.login-access-panel .login-msg--ok svg { color: #9fe0b7; }
+/* Si el cuadro se abre por un mensaje del servidor, no hace falta el retraso de 2 s. */
+.login-access.has-msg .login-access-panel { animation-delay: 120ms; }
+.login-access.has-msg .login-access-panel::before,
+.login-access.has-msg .login-access-panel::after { animation-delay: 220ms; }
+
 .login-access-panel .hint { margin: 0.9rem 0 0; font: 12px system-ui; color: #d2ddc9; }
 .login-access-panel .hint a { color: #d6e2c9; }
 
@@ -234,6 +267,17 @@ body.immersive footer.footnote { display: none; }
 @keyframes login-panel-in {
   from { opacity: 0; transform: translateY(-14px) scale(0.97); }
   to { opacity: 1; transform: none; }
+}
+@keyframes login-msg-in {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes login-msg-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
 }
 @keyframes login-panel-ripple {
   0%, 100% { transform: scale(1); opacity: .55; }

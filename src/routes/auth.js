@@ -11,14 +11,16 @@ router.get('/login', (req, res) => {
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
+    // Mismo mensaje para usuario inexistente, inactivo o clave errada: no revela si la cuenta existe.
+    const BAD_CREDENTIALS = 'Usuario o contraseña incorrectos, o cuenta inactiva.';
     const user = (await userModel.findByUsername(pool, username)) || (await userModel.findByEmail(pool, username));
     if (!user || !user.activo) {
-      req.flash('error', 'Usuario o contraseña incorrectos, o cuenta inactiva.');
+      req.flash('error', BAD_CREDENTIALS);
       return res.redirect('/login');
     }
     const ok = await userModel.verifyPassword(user, password);
     if (!ok) {
-      req.flash('error', 'Usuario o contraseña incorrectos.');
+      req.flash('error', BAD_CREDENTIALS);
       return res.redirect('/login');
     }
     req.session.user = {
@@ -31,7 +33,8 @@ router.post('/login', async (req, res) => {
     };
     res.redirect('/dashboard');
   } catch (e) {
-    req.flash('error', e.message);
+    console.error('Error en login:', e);
+    req.flash('error', 'No se pudo iniciar sesión en este momento. Intente de nuevo en unos minutos.');
     res.redirect('/login');
   }
 });
