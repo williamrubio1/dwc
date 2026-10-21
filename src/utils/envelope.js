@@ -1,276 +1,390 @@
-const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, AlignmentType, WidthType, BorderStyle } = require('docx');
+const {
+  Document, Packer, Paragraph, TextRun, Tab, AlignmentType, TabStopType,
+  FrameAnchorType, FrameWrap, HeightRule,
+} = require('docx');
 const PDFDocument = require('pdfkit');
+
+// Medidas tomadas del modelo aprobado (SobresMusgos.docx), exportado con Word, en
+// puntos desde la esquina superior izquierda de la hoja Carta. La etiqueta del modelo
+// es un cuadro flotante con posicion absoluta (no respeta el margen inferior), asi que
+// aqui tambien se coloca de forma absoluta: la hoja se dobla siempre por las mismas
+// marcas y la etiqueta debe caer siempre en el mismo lugar.
+const FONT = 'Times New Roman';
+const PAGE_W = 612;
+const PAGE_H = 792;
+const TEXT_LEFT = 112.19; // 3 cm de margen + 19,95 pt de desplazamiento del cuadro + 7,2 pt de sangria
+const TEXT_WIDTH = 386.1; // cuadro de 400,5 pt menos las dos sangrias
+const TEXT_RIGHT = TEXT_LEFT + TEXT_WIDTH;
+const TEXT_CENTER = TEXT_LEFT + TEXT_WIDTH / 2;
+const DET_CENTER = TEXT_LEFT + 160; // en el modelo "Det." queda centrado en 3,78", no en el centro del cuadro
+const ALIGN_RIGHT = 494.64; // 6,87": donde terminan la familia y la fecha en el modelo (borde derecho del cuadro: 6,92")
+const BODY_SIZE = 12;
+const FOLD_SIZE = 20;
+const PITCH = 1.15; // interlineado sencillo de Times New Roman
+const ASCENT = 0.891;
+const BLOCK_TOP = 553.56; // arriba de la primera linea (7,69")
+const FOLD_TOPS = [255.6, 531.4]; // marcas de doblez a 3,70" y 7,53"
+const FOLD_LEFT_X = 95.0;
+const FOLD_RIGHT_X = 506.9;
+// Si la ultima linea pasa de aqui (0,2" del borde, un margen minimo de impresora) se
+// reduce la letra de la localidad hasta que quepa.
+const PRINT_BOTTOM_LIMIT = PAGE_H - 14.4;
+const MIN_LOCALITY_SIZE = 8;
 
 const MESES = [
   'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
   'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
 ];
 
+const twips = (pt) => Math.round(pt * 20);
+const v = (x) => String(x ?? '').trim();
+const seg = (t, o = {}) => ({ t, bold: !!o.bold, italic: !!o.italic });
+
 function fechaLarga(iso) {
   if (!iso) return null;
-  const [y, m, d] = iso.split('-').map(Number);
+  const [y, m, d] = String(iso).slice(0, 10).split('-').map(Number);
+  if (!y || !m || !d) return null;
   return `${d} de ${MESES[m - 1]} de ${y}`;
 }
 
-function nombreCientifico(record) {
-  if (!record.scientificName) return null;
-  const autoria = record.scientificNameAuthorship ? ` ${record.scientificNameAuthorship}` : '';
-  return { cursiva: record.scientificName, resto: autoria };
+// Abreviaturas de rango/determinacion que no van en cursiva (sp., cf., var., ...).
+// Las iniciales de genero ("R. flexuosa") si van en cursiva.
+const NO_ITALIC = /^(sp|spp|cf|aff|var|subsp|ssp|f|fo|nov|ined)\.$/;
+
+function scientificSegs(name, authorship) {
+  const words = v(name).split(/\s+/).filter(Boolean);
+  const segs = [];
+  words.forEach((w, i) => {
+    const italic = !NO_ITALIC.test(w);
+    const text = (i > 0 ? ' ' : '') + w;
+    const last = segs[segs.length - 1];
+    if (last && last.italic === italic) last.t += text;
+    else segs.push(seg(text, { italic }));
+  });
+  if (v(authorship)) segs.push(seg(' ' + v(authorship)));
+  return segs;
 }
 
-function localidad(record) {
-  const partes = [record.stateProvince, record.municipality, record.locality].filter(Boolean);
-  if (!record.country && partes.length === 0) return null;
-  return { pais: record.country ? record.country.toUpperCase() : null, resto: partes.join(', ') };
+// Formato del modelo: N 04°09'12,8'' W 73°39'21,0'' (sin espacios, coma decimal, comillas dobles de apostrofe).
+const DMS_PRINT = /^\s*(?:([NSEW])\s*)?(\d{1,3})\s*[°oO]\s*(\d{1,2})\s*['′´]\s*(\d{1,2}(?:[.,]\d+)?)\s*(?:''|"|″)?\s*$/i;
+
+function formatCoordinate(raw, defaultHemi) {
+  const s = v(raw);
+  const m = s.match(DMS_PRINT);
+  if (!m) return /^[NSEW]\b/i.test(s) ? s : `${defaultHemi} ${s}`;
+  const hemi = (m[1] || defaultHemi).toUpperCase();
+  const deg = String(Number(m[2])).padStart(2, '0');
+  const min = m[3].padStart(2, '0');
+  const [si, sd] = m[4].replace(',', '.').split('.');
+  const sec = si.padStart(2, '0') + (sd !== undefined ? ',' + sd : '');
+  return `${hemi} ${deg}°${min}'${sec}''`;
 }
+
+// La base guarda las elevaciones como DECIMAL ("589.00"); en el sobre se imprimen sin ceros sobrantes.
+const metros = (x) => (Number.isFinite(Number(v(x))) ? String(Number(v(x))) : v(x));
 
 function altitud(record) {
-  if (record.verbatimElevation) return `${record.verbatimElevation} msnm`;
-  if (record.minimumElevationInMeters && record.maximumElevationInMeters) {
-    return `${record.minimumElevationInMeters}–${record.maximumElevationInMeters} msnm`;
+  if (v(record.verbatimElevation)) return `${v(record.verbatimElevation)} msnm.`;
+  if (v(record.minimumElevationInMeters) && v(record.maximumElevationInMeters)) {
+    return `${metros(record.minimumElevationInMeters)}–${metros(record.maximumElevationInMeters)} msnm.`;
   }
   return null;
 }
 
-function numeroYColector(record) {
-  if (!record.recordNumber && !record.recordedBy) return null;
-  const match = String(record.recordNumber || '').match(/(\d+)\s*$/);
-  const numero = match ? match[1] : record.recordNumber || '';
-  const primerColector = String(record.recordedBy || '')
-    .split(/[,;]/)[0]
-    .trim();
-  return { numero, colector: primerColector };
-}
+// Seccion 9: arma las filas del sobre en el orden y agrupacion del modelo (una linea en
+// blanco entre grupos). Los datos vacios omiten su linea, y el grupo si queda sin lineas.
+function buildEnvelopeRows(record, { organismTypeByPhylum, encabezado }) {
+  const groups = [];
 
-// Seccion 9: arma las lineas del sobre a partir del registro. Las lineas cuyo
-// dato de origen esta vacio se omiten (regla explicita de la especificacion).
-function buildEnvelopeModel(record, { organismTypeByPhylum, encabezado }) {
-  const lines = [];
-
-  lines.push({ kind: 'encabezado', text: encabezado });
-
-  if (record.family) lines.push({ kind: 'familia', text: record.family.toUpperCase() });
-
-  const cientifico = nombreCientifico(record);
-  if (cientifico) lines.push({ kind: 'cientifico', ...cientifico });
-
-  if (record.identifiedBy) lines.push({ kind: 'det', text: record.identifiedBy });
-
-  const tipo = record.phylum ? organismTypeByPhylum[record.phylum] : null;
-  if (tipo) lines.push({ kind: 'tipo', text: `${tipo}.` });
-
-  const loc = localidad(record);
-  if (loc) lines.push({ kind: 'localidad', ...loc });
-
-  if (record.verbatimLatitude && record.verbatimLongitude) {
-    // verbatimLatitude/verbatimLongitude normalmente no traen la letra de hemisferio
-    // (ver Plantilla.csv); el sobre siempre la muestra, asumiendo Norte/Oeste si falta.
-    const lat = /^[NS]/i.test(record.verbatimLatitude.trim()) ? record.verbatimLatitude : `N ${record.verbatimLatitude}`;
-    const lon = /^[EW]/i.test(record.verbatimLongitude.trim()) ? record.verbatimLongitude : `W ${record.verbatimLongitude}`;
-    lines.push({ kind: 'coordenadas', text: `${lat} ${lon}` });
+  const g1 = [{ type: 'text', align: 'center', segs: [seg(v(encabezado), { bold: true })] }];
+  if (v(record.family)) g1.push({ type: 'text', align: 'right', segs: [seg(v(record.family).toUpperCase())] });
+  if (v(record.scientificName)) {
+    g1.push({ type: 'text', align: 'left', segs: scientificSegs(record.scientificName, record.scientificNameAuthorship) });
   }
+  groups.push(g1);
+
+  if (v(record.identifiedBy)) {
+    groups.push([{ type: 'text', align: 'det', segs: [seg(`Det.  ${v(record.identifiedBy)}`)] }]);
+  }
+
+  const tipo = v(record.phylum) ? organismTypeByPhylum[v(record.phylum)] : null;
+  if (tipo) groups.push([{ type: 'text', align: 'left', segs: [seg(`${tipo}.`)] }]);
+
+  const g4 = [];
+  const country = v(record.country);
+  const rest = [record.stateProvince, record.municipality, record.locality].map(v).filter(Boolean).join(', ');
+  if (country || rest) {
+    const segs = [];
+    if (country) segs.push(seg(country.toUpperCase() + (rest ? ', ' : ''), { bold: true }));
+    segs.push(seg(rest ? (/[.!?]$/.test(rest) ? rest : `${rest}.`) : '.'));
+    g4.push({ type: 'text', align: 'justify', loc: true, segs });
+  }
+  if (v(record.verbatimLatitude) && v(record.verbatimLongitude)) {
+    // verbatimLatitude/verbatimLongitude suelen venir sin letra de hemisferio: se asume Norte/Oeste.
+    const lat = formatCoordinate(record.verbatimLatitude, 'N');
+    const lon = formatCoordinate(record.verbatimLongitude, 'W');
+    g4.push({ type: 'text', align: 'left', segs: [seg(`Coordenadas ${lat} ${lon}`)] });
+  }
+  if (g4.length) groups.push(g4);
 
   const alt = altitud(record);
-  if (alt) lines.push({ kind: 'alt', text: alt });
-
   const fecha = fechaLarga(record.eventDate);
-  if (fecha) lines.push({ kind: 'fecha', text: fecha });
-
-  const numColector = numeroYColector(record);
-  if (numColector) lines.push({ kind: 'numero_colector', ...numColector });
-
-  return lines;
-}
-
-const CM_TO_TWIP = 566.929;
-const CM_TO_PT = 28.3465;
-
-// Posiciones tomadas del documento modelo (SobresMusgos.docx): dos marcas de
-// doblez, la etiqueta arranca bien entrada la mitad inferior de la hoja.
-const PAGE_HEIGHT_TWIP = 15840;
-const MARGIN_TWIP = 2.5 * CM_TO_TWIP;
-const USABLE_HEIGHT_TWIP = PAGE_HEIGHT_TWIP - 2 * MARGIN_TWIP;
-const FOLD1_GAP_TWIP = USABLE_HEIGHT_TWIP * 0.24;
-const FOLD2_GAP_TWIP = USABLE_HEIGHT_TWIP * 0.32;
-
-const PAGE_HEIGHT_PT = 792; // Carta/Letter
-const MARGIN_PT = 2.5 * CM_TO_PT;
-const USABLE_HEIGHT_PT = PAGE_HEIGHT_PT - 2 * MARGIN_PT;
-const FOLD1_GAP_PT = USABLE_HEIGHT_PT * 0.24;
-const FOLD2_GAP_PT = USABLE_HEIGHT_PT * 0.32;
-
-function buildEnvelopeDocxSection(lines) {
-  const children = [];
-  for (const line of lines) {
-    switch (line.kind) {
-      case 'encabezado':
-        children.push(new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: line.text, bold: true, font: 'Arial', size: 24 })],
-        }));
-        break;
-      case 'familia':
-        children.push(new Paragraph({
-          alignment: AlignmentType.RIGHT,
-          children: [new TextRun({ text: line.text, font: 'Times New Roman', size: 22 })],
-        }));
-        break;
-      case 'cientifico':
-        children.push(new Paragraph({
-          children: [
-            new TextRun({ text: line.cursiva, italics: true, font: 'Times New Roman', size: 22 }),
-            new TextRun({ text: line.resto, font: 'Times New Roman', size: 22 }),
-          ],
-        }));
-        break;
-      case 'det':
-        // El modelo (SobresMusgos.docx) centra el nombre de quien identifico el ejemplar.
-        children.push(new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: `Det.  ${line.text}`, font: 'Times New Roman', size: 22 })],
-        }));
-        break;
-      case 'localidad':
-        children.push(new Paragraph({
-          children: [
-            line.pais ? new TextRun({ text: line.pais, bold: true, font: 'Times New Roman', size: 22 }) : null,
-            line.resto ? new TextRun({ text: (line.pais ? ', ' : '') + line.resto, font: 'Times New Roman', size: 22 }) : null,
-          ].filter(Boolean),
-        }));
-        break;
-      case 'fecha':
-        children.push(new Paragraph({
-          alignment: AlignmentType.RIGHT,
-          children: [new TextRun({ text: line.text, font: 'Times New Roman', size: 22 })],
-        }));
-        break;
-      case 'numero_colector':
-        children.push(new Paragraph({
-          children: [
-            new TextRun({ text: line.numero, bold: true, font: 'Times New Roman', size: 22 }),
-            new TextRun({ text: ` ${line.colector}`, font: 'Times New Roman', size: 22 }),
-          ],
-        }));
-        break;
-      default:
-        children.push(new Paragraph({
-          children: [new TextRun({ text: line.text, font: 'Times New Roman', size: 22 })],
-        }));
+  if (alt || fecha) {
+    if (alt && fecha) {
+      groups.push([{ type: 'text', align: 'lr', segs: [seg('Alt', { bold: true }), seg(`. ${alt}`)], rightSegs: [seg(fecha)] }]);
+    } else if (alt) {
+      groups.push([{ type: 'text', align: 'left', segs: [seg('Alt', { bold: true }), seg(`. ${alt}`)] }]);
+    } else {
+      groups.push([{ type: 'text', align: 'right', segs: [seg(fecha)] }]);
     }
   }
-  return children;
-}
 
-function foldMarksRow() {
-  return new TableRow({
-    children: [
-      new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun('+')] })], borders: noBorders() }),
-      new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, children: [new Paragraph({ alignment: AlignmentType.RIGHT, children: [new TextRun('+')] })], borders: noBorders() }),
-    ],
+  if (v(record.recordNumber) || v(record.recordedBy)) {
+    const match = v(record.recordNumber).match(/(\d+)\s*$/);
+    const numero = match ? match[1] : v(record.recordNumber);
+    const colector = v(record.recordedBy).split(/[,;]/)[0].trim();
+    const segs = [];
+    if (numero) segs.push(seg(numero, { bold: true }));
+    if (colector) segs.push(seg((numero ? ' ' : '') + colector));
+    groups.push([{ type: 'text', align: 'left', segs }]);
+  }
+
+  const rows = [];
+  groups.forEach((g, i) => {
+    if (i > 0) rows.push({ type: 'blank' });
+    rows.push(...g);
   });
+  return rows;
 }
 
-function noBorders() {
-  const none = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
-  return { top: none, bottom: none, left: none, right: none };
+// ---- Medicion con las metricas de Times (iguales a las de Times New Roman) ----
+let measureDoc = null;
+function fontName(s) {
+  if (s.bold && s.italic) return 'Times-BoldItalic';
+  if (s.bold) return 'Times-Bold';
+  if (s.italic) return 'Times-Italic';
+  return 'Times-Roman';
+}
+function textWidth(text, style, size) {
+  if (!measureDoc) measureDoc = new PDFDocument({ size: 'LETTER' });
+  return measureDoc.font(fontName(style)).fontSize(size).widthOfString(text, { lineBreak: false });
 }
 
-function foldMarksTable() {
-  return new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [foldMarksRow()] });
+function tokenize(segs) {
+  const tokens = [];
+  for (const s of segs) {
+    for (const part of s.t.split(/(\s+)/)) {
+      if (part === '') continue;
+      tokens.push({ t: part, bold: s.bold, italic: s.italic, space: /^\s+$/.test(part) });
+    }
+  }
+  return tokens;
 }
 
-function spacer(twips) {
-  return new Paragraph({ spacing: { after: Math.max(0, Math.round(twips)) }, children: [] });
+function mergeTokens(tokens) {
+  const segs = [];
+  for (const t of tokens) {
+    const last = segs[segs.length - 1];
+    if (last && last.bold === t.bold && last.italic === t.italic) last.t += t.t;
+    else segs.push(seg(t.t, t));
+  }
+  return segs;
 }
 
-// Genera un documento DOCX con un sobre por pagina (hoja Carta, seccion 9-10).
-// El modelo (SobresMusgos.docx) trae dos marcas de doblez y la etiqueta impresa
-// arranca bien pasada la mitad de la hoja, no arriba.
+function wrapSegs(segs, size, width) {
+  const lines = [];
+  let cur = [];
+  let curW = 0;
+  for (const tk of tokenize(segs)) {
+    const w = textWidth(tk.t, tk, size);
+    if (!tk.space && curW + w > width && cur.length) {
+      while (cur.length && cur[cur.length - 1].space) cur.pop();
+      lines.push(cur);
+      cur = [];
+      curW = 0;
+    }
+    if (tk.space && !cur.length) continue;
+    cur.push(tk);
+    curW += w;
+  }
+  while (cur.length && cur[cur.length - 1].space) cur.pop();
+  if (cur.length) lines.push(cur);
+  return lines.length ? lines : [[]];
+}
+
+// Posiciona cada linea. Devuelve las lineas con su "top" y la letra usada en la localidad.
+function layoutEnvelope(record, options) {
+  const rows = buildEnvelopeRows(record, options);
+  let locSize = BODY_SIZE;
+  for (;;) {
+    const lines = [];
+    let top = BLOCK_TOP;
+    for (const row of rows) {
+      if (row.type === 'blank') {
+        top += BODY_SIZE * PITCH;
+        continue;
+      }
+      const size = row.loc ? locSize : BODY_SIZE;
+      const wrapped = row.align === 'lr' ? [tokenize(row.segs)] : wrapSegs(row.segs, size, TEXT_WIDTH);
+      wrapped.forEach((tokens, i) => {
+        const isLast = i === wrapped.length - 1;
+        lines.push({
+          align: row.align === 'justify' && isLast ? 'left' : row.align,
+          size,
+          top,
+          tokens,
+          rightSegs: row.rightSegs,
+        });
+        top += size * PITCH;
+      });
+    }
+    const last = lines[lines.length - 1];
+    const bottom = last ? last.top + last.size * PITCH : BLOCK_TOP;
+    if (bottom <= PRINT_BOTTOM_LIMIT || locSize <= MIN_LOCALITY_SIZE) return { rows, lines, locSize, bottom };
+    locSize -= 0.5;
+  }
+}
+
+// ---- DOCX: marcos con posicion absoluta respecto a la hoja, como el cuadro del modelo ----
+function frame(xPt, yPt, wPt) {
+  return {
+    type: 'absolute',
+    position: { x: twips(xPt), y: twips(yPt) },
+    width: twips(wPt),
+    height: 300,
+    rule: HeightRule.ATLEAST,
+    anchor: { horizontal: FrameAnchorType.PAGE, vertical: FrameAnchorType.PAGE },
+    wrap: FrameWrap.AROUND,
+  };
+}
+
+function runs(segs, size) {
+  return segs.map((s) => new TextRun({ text: s.t, bold: s.bold, italics: s.italic, font: FONT, size: Math.round(size * 2) }));
+}
+
+function docxParagraph(row, locSize, blockFrame) {
+  if (row.type === 'blank') return new Paragraph({ frame: blockFrame, children: [] });
+  const size = row.loc ? locSize : BODY_SIZE;
+  const base = { frame: blockFrame, children: runs(row.segs, size) };
+  switch (row.align) {
+    case 'center': return new Paragraph({ ...base, alignment: AlignmentType.CENTER });
+    case 'right':
+      return new Paragraph({ ...base, alignment: AlignmentType.RIGHT, indent: { right: twips(TEXT_RIGHT - ALIGN_RIGHT) } });
+    case 'justify': return new Paragraph({ ...base, alignment: AlignmentType.JUSTIFIED });
+    case 'det':
+      return new Paragraph({ ...base, alignment: AlignmentType.CENTER, indent: { right: twips(2 * (TEXT_CENTER - DET_CENTER)) } });
+    case 'lr':
+      return new Paragraph({
+        frame: blockFrame,
+        tabStops: [{ type: TabStopType.RIGHT, position: twips(ALIGN_RIGHT - TEXT_LEFT) }],
+        children: [
+          ...runs(row.segs, size),
+          new TextRun({ children: [new Tab()], font: FONT, size: Math.round(size * 2) }),
+          ...runs(row.rightSegs, size),
+        ],
+      });
+    default: return new Paragraph(base);
+  }
+}
+
+// Ajuste (pt) entre la posicion pedida y la que Word dibuja, medido contra el modelo.
+const DOCX_Y_ADJUST = 0;
+
 async function generateEnvelopeDocx(records, options) {
-  const sections = records.map((record, idx) => {
-    const lines = buildEnvelopeModel(record, options);
-    const content = buildEnvelopeDocxSection(lines);
+  const sections = records.map((record) => {
+    const { rows, locSize } = layoutEnvelope(record, options);
+    const blockFrame = frame(TEXT_LEFT, BLOCK_TOP + DOCX_Y_ADJUST, TEXT_WIDTH);
+    const plus = (x, top) => new Paragraph({
+      frame: frame(x, top + DOCX_Y_ADJUST, 24),
+      children: [new TextRun({ text: '+', font: FONT, size: FOLD_SIZE * 2 })],
+    });
     return {
       properties: {
         page: {
-          size: { width: 12240, height: 15840 },
-          margin: { top: 2.5 * CM_TO_TWIP, bottom: 2.5 * CM_TO_TWIP, left: 3 * CM_TO_TWIP, right: 3 * CM_TO_TWIP },
+          size: { width: twips(PAGE_W), height: twips(PAGE_H) },
+          margin: { top: 1418, bottom: 1418, left: 1701, right: 1701 },
         },
       },
       children: [
-        spacer(FOLD1_GAP_TWIP),
-        foldMarksTable(),
-        spacer(FOLD2_GAP_TWIP),
-        foldMarksTable(),
-        spacer(140),
-        ...content,
+        plus(FOLD_LEFT_X, FOLD_TOPS[0]),
+        plus(FOLD_RIGHT_X, FOLD_TOPS[0]),
+        plus(FOLD_LEFT_X, FOLD_TOPS[1]),
+        plus(FOLD_RIGHT_X, FOLD_TOPS[1]),
+        ...rows.map((row) => docxParagraph(row, locSize, blockFrame)),
+        new Paragraph({ children: [] }),
       ],
     };
   });
 
-  const doc = new Document({ sections });
+  const doc = new Document({
+    styles: {
+      default: {
+        document: {
+          run: { font: FONT, size: BODY_SIZE * 2 },
+          paragraph: { spacing: { before: 0, after: 0 } },
+        },
+      },
+    },
+    sections,
+  });
   return Packer.toBuffer(doc);
 }
 
-// Genera un PDF con un sobre por pagina, replicando el mismo contenido que el DOCX.
+// ---- PDF: mismas posiciones, dibujadas linea por linea ----
 function generateEnvelopePdf(records, options) {
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({ size: 'LETTER', margins: {
-      top: 2.5 * CM_TO_PT, bottom: 2.5 * CM_TO_PT, left: 3 * CM_TO_PT, right: 3 * CM_TO_PT,
-    }});
+    const doc = new PDFDocument({ size: 'LETTER', margin: 0, info: { Title: 'Sobres de herbario' } });
     const chunks = [];
     doc.on('data', (c) => chunks.push(c));
     doc.on('end', () => resolve(Buffer.concat(chunks)));
     doc.on('error', reject);
 
+    const draw = (text, style, size, x, baseline) => {
+      doc.font(fontName(style)).fontSize(size).text(text, x, baseline, { lineBreak: false, baseline: 'alphabetic' });
+    };
+    const widthOf = (tokens, size) => tokens.reduce((a, tk) => a + textWidth(tk.t, tk, size), 0);
+
     records.forEach((record, idx) => {
       if (idx > 0) doc.addPage();
-      const lines = buildEnvelopeModel(record, options);
+      const { lines } = layoutEnvelope(record, options);
 
-      const left = doc.page.margins.left;
-      const width = doc.page.width - doc.page.margins.left - doc.page.margins.right;
-      const right = doc.page.width - doc.page.margins.right;
+      for (const top of FOLD_TOPS) {
+        const baseline = top + ASCENT * FOLD_SIZE;
+        draw('+', {}, FOLD_SIZE, FOLD_LEFT_X, baseline);
+        draw('+', {}, FOLD_SIZE, FOLD_RIGHT_X, baseline);
+      }
 
-      // Dos marcas de doblez, como en el modelo (SobresMusgos.docx).
-      const fold1Y = doc.page.margins.top + FOLD1_GAP_PT;
-      const fold2Y = fold1Y + FOLD2_GAP_PT;
-      doc.font('Helvetica').fontSize(10);
-      doc.text('+', left, fold1Y);
-      doc.text('+', right - 10, fold1Y);
-      doc.text('+', left, fold2Y);
-      doc.text('+', right - 10, fold2Y);
-
-      // La etiqueta arranca bien pasada la mitad de la hoja, no arriba.
-      let y = fold2Y + 20;
-
-      for (const line of lines) {
-        switch (line.kind) {
-          case 'encabezado':
-            doc.font('Helvetica-Bold').fontSize(13).text(line.text, left, y, { width, align: 'center' });
-            break;
-          case 'familia':
-            doc.font('Times-Roman').fontSize(11).text(line.text, left, y, { width, align: 'right' });
-            break;
-          case 'cientifico':
-            doc.font('Times-Italic').fontSize(11).text(line.cursiva + line.resto, left, y, { width, continued: false });
-            break;
-          case 'det':
-            // El modelo (SobresMusgos.docx) centra el nombre de quien identifico el ejemplar.
-            doc.font('Times-Roman').fontSize(11).text(`Det.  ${line.text}`, left, y, { width, align: 'center' });
-            break;
-          case 'localidad':
-            doc.font('Times-Bold').fontSize(11).text((line.pais || '') + (line.resto ? (line.pais ? ', ' : '') + line.resto : ''), left, y, { width });
-            break;
-          case 'fecha':
-            doc.font('Times-Roman').fontSize(11).text(line.text, left, y, { width, align: 'right' });
-            break;
-          case 'numero_colector':
-            doc.font('Times-Bold').fontSize(11).text(`${line.numero} ${line.colector}`, left, y, { width });
-            break;
-          default:
-            doc.font('Times-Roman').fontSize(11).text(line.text, left, y, { width });
+      for (const ln of lines) {
+        const baseline = ln.top + ASCENT * ln.size;
+        const w = widthOf(ln.tokens, ln.size);
+        if (ln.align === 'justify') {
+          const gaps = ln.tokens.filter((t) => t.space).length;
+          const extra = gaps ? (TEXT_WIDTH - w) / gaps : 0;
+          let x = TEXT_LEFT;
+          for (const tk of ln.tokens) {
+            const tw = textWidth(tk.t, tk, ln.size);
+            if (!tk.space) draw(tk.t, tk, ln.size, x, baseline);
+            x += tw + (tk.space ? extra : 0);
+          }
+          continue;
         }
-        y = doc.y + 4;
+        let x = TEXT_LEFT;
+        if (ln.align === 'center') x = TEXT_CENTER - w / 2;
+        else if (ln.align === 'det') x = DET_CENTER - w / 2;
+        else if (ln.align === 'right') x = ALIGN_RIGHT - w;
+        let cx = x;
+        for (const s of mergeTokens(ln.tokens)) {
+          draw(s.t, s, ln.size, cx, baseline);
+          cx += textWidth(s.t, s, ln.size);
+        }
+        if (ln.align === 'lr' && ln.rightSegs) {
+          const rt = tokenize(ln.rightSegs);
+          let rx = ALIGN_RIGHT - widthOf(rt, ln.size);
+          for (const s of mergeTokens(rt)) {
+            draw(s.t, s, ln.size, rx, baseline);
+            rx += textWidth(s.t, s, ln.size);
+          }
+        }
       }
     });
 
@@ -278,4 +392,4 @@ function generateEnvelopePdf(records, options) {
   });
 }
 
-module.exports = { buildEnvelopeModel, generateEnvelopeDocx, generateEnvelopePdf };
+module.exports = { buildEnvelopeRows, layoutEnvelope, generateEnvelopeDocx, generateEnvelopePdf };
