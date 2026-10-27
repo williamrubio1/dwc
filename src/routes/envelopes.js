@@ -7,11 +7,9 @@ const { generateEnvelopeDocx, generateEnvelopePdf } = require('../utils/envelope
 router.use(requireRole('estudiante', 'administrador'));
 
 async function loadEnvelopeOptions(pool) {
-  const [types] = await pool.query('SELECT phylum, tipo_impreso FROM organism_types');
-  const organismTypeByPhylum = Object.fromEntries(types.map((t) => [t.phylum, t.tipo_impreso]));
   const [[settingRow]] = await pool.query("SELECT valor FROM app_settings WHERE clave = 'sobre_encabezado'");
   const encabezado = settingRow ? settingRow.valor : 'HERBARIO UNIVERSIDAD DE LOS LLANOS (LLANOS)';
-  return { organismTypeByPhylum, encabezado };
+  return { encabezado };
 }
 
 async function loadAccessibleRecord(req) {

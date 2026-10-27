@@ -96,7 +96,7 @@ function altitud(record) {
 
 // Seccion 9: arma las filas del sobre en el orden y agrupacion del modelo (una linea en
 // blanco entre grupos). Los datos vacios omiten su linea, y el grupo si queda sin lineas.
-function buildEnvelopeRows(record, { organismTypeByPhylum, encabezado }) {
+function buildEnvelopeRows(record, { encabezado }) {
   const groups = [];
 
   const g1 = [{ type: 'text', align: 'center', segs: [seg(v(encabezado), { bold: true })] }];
@@ -110,8 +110,10 @@ function buildEnvelopeRows(record, { organismTypeByPhylum, encabezado }) {
     groups.push([{ type: 'text', align: 'det', segs: [seg(`Det.  ${v(record.identifiedBy)}`)] }]);
   }
 
-  const tipo = v(record.phylum) ? organismTypeByPhylum[v(record.phylum)] : null;
-  if (tipo) groups.push([{ type: 'text', align: 'left', segs: [seg(`${tipo}.`)] }]);
+  // Notas de campo (fieldNotes): texto largo, un solo parrafo justificado; si no cabe, baja la letra
+  // y, como ultimo recurso, se recorta con "..." (ver layoutEnvelope).
+  const notas = v(record.fieldNotes).replace(/\s+/g, ' ');
+  if (notas) groups.push([{ type: 'text', align: 'justify', fit: true, notes: true, segs: [seg(notas)] }]);
 
   const g4 = [];
   const country = v(record.country);
@@ -217,14 +219,16 @@ function wrapSegs(segs, size, width) {
   return lines.length ? lines : [[]];
 }
 
-// Posiciona cada linea. Devuelve las lineas con su "top"; cada fila ajustable queda con su letra en row.size.
-// Si la ultima linea se acerca al borde, baja la letra de las filas ajustables (localidad y colectores)
-// que ocupan mas de una linea; las de una sola linea no se tocan.
+// Posiciona cada linea (cada una arranca justo donde termina la anterior, asi que no se pisan).
+// Devuelve las lineas con su "top"; cada fila ajustable queda con su letra en row.size.
+// Si la ultima linea se acerca al borde: 1) baja la letra de las filas ajustables (notas de campo,
+// localidad y colectores) que ocupan mas de una linea, hasta MIN_FIT_SIZE; 2) como ultimo recurso
+// recorta las notas de campo con "..." hasta que quepan. Las filas de una sola linea no se tocan.
 function layoutEnvelope(record, options) {
   const rows = buildEnvelopeRows(record, options);
   const flex = new Set(rows.filter((r) => r.fit && wrapSegs(r.segs, BODY_SIZE, TEXT_WIDTH).length > 1));
-  let fitSize = BODY_SIZE;
-  for (;;) {
+
+  const place = (fitSize) => {
     const lines = [];
     let top = BLOCK_TOP;
     for (const row of rows) {
@@ -248,10 +252,28 @@ function layoutEnvelope(record, options) {
       });
     }
     const last = lines[lines.length - 1];
-    const bottom = last ? last.top + last.size * PITCH : BLOCK_TOP;
-    if (bottom <= PRINT_BOTTOM_LIMIT || fitSize <= MIN_FIT_SIZE || !flex.size) return { rows, lines, fitSize, bottom };
+    return { lines, bottom: last ? last.top + last.size * PITCH : BLOCK_TOP };
+  };
+
+  let fitSize = BODY_SIZE;
+  let res = place(fitSize);
+  while (res.bottom > PRINT_BOTTOM_LIMIT && flex.size && fitSize > MIN_FIT_SIZE) {
     fitSize -= 0.5;
+    res = place(fitSize);
   }
+
+  let truncated = false;
+  const notes = rows.find((r) => r.notes);
+  if (res.bottom > PRINT_BOTTOM_LIMIT && notes) {
+    const words = notes.segs[0].t.split(' ');
+    while (res.bottom > PRINT_BOTTOM_LIMIT && words.length > 1) {
+      words.pop();
+      notes.segs = [seg(words.join(' ').replace(/[\s,;:.\-]+$/, '') + '…')];
+      res = place(fitSize);
+      truncated = true;
+    }
+  }
+  return { rows, lines: res.lines, fitSize, bottom: res.bottom, truncated };
 }
 
 // ---- DOCX: marcos con posicion absoluta respecto a la hoja, como el cuadro del modelo ----
