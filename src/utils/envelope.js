@@ -142,14 +142,12 @@ function buildEnvelopeRows(record, { organismTypeByPhylum, encabezado }) {
     }
   }
 
-  if (v(record.recordNumber) || v(record.recordedBy)) {
+  // Ultima linea: solo el numero de colecta (parte numerica final de recordNumber). El
+  // colector (recordedBy) ya no se imprime aqui.
+  if (v(record.recordNumber)) {
     const match = v(record.recordNumber).match(/(\d+)\s*$/);
     const numero = match ? match[1] : v(record.recordNumber);
-    const colector = v(record.recordedBy).split(/[,;]/)[0].trim();
-    const segs = [];
-    if (numero) segs.push(seg(numero, { bold: true }));
-    if (colector) segs.push(seg((numero ? ' ' : '') + colector));
-    groups.push([{ type: 'text', align: 'left', segs }]);
+    groups.push([{ type: 'text', align: 'left', segs: [seg(numero, { bold: true })] }]);
   }
 
   const rows = [];
