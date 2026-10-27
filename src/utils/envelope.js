@@ -23,7 +23,10 @@ const FOLD_SIZE = 20;
 const PITCH = 1.15; // interlineado sencillo de Times New Roman
 const ASCENT = 0.891;
 const BLOCK_TOP = 553.56; // arriba de la primera linea (7,69")
-const FOLD_TOPS = [255.6, 531.4]; // marcas de doblez a 3,70" y 7,53"
+const CM = 28.3465;
+// Marcas de doblez: la superior queda a 3,70" (igual al modelo); la inferior se subio 0,5 cm
+// respecto al modelo (7,53" -> 7,33") y el texto de la etiqueta conserva su posicion (BLOCK_TOP).
+const FOLD_TOPS = [255.6, 531.4 - 0.5 * CM];
 const FOLD_LEFT_X = 95.0;
 const FOLD_RIGHT_X = 506.9;
 // Si la ultima linea pasa de aqui (0,2" del borde, un margen minimo de impresora) se
