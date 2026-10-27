@@ -32,7 +32,7 @@ const FOLD_RIGHT_X = 506.9;
 // Si la ultima linea pasa de aqui (0,2" del borde, un margen minimo de impresora) se
 // reduce la letra de la localidad hasta que quepa.
 const PRINT_BOTTOM_LIMIT = PAGE_H - 14.4;
-const MIN_LOCALITY_SIZE = 8;
+const MIN_FIT_SIZE = 8;
 
 const MESES = [
   'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -120,7 +120,7 @@ function buildEnvelopeRows(record, { organismTypeByPhylum, encabezado }) {
     const segs = [];
     if (country) segs.push(seg(country.toUpperCase() + (rest ? ', ' : ''), { bold: true }));
     segs.push(seg(rest ? (/[.!?]$/.test(rest) ? rest : `${rest}.`) : '.'));
-    g4.push({ type: 'text', align: 'justify', loc: true, segs });
+    g4.push({ type: 'text', align: 'justify', fit: true, segs });
   }
   if (v(record.verbatimLatitude) && v(record.verbatimLongitude)) {
     // verbatimLatitude/verbatimLongitude suelen venir sin letra de hemisferio: se asume Norte/Oeste.
@@ -142,12 +142,16 @@ function buildEnvelopeRows(record, { organismTypeByPhylum, encabezado }) {
     }
   }
 
-  // Ultima linea: solo el numero de colecta (parte numerica final de recordNumber). El
-  // colector (recordedBy) ya no se imprime aqui.
-  if (v(record.recordNumber)) {
+  // Ultima linea: numero de colecta (parte numerica final de recordNumber, en negrita) seguido
+  // de recordedBy completo tal como esta guardado (solo se limpian espacios sobrantes).
+  const colectores = v(record.recordedBy).replace(/\s+/g, ' ');
+  if (v(record.recordNumber) || colectores) {
     const match = v(record.recordNumber).match(/(\d+)\s*$/);
     const numero = match ? match[1] : v(record.recordNumber);
-    groups.push([{ type: 'text', align: 'left', segs: [seg(numero, { bold: true })] }]);
+    const segs = [];
+    if (numero) segs.push(seg(numero, { bold: true }));
+    if (colectores) segs.push(seg((numero ? ' ' : '') + colectores));
+    groups.push([{ type: 'text', align: 'left', fit: true, segs }]);
   }
 
   const rows = [];
@@ -213,10 +217,13 @@ function wrapSegs(segs, size, width) {
   return lines.length ? lines : [[]];
 }
 
-// Posiciona cada linea. Devuelve las lineas con su "top" y la letra usada en la localidad.
+// Posiciona cada linea. Devuelve las lineas con su "top"; cada fila ajustable queda con su letra en row.size.
+// Si la ultima linea se acerca al borde, baja la letra de las filas ajustables (localidad y colectores)
+// que ocupan mas de una linea; las de una sola linea no se tocan.
 function layoutEnvelope(record, options) {
   const rows = buildEnvelopeRows(record, options);
-  let locSize = BODY_SIZE;
+  const flex = new Set(rows.filter((r) => r.fit && wrapSegs(r.segs, BODY_SIZE, TEXT_WIDTH).length > 1));
+  let fitSize = BODY_SIZE;
   for (;;) {
     const lines = [];
     let top = BLOCK_TOP;
@@ -225,7 +232,8 @@ function layoutEnvelope(record, options) {
         top += BODY_SIZE * PITCH;
         continue;
       }
-      const size = row.loc ? locSize : BODY_SIZE;
+      const size = flex.has(row) ? fitSize : BODY_SIZE;
+      row.size = size;
       const wrapped = row.align === 'lr' ? [tokenize(row.segs)] : wrapSegs(row.segs, size, TEXT_WIDTH);
       wrapped.forEach((tokens, i) => {
         const isLast = i === wrapped.length - 1;
@@ -241,8 +249,8 @@ function layoutEnvelope(record, options) {
     }
     const last = lines[lines.length - 1];
     const bottom = last ? last.top + last.size * PITCH : BLOCK_TOP;
-    if (bottom <= PRINT_BOTTOM_LIMIT || locSize <= MIN_LOCALITY_SIZE) return { rows, lines, locSize, bottom };
-    locSize -= 0.5;
+    if (bottom <= PRINT_BOTTOM_LIMIT || fitSize <= MIN_FIT_SIZE || !flex.size) return { rows, lines, fitSize, bottom };
+    fitSize -= 0.5;
   }
 }
 
@@ -263,9 +271,9 @@ function runs(segs, size) {
   return segs.map((s) => new TextRun({ text: s.t, bold: s.bold, italics: s.italic, font: FONT, size: Math.round(size * 2) }));
 }
 
-function docxParagraph(row, locSize, blockFrame) {
+function docxParagraph(row, blockFrame) {
   if (row.type === 'blank') return new Paragraph({ frame: blockFrame, children: [] });
-  const size = row.loc ? locSize : BODY_SIZE;
+  const size = row.size || BODY_SIZE;
   const base = { frame: blockFrame, children: runs(row.segs, size) };
   switch (row.align) {
     case 'center': return new Paragraph({ ...base, alignment: AlignmentType.CENTER });
@@ -293,7 +301,7 @@ const DOCX_Y_ADJUST = 0;
 
 async function generateEnvelopeDocx(records, options) {
   const sections = records.map((record) => {
-    const { rows, locSize } = layoutEnvelope(record, options);
+    const { rows } = layoutEnvelope(record, options);
     const blockFrame = frame(TEXT_LEFT, BLOCK_TOP + DOCX_Y_ADJUST, TEXT_WIDTH);
     const plus = (x, top) => new Paragraph({
       frame: frame(x, top + DOCX_Y_ADJUST, 24),
@@ -311,7 +319,7 @@ async function generateEnvelopeDocx(records, options) {
         plus(FOLD_RIGHT_X, FOLD_TOPS[0]),
         plus(FOLD_LEFT_X, FOLD_TOPS[1]),
         plus(FOLD_RIGHT_X, FOLD_TOPS[1]),
-        ...rows.map((row) => docxParagraph(row, locSize, blockFrame)),
+        ...rows.map((row) => docxParagraph(row, blockFrame)),
         new Paragraph({ children: [] }),
       ],
     };
