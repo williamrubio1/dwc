@@ -101,9 +101,11 @@ function buildEnvelopeRows(record, { encabezado }) {
 
   const g1 = [{ type: 'text', align: 'center', segs: [seg(v(encabezado), { bold: true })] }];
   if (v(record.family)) g1.push({ type: 'text', align: 'right', segs: [seg(v(record.family).toUpperCase())] });
-  if (v(record.scientificName)) {
-    g1.push({ type: 'text', align: 'left', segs: scientificSegs(record.scientificName, record.scientificNameAuthorship) });
-  }
+  // Tercera linea: epiteto especifico; si esta vacio, el genero; si tampoco hay, "Pd". Esta linea
+  // siempre se imprime. La cursiva sigue la misma regla de antes (no aplica a "sp.", "cf.", ...),
+  // y "Pd" va en letra normal porque no es un nombre. La autoria ya no se imprime.
+  const epiteto = v(record.specificEpithet) || v(record.genus);
+  g1.push({ type: 'text', align: 'left', segs: epiteto ? scientificSegs(epiteto, '') : [seg('Pd')] });
   groups.push(g1);
 
   if (v(record.identifiedBy)) {
