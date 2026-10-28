@@ -4,6 +4,7 @@ const pool = require('../config/db');
 const { requireRole } = require('../middleware/auth');
 const userModel = require('../models/userModel');
 const classCodeModel = require('../models/classCodeModel');
+const occurrenceModel = require('../models/occurrenceModel');
 
 router.use(requireRole('administrador'));
 
@@ -105,15 +106,43 @@ router.post('/settings', async (req, res) => {
 
 // ---- Consulta de toda la base (seccion 2, 8) ----
 router.get('/records', async (req, res) => {
-  const [rows] = await pool.query(
-    `SELECT o.id, o.occurrenceID, o.scientificName, o.family, o.eventDate, o.estado_validacion, o.updated_at,
-            u.nombre AS estudiante, cc.nombre_clase
-     FROM occurrences o
-     JOIN users u ON u.id = o.usuario_creador_id
-     LEFT JOIN class_codes cc ON cc.id = o.class_code_id
-     WHERE o.eliminado = FALSE ORDER BY o.updated_at DESC LIMIT 500`
-  );
-  res.render('admin/records', { records: rows });
+  const q = String(req.query.q || '').trim();
+  let sql = `SELECT o.id, o.occurrenceID, o.scientificName, o.specificEpithet, o.genus, o.family, o.eventDate, o.estado_validacion, o.updated_at,
+                    u.nombre AS estudiante, u.email AS estudiante_email, cc.nombre_clase
+             FROM occurrences o
+             JOIN users u ON u.id = o.usuario_creador_id
+             LEFT JOIN class_codes cc ON cc.id = o.class_code_id
+             WHERE o.eliminado = FALSE`;
+  const params = [];
+  if (q) {
+    sql += ' AND (u.nombre LIKE ? OR u.email LIKE ? OR o.occurrenceID LIKE ? OR o.recordNumber LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  sql += ` ORDER BY o.updated_at DESC LIMIT ${occurrenceModel.BULK_DELETE_LIMIT}`;
+  const [rows] = await pool.query(sql, params);
+  res.render('admin/records', { records: rows, q, limit: occurrenceModel.BULK_DELETE_LIMIT });
+});
+
+// Eliminar varios registros de cualquier estudiante: confirmacion y luego borrado logico.
+router.post('/records/bulk-delete', async (req, res) => {
+  const ids = occurrenceModel.parseIds(req.body.ids);
+  const records = await occurrenceModel.findDeletable(pool, ids);
+  if (!records.length) {
+    req.flash('error', 'Seleccione al menos un registro para eliminar.');
+    return res.redirect('/admin/records');
+  }
+  const warnings = await occurrenceModel.deletionWarnings(pool, records);
+  res.render('records/bulk-delete-confirm', {
+    records, warnings, confirmAction: '/admin/records/bulk-delete/confirm', cancelUrl: '/admin/records', showOwner: true,
+  });
+});
+
+router.post('/records/bulk-delete/confirm', async (req, res) => {
+  const ids = occurrenceModel.parseIds(req.body.ids);
+  const n = await occurrenceModel.softDeleteMany(pool, ids);
+  if (n) req.flash('success', `${n} ${n === 1 ? 'registro eliminado' : 'registros eliminados'}.`);
+  else req.flash('error', 'No se eliminó ningún registro (ya estaban eliminados).');
+  res.redirect('/admin/records');
 });
 
 router.get('/records/:id', async (req, res) => {

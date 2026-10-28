@@ -1,23 +1,54 @@
 <%- include('../partials/header', { title: 'Toda la base' }) %>
 <h1>Toda la base de registros</h1>
 <p class="actions"><a class="btn secondary" href="/export">Exportar</a></p>
+
 <div class="card">
+  <form method="get" action="/admin/records" class="stack" style="flex-direction:row;flex-wrap:wrap;align-items:end;max-width:none;">
+    <div class="field" style="flex:1 1 320px;">
+      <label>Buscar por estudiante (nombre o correo), occurrenceID o recordNumber
+        <span class="helpball" title="Filtra la lista. Sirve para encontrar todos los registros de una persona y eliminarlos juntos.">ⓘ</span>
+      </label>
+      <input type="text" name="q" value="<%= q %>" placeholder="Ej: nombre o correo del estudiante">
+    </div>
+    <button type="submit">Buscar</button>
+    <% if (q) { %><a class="btn secondary" href="/admin/records">Quitar filtro</a><% } %>
+  </form>
+</div>
+
+<div class="card">
+<form method="post" action="/admin/records/bulk-delete" data-bulk>
+<% if (records.length > 0) { %>
+<div class="bulkbar">
+  <button type="submit" class="btn danger" data-bulk-submit disabled>Eliminar seleccionados</button>
+  <span class="hint" data-bulk-count></span>
+  <span class="hint">
+    <%= records.length %> <%= records.length === 1 ? 'registro' : 'registros' %><%= q ? ' con ese filtro' : '' %><%= records.length >= limit ? ' (se muestran como máximo ' + limit + ')' : '' %>.
+    Antes de borrar se le pedirá confirmación.
+  </span>
+</div>
+<% } %>
 <table>
-  <thead><tr><th>occurrenceID</th><th>Estudiante</th><th>Clase</th><th>Científico</th><th>Fecha</th><th>Estado</th><th></th></tr></thead>
+  <thead><tr>
+    <th class="check"><% if (records.length > 0) { %><input type="checkbox" data-bulk-all aria-label="Seleccionar todos"><% } %></th>
+    <th>occurrenceID</th><th>Estudiante</th><th>Clase</th><th>Epíteto / género</th><th>Fecha</th><th>Estado</th><th></th>
+  </tr></thead>
   <tbody>
   <% records.forEach(function(r) { %>
     <tr>
+      <td class="check"><input type="checkbox" name="ids" value="<%= r.id %>" data-bulk-item aria-label="Seleccionar <%= r.occurrenceID %>"></td>
       <td><%= r.occurrenceID %></td>
-      <td><%= r.estudiante %></td>
+      <td><%= r.estudiante %><br><span class="hint"><%= r.estudiante_email %></span></td>
       <td><%= r.nombre_clase || '-' %></td>
-      <td><em><%= r.scientificName || '' %></em></td>
+      <td><em><%= r.specificEpithet || r.genus || r.scientificName || '' %></em></td>
       <td><%= r.eventDate || '' %></td>
       <td><span class="badge <%= r.estado_validacion %>"><%= r.estado_validacion.replace('_',' ') %></span></td>
       <td><a href="/admin/records/<%= r.id %>">Ver</a></td>
     </tr>
   <% }); %>
-  <% if (records.length === 0) { %><tr><td colspan="7">Sin registros.</td></tr><% } %>
+  <% if (records.length === 0) { %><tr><td colspan="8"><%= q ? 'Ningún registro coincide con el filtro.' : 'Sin registros.' %></td></tr><% } %>
   </tbody>
 </table>
+</form>
 </div>
+<script src="/js/bulk-select.js" defer></script>
 <%- include('../partials/footer') %>

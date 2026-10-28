@@ -13,11 +13,33 @@ router.use(requireRole('estudiante'));
 
 router.get('/', async (req, res) => {
   const [rows] = await pool.query(
-    `SELECT id, occurrenceID, scientificName, family, eventDate, estado_validacion, version, updated_at
+    `SELECT id, occurrenceID, scientificName, specificEpithet, genus, family, eventDate, estado_validacion, version, updated_at
      FROM occurrences WHERE usuario_creador_id = ? AND eliminado = FALSE ORDER BY updated_at DESC`,
     [req.session.user.id]
   );
   res.render('records/list', { records: rows });
+});
+
+// Eliminar varios registros propios: primero una pantalla de confirmacion, despues el borrado.
+router.post('/bulk-delete', async (req, res) => {
+  const ids = occurrenceModel.parseIds(req.body.ids);
+  const records = await occurrenceModel.findDeletable(pool, ids, req.session.user.id);
+  if (!records.length) {
+    req.flash('error', 'Seleccione al menos un registro para eliminar.');
+    return res.redirect('/records');
+  }
+  const warnings = await occurrenceModel.deletionWarnings(pool, records);
+  res.render('records/bulk-delete-confirm', {
+    records, warnings, confirmAction: '/records/bulk-delete/confirm', cancelUrl: '/records', showOwner: false,
+  });
+});
+
+router.post('/bulk-delete/confirm', async (req, res) => {
+  const ids = occurrenceModel.parseIds(req.body.ids);
+  const n = await occurrenceModel.softDeleteMany(pool, ids, req.session.user.id);
+  if (n) req.flash('success', `${n} ${n === 1 ? 'registro eliminado' : 'registros eliminados'}.`);
+  else req.flash('error', 'No se eliminó ningún registro (ya estaban eliminados o no le pertenecen).');
+  res.redirect('/records');
 });
 
 router.get('/new', (req, res) => {

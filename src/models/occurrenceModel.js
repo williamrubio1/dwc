@@ -179,11 +179,80 @@ async function softDeleteOccurrence(pool, id) {
   await pool.query('UPDATE occurrences SET eliminado = TRUE, eliminado_en = NOW() WHERE id = ?', [id]);
 }
 
+// ---- Eliminacion de varios registros (logica, como la individual: se conservan para auditoria) ----
+const BULK_DELETE_LIMIT = 500;
+
+// Acepta lo que llega de un formulario (un id, una lista o nada) y deja enteros positivos unicos.
+function parseIds(raw) {
+  const list = Array.isArray(raw) ? raw : raw != null && raw !== '' ? [raw] : [];
+  const ids = [];
+  for (const x of list) {
+    const n = Number(x);
+    if (Number.isInteger(n) && n > 0 && !ids.includes(n)) ids.push(n);
+  }
+  return ids.slice(0, BULK_DELETE_LIMIT);
+}
+
+// Registros activos que realmente se pueden eliminar. Con ownerId (estudiante) solo los propios;
+// sin ownerId (administrador) cualquiera. Lo que no cumpla se ignora, no se elimina.
+async function findDeletable(pool, ids, ownerId = null) {
+  if (!ids.length) return [];
+  let sql = `SELECT o.id, o.occurrenceID, o.recordNumber, o.family, o.specificEpithet, o.genus, o.class_code_id,
+                    cc.nombre_clase, u.nombre AS estudiante, u.email AS estudiante_email
+             FROM occurrences o
+             JOIN users u ON u.id = o.usuario_creador_id
+             LEFT JOIN class_codes cc ON cc.id = o.class_code_id
+             WHERE o.eliminado = FALSE AND o.id IN (?)`;
+  const params = [ids];
+  if (ownerId != null) {
+    sql += ' AND o.usuario_creador_id = ?';
+    params.push(ownerId);
+  }
+  const [rows] = await pool.query(sql + ' ORDER BY o.id', params);
+  return rows;
+}
+
+// Seccion 5: antes de eliminar se advierte si el registro pertenece a una clase o participo en
+// generaciones de sobres anteriores. (Se lee en JS para no depender de JSON_TABLE, que MariaDB no tiene.)
+async function deletionWarnings(pool, records) {
+  const wanted = new Set(records.map((r) => r.id));
+  const [gens] = await pool.query('SELECT registros_incluidos FROM envelope_generations');
+  const used = new Set();
+  for (const g of gens) {
+    let list = g.registros_incluidos;
+    if (typeof list === 'string') {
+      try { list = JSON.parse(list); } catch { list = []; }
+    }
+    for (const item of Array.isArray(list) ? list : []) {
+      if (item && wanted.has(Number(item.id))) used.add(Number(item.id));
+    }
+  }
+  return {
+    conClase: records.filter((r) => r.class_code_id).length,
+    enGeneraciones: used.size,
+  };
+}
+
+async function softDeleteMany(pool, ids, ownerId = null) {
+  const rows = await findDeletable(pool, ids, ownerId);
+  if (!rows.length) return 0;
+  const [result] = await pool.query(
+    'UPDATE occurrences SET eliminado = TRUE, eliminado_en = NOW() WHERE eliminado = FALSE AND id IN (?)',
+    [rows.map((r) => r.id)]
+  );
+  return result.affectedRows;
+}
+
 module.exports = {
   EDITABLE_FIELDS,
+  BULK_DELETE_LIMIT,
   processRecordInput,
   computeStatus,
   createOccurrence,
   updateOccurrence,
   softDeleteOccurrence,
+  parseIds,
+  findDeletable,
+  deletionWarnings,
+  softDeleteMany,
 };

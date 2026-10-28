@@ -200,3 +200,8 @@ footer.footnote {
 
 .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; font-size: 0.85rem; }
 .legend .item { display: flex; align-items: center; gap: 0.4rem; }
+
+/* Seleccion multiple de registros */
+.bulkbar { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+th.check, td.check { width: 2rem; text-align: center; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }

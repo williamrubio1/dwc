@@ -14,13 +14,25 @@
 </div>
 
 <div class="card">
+<form method="post" action="/records/bulk-delete" data-bulk>
+<% if (records.length > 0) { %>
+<div class="bulkbar">
+  <button type="submit" class="btn danger" data-bulk-submit disabled>Eliminar seleccionados</button>
+  <span class="hint" data-bulk-count></span>
+  <span class="hint">Marque los registros a eliminar; antes de borrar se le pedirá confirmación.</span>
+</div>
+<% } %>
 <table>
-  <thead><tr><th>occurrenceID</th><th>Nombre científico</th><th>Familia</th><th>Fecha</th><th>Estado</th><th>Versión</th><th></th></tr></thead>
+  <thead><tr>
+    <th class="check"><% if (records.length > 0) { %><input type="checkbox" data-bulk-all aria-label="Seleccionar todos"><% } %></th>
+    <th>occurrenceID</th><th>Epíteto / género</th><th>Familia</th><th>Fecha</th><th>Estado</th><th>Versión</th><th></th>
+  </tr></thead>
   <tbody>
   <% records.forEach(function(r) { %>
     <tr>
+      <td class="check"><input type="checkbox" name="ids" value="<%= r.id %>" data-bulk-item aria-label="Seleccionar <%= r.occurrenceID %>"></td>
       <td><%= r.occurrenceID %></td>
-      <td><em><%= r.scientificName || '' %></em></td>
+      <td><em><%= r.specificEpithet || r.genus || r.scientificName || '' %></em></td>
       <td><%= r.family || '' %></td>
       <td><%= r.eventDate || '' %></td>
       <td><span class="badge <%= r.estado_validacion %>"><%= r.estado_validacion.replace('_',' ') %></span></td>
@@ -33,8 +45,10 @@
       </td>
     </tr>
   <% }); %>
-  <% if (records.length === 0) { %><tr><td colspan="7">Aún no tiene registros.</td></tr><% } %>
+  <% if (records.length === 0) { %><tr><td colspan="8">Aún no tiene registros.</td></tr><% } %>
   </tbody>
 </table>
+</form>
 </div>
+<script src="/js/bulk-select.js" defer></script>
 <%- include('../partials/footer') %>

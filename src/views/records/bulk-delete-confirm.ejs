@@ -1,0 +1,41 @@
+<%- include('../partials/header', { title: 'Eliminar registros' }) %>
+<h1>Eliminar <%= records.length %> <%= records.length === 1 ? 'registro' : 'registros' %></h1>
+
+<div class="card">
+  <p>Va a eliminar los registros de la lista. La eliminación es lógica: desaparecen de las vistas y de las exportaciones, pero se conservan para auditoría, y su occurrenceID no se reutiliza.</p>
+
+  <% if (warnings.conClase > 0) { %>
+    <p class="alert error"><%= warnings.conClase %> de estos registros <%= warnings.conClase === 1 ? 'pertenece' : 'pertenecen' %> a una clase.</p>
+  <% } %>
+  <% if (warnings.enGeneraciones > 0) { %>
+    <p class="alert error"><%= warnings.enGeneraciones %> de estos registros <%= warnings.enGeneraciones === 1 ? 'participó' : 'participaron' %> en generaciones de sobres anteriores.</p>
+  <% } %>
+
+  <form method="post" action="<%= confirmAction %>" class="actions">
+    <% records.forEach(function(r) { %><input type="hidden" name="ids" value="<%= r.id %>"><% }); %>
+    <button type="submit" class="btn danger">Confirmar eliminación de <%= records.length %> <%= records.length === 1 ? 'registro' : 'registros' %></button>
+    <a class="btn secondary" href="<%= cancelUrl %>">Cancelar</a>
+  </form>
+</div>
+
+<div class="card">
+<table>
+  <thead><tr>
+    <th>occurrenceID</th><th>recordNumber</th><th>Familia</th><th>Epíteto / género</th>
+    <% if (showOwner) { %><th>Estudiante</th><% } %><th>Clase</th>
+  </tr></thead>
+  <tbody>
+  <% records.forEach(function(r) { %>
+    <tr>
+      <td><%= r.occurrenceID %></td>
+      <td><%= r.recordNumber || '-' %></td>
+      <td><%= r.family || '' %></td>
+      <td><em><%= r.specificEpithet || r.genus || '' %></em></td>
+      <% if (showOwner) { %><td><%= r.estudiante %><br><span class="hint"><%= r.estudiante_email %></span></td><% } %>
+      <td><%= r.nombre_clase || '-' %></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>
