@@ -118,7 +118,10 @@ function buildEnvelopeRows(record, { encabezado }) {
   // recurso, se recorta el final con "..." (primero se pierde locationRemarks; ver layoutEnvelope).
   const campo = v(record.fieldNotes).replace(/\s+/g, ' ');
   const ubicacion = v(record.locationRemarks).replace(/\s+/g, ' ');
-  const notas = campo && ubicacion ? `${/[.,;:!?]$/.test(campo) ? campo : `${campo}.`} ${ubicacion}` : campo || ubicacion;
+  // fieldNotes + (locationRemarks); todo el texto termina en ".".
+  const entreParentesis = ubicacion ? `(${ubicacion.replace(/\.+$/, '')})` : '';
+  const juntos = [campo, entreParentesis].filter(Boolean).join(' ');
+  const notas = juntos && !juntos.endsWith('.') ? `${juntos}.` : juntos;
   if (notas) groups.push([{ type: 'text', align: 'justify', fit: true, notes: true, segs: [seg(notas)] }]);
 
   const g4 = [];
