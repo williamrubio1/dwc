@@ -129,17 +129,18 @@ function buildEnvelopeRows(record, { encabezado }) {
   // De municipality y locality solo cuenta lo anterior a la primera "," o "-".
   const primeraParte = (x) => v(x).split(/[,-]/)[0].trim();
   const rest = [v(record.stateProvince), primeraParte(record.municipality), primeraParte(record.locality)].filter(Boolean).join(', ');
-  if (country || rest) {
+  // verbatimLatitude/verbatimLongitude suelen venir sin letra de hemisferio: se asume Norte/Oeste.
+  // Las coordenadas se escriben a continuacion de la localidad, en el mismo parrafo, separadas por
+  // un espacio despues del punto con que termina la localidad.
+  const coordenadas = v(record.verbatimLatitude) && v(record.verbatimLongitude)
+    ? `Coordenadas ${formatCoordinate(record.verbatimLatitude, 'N')} ${formatCoordinate(record.verbatimLongitude, 'W')}`
+    : '';
+  if (country || rest || coordenadas) {
     const segs = [];
     if (country) segs.push(seg(country.toUpperCase() + (rest ? ', ' : ''), { bold: true }));
-    segs.push(seg(rest ? (/[.!?]$/.test(rest) ? rest : `${rest}.`) : '.'));
+    if (country || rest) segs.push(seg(rest ? (/[.!?]$/.test(rest) ? rest : `${rest}.`) : '.'));
+    if (coordenadas) segs.push(seg((country || rest ? ' ' : '') + coordenadas));
     g4.push({ type: 'text', align: 'justify', fit: true, segs });
-  }
-  if (v(record.verbatimLatitude) && v(record.verbatimLongitude)) {
-    // verbatimLatitude/verbatimLongitude suelen venir sin letra de hemisferio: se asume Norte/Oeste.
-    const lat = formatCoordinate(record.verbatimLatitude, 'N');
-    const lon = formatCoordinate(record.verbatimLongitude, 'W');
-    g4.push({ type: 'text', align: 'left', segs: [seg(`Coordenadas ${lat} ${lon}`)] });
   }
   if (g4.length) groups.push(g4);
 
