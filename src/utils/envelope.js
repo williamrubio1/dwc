@@ -112,9 +112,13 @@ function buildEnvelopeRows(record, { encabezado }) {
     groups.push([{ type: 'text', align: 'det', segs: [seg(`Det.  ${v(record.identifiedBy)}`)] }]);
   }
 
-  // Notas de campo (fieldNotes): texto largo, un solo parrafo justificado; si no cabe, baja la letra
-  // y, como ultimo recurso, se recorta con "..." (ver layoutEnvelope).
-  const notas = v(record.fieldNotes).replace(/\s+/g, ' ');
+  // Notas de campo (fieldNotes) y, seguido en el mismo parrafo donde termina el texto, los comentarios
+  // de la ubicacion (locationRemarks): un solo parrafo justificado. Si fieldNotes no termina en signo de
+  // puntuacion se le pone un punto para separar ambos textos. Si no cabe, baja la letra y, como ultimo
+  // recurso, se recorta el final con "..." (primero se pierde locationRemarks; ver layoutEnvelope).
+  const campo = v(record.fieldNotes).replace(/\s+/g, ' ');
+  const ubicacion = v(record.locationRemarks).replace(/\s+/g, ' ');
+  const notas = campo && ubicacion ? `${/[.,;:!?]$/.test(campo) ? campo : `${campo}.`} ${ubicacion}` : campo || ubicacion;
   if (notas) groups.push([{ type: 'text', align: 'justify', fit: true, notes: true, segs: [seg(notas)] }]);
 
   const g4 = [];
