@@ -123,7 +123,9 @@ function buildEnvelopeRows(record, { encabezado }) {
 
   const g4 = [];
   const country = v(record.country);
-  const rest = [record.stateProvince, record.municipality, record.locality].map(v).filter(Boolean).join(', ');
+  // De municipality y locality solo cuenta lo anterior a la primera "," o "-".
+  const primeraParte = (x) => v(x).split(/[,-]/)[0].trim();
+  const rest = [v(record.stateProvince), primeraParte(record.municipality), primeraParte(record.locality)].filter(Boolean).join(', ');
   if (country || rest) {
     const segs = [];
     if (country) segs.push(seg(country.toUpperCase() + (rest ? ', ' : ''), { bold: true }));
